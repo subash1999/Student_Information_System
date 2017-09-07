@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="529.0" prefWidth="1049.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="User.Student.StudentController">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar prefHeight="33.0" prefWidth="800.0" stylesheets="@../../stylesheet/bootstrap2.css">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem fx:id="menuitem_close" mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                        <MenuItem fx:id="menuitem_detailview" mnemonicParsing="false" text="Detail View" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem fx:id="menuitem_about" mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <AnchorPane prefHeight="59.0" prefWidth="800.0">
+               <children>
+                  <JFXTextField fx:id="search_field" focusColor="#40a9db" layoutX="270.0" layoutY="5.0" promptText="Search" unFocusColor="#1c2221f7">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXTextField>
+                  <Label layoutX="25.0" layoutY="9.0" prefHeight="27.0" prefWidth="103.0" stylesheets="@../../stylesheet/bootstrap2.css" text="Search by : ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="search_icon" accessibleRole="BUTTON" fitHeight="28.0" fitWidth="39.0" layoutX="444.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/search.png" />
+                     </image>
+                  </ImageView>
+                  <ChoiceBox fx:id="search_choice" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@../../stylesheet/bootstrap2.css" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <TableView fx:id="table" prefHeight="370.0" prefWidth="842.0" style="-fx-background-color: ;" stylesheets="@../../stylesheet/bootstrap2.css" />
+   </center>
+   <left>
+      <AnchorPane BorderPane.alignment="CENTER" />
+   </left>
+</BorderPane>

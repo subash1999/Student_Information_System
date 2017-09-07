@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.CalendarPicker?>
+
+<BorderPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="User.MainwindowController">
+   <top>
+      <MenuBar id="menu" fx:id="menubar" prefHeight="37.0" prefWidth="694.0" stylesheets="@../stylesheet/bootstrap2.css" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu id="file" fx:id="file" mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem fx:id="view_session_menu_item" mnemonicParsing="false" text="View Session..." />
+                  <MenuItem fx:id="change_session_menuu_item" mnemonicParsing="false" text="Change Session..." />
+              <MenuItem fx:id="close_menu_item" mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu id="edit" fx:id="edit" mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem fx:id="delete_menu_item" mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu id="help" fx:id="help" mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem fx:id="about_menu_item" mnemonicParsing="false" text="About..." />
+            </items>
+          </Menu>
+            <Menu id="teacher" fx:id="teacher" mnemonicParsing="false" text="Teacher">
+              <items>
+                <MenuItem fx:id="view_all_menu_item" mnemonicParsing="false" text="View all..." />
+                  <MenuItem fx:id="view_classwise_menu_item" mnemonicParsing="false" text="View Classwise..." />
+              </items>
+            </Menu>
+            <Menu id="admin" fx:id="admin" mnemonicParsing="false" text="Admin">
+              <items>
+                <MenuItem fx:id="dashboard_menu_item" mnemonicParsing="false" text="Dashboard..." />
+              </items>
+            </Menu>
+            <Menu id="chat" fx:id="chat" mnemonicParsing="false" text="Chat">
+              <items>
+                <MenuItem fx:id="open_chat_menu_item" mnemonicParsing="false" text="Open Chat..." />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <GridPane id="left_gridpane" fx:id="left_gridpane" prefHeight="460.0" prefWidth="210.0" style="-fx-background-color: #141414;" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="148.0" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="369.0" minHeight="9.0" prefHeight="47.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label id="current_date" fx:id="current_date" alignment="CENTER" prefHeight="45.0" prefWidth="207.0" style="-fx-text-fill: white;" text="Current Date" textFill="#6e5c5c" GridPane.rowIndex="1">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <Label id="current_time" fx:id="current_time" alignment="CENTER" prefHeight="45.0" prefWidth="207.0" style="-fx-text-fill: white;" text="Current Time" textFill="#6e5c5c">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </GridPane>
+   </left>
+   <center>
+      <ScrollPane stylesheets="@../stylesheet/bootstrap2.css" BorderPane.alignment="CENTER">
+         <content>
+            <AnchorPane>
+               <children>
+                  <GridPane layoutX="81.0" layoutY="14.0" prefHeight="717.0" prefWidth="1075.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="216.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="216.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="146.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="208.0" minHeight="10.0" prefHeight="208.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="208.0" minHeight="10.0" prefHeight="208.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <AnchorPane fx:id="student_anchor">
+                           <children>
+                              <ImageView fx:id="student_image" accessibleRole="HYPERLINK" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/student.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="student_label" layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text="  Student Information">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="teacher_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                           <children>
+                              <ImageView fx:id="teacher_image" accessibleRole="HYPERLINK" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/teacher.jpg" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="teacher_label" layoutY="156.0" prefHeight="27.0" prefWidth="201.0" text="  Teacher information">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="marksheet_anchor" GridPane.rowIndex="1">
+                           <children>
+                              <Label fx:id="marksheet_label" layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text=" Marksheet">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="marksheet_image" accessibleRole="HYPERLINK" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/marksheet.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="legder_anchor" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label fx:id="ledger_label" layoutX="14.0" layoutY="163.0" prefHeight="27.0" prefWidth="201.0" text=" Legder">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="ledger_label" accessibleRole="HYPERLINK" fitHeight="138.0" fitWidth="147.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/ledger.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="chart_anchor" GridPane.rowIndex="2">
+                           <children>
+                              <Label fx:id="chart_label" layoutY="167.0" prefHeight="27.0" prefWidth="216.0" text=" Comparative Chart">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="chart_image" accessibleRole="HYPERLINK" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/chart.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="attendance_anchor" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fx:id="attendance_image" accessibleRole="HYPERLINK" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/attendance.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="attendance_label" layoutX="14.0" layoutY="167.0" prefHeight="27.0" prefWidth="216.0" text="  Student Attendance">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="session_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2">
+                           <children>
+                              <ImageView fx:id="session_image" accessibleRole="HYPERLINK" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/previous_session.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="session_label" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Change Session">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="classwise_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <children>
+                              <ImageView fx:id="classwise_anchor" accessibleRole="HYPERLINK" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/class.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="classwise_label" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Classwise information">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+   </center>
+   <opaqueInsets>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </opaqueInsets>
+   <right>
+      <AnchorPane prefHeight="731.0" prefWidth="252.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane layoutX="-25.0" layoutY="295.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="247.0" styleClass="column-header-background" stylesheets="@../stylesheet/bootstrap3.css">
+               <children>
+                  <Button layoutX="71.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="38.0" text="1" />
+                  <Button layoutX="116.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="38.0" text="2" />
+                  <Button layoutX="164.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefHeight="32.0" prefWidth="38.0" text="3" />
+                  <Button layoutX="71.0" layoutY="134.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="38.0" text="4" />
+                  <Button layoutX="117.0" layoutY="135.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="38.0" text="5" />
+                  <Button layoutX="163.0" layoutY="134.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefHeight="32.0" prefWidth="38.0" text="6" />
+                  <Button layoutX="71.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="38.0" text="7" />
+                  <Button layoutX="116.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="38.0" text="8" />
+                  <Button layoutX="164.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefHeight="32.0" prefWidth="38.0" text="9" />
+                  <TextField fx:id="display" alignment="BOTTOM_RIGHT" editable="false" layoutX="66.0" layoutY="14.0" prefHeight="37.0" prefWidth="186.0" styleClass="display" text="0">
+                     <font>
+                        <Font name="Lucida Console" size="20.0" />
+                     </font>
+                  </TextField>
+                  <Button layoutX="129.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="50.0" text="C" />
+                  <Button layoutX="209.0" layoutY="208.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefHeight="23.0" prefWidth="47.0" text="=" />
+                  <Button layoutX="215.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" text="＋" />
+                  <Button layoutX="71.0" layoutY="208.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="38.0" text="0" />
+                  <Button layoutX="215.0" layoutY="134.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" text="－" />
+                  <Button layoutX="215.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefHeight="32.0" prefWidth="35.0" styleClass="background" text="X" />
+                  <Button layoutX="214.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefHeight="32.0" prefWidth="37.0" styleClass="background" text="÷" />
+                  <Button layoutX="71.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefWidth="50.0" text="AC" />
+                  <Button layoutX="163.0" layoutY="208.0" mnemonicParsing="false" onAction="#handleOnAnyButtonClicked" prefHeight="32.0" prefWidth="37.0" text="." />
+               </children>
+            </AnchorPane>
+            <CalendarPicker layoutX="6.0" layoutY="14.0" prefHeight="203.0" prefWidth="236.0" />
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>
