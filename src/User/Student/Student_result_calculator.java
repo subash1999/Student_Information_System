@@ -23,7 +23,7 @@ public class Student_result_calculator extends Application {
     public void start(Stage primaryStage)  {
        
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/User/Teacher/teachers_of_student.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/User/mainwindow.fxml"));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             //primaryStage.setMaximized(true);

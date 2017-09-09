@@ -99,7 +99,7 @@ public class StudentController implements Initializable {
             //passing the id of the selected student to the studentdetail.fxml file
             controller.setStudentId(student_id);            
             Stage stage = new Stage();           
-            stage.setTitle("Student Detail");
+            stage.setTitle("Student Detail" );
             stage.setScene(new Scene(root1));
             stage.show();
        }

@@ -198,7 +198,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="teachers_btn" layoutX="534.0" layoutY="153.0" mnemonicParsing="false" stylesheets="@../../stylesheet/bootstrap3.css" text="View Teachers">
+                  <Button fx:id="teachers_btn" layoutX="534.0" layoutY="153.0" mnemonicParsing="false" onMouseClicked="#teacher_btn_clicked" stylesheets="@../../stylesheet/bootstrap3.css" text="View Teachers">
                      <styleClass>
                         <String fx:value="action-btn" />
                         <String fx:value="success" />

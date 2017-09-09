@@ -5,6 +5,8 @@
  */
 package User;
 
+import User.Student.StudentController;
+import static User.Student.StudentController.student_id;
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -19,7 +21,10 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -27,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -62,7 +68,23 @@ public class MainwindowController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {     
      dateAndTime(); 
      
-    }   
+    } 
+    public void student_clicked(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/User/Student/student.fxml"));
+            
+            Parent root1 = null;            
+            root1 =  fxmlLoader.load();
+            StudentController controller = (StudentController)fxmlLoader.getController();
+            //passing the id of the selected student to the studentdetail.fxml file
+            Stage stage = new Stage();           
+            stage.setTitle("Students");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (Exception ex) {
+            System.out.println("Error while loading the file : " + ex.getMessage());
+        }
+    }
 //GADGETS PORTION AT THE END OF THE CODE i.e The gadgets included are
 //i) date and time display
 //ii)Calculator

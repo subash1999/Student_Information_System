@@ -5,6 +5,7 @@
  */
 package User.Student;
 
+import User.Teacher.Teachers_of_studentController;
 import com.jfoenix.controls.JFXTextField;
 import java.sql.*;
 import java.net.URL;
@@ -16,12 +17,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 
@@ -104,6 +109,25 @@ public class StudentdetailController implements Initializable {
         onRowClick();
         searchTable();
     }
+    public void teacher_btn_clicked(){
+        try{    
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/User/Teacher/teachers_of_student.fxml"));
+        
+            Parent root = null;            
+            root =  fxmlLoader.load();
+            
+            Teachers_of_studentController controller = (Teachers_of_studentController) fxmlLoader.getController();
+            controller.setStudentId(store_student_id.get());
+            Scene scene = new Scene(root);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Teachers of a Student ");
+            primaryStage.setScene(scene);       
+            primaryStage.show();
+        }
+        catch(Exception e){
+            System.out.println("Error in loading fxml file :" + e.getMessage());
+        }
+  }
     public void searchTable(){
          search_field.textProperty().addListener(new InvalidationListener() {           
 

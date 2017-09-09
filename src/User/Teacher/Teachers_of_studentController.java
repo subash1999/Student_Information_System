@@ -63,11 +63,24 @@ public class Teachers_of_studentController implements Initializable {
 
     @FXML
     private TableView teacher_table;
-
-      ObservableList<ObservableList> data = FXCollections.observableArrayList();
+    StudentIdStore store_student_id = new StudentIdStore();
+    ObservableList<ObservableList> data = FXCollections.observableArrayList();
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        
+    }
+    public void setStudentId(String s){
+        store_student_id.set(s);
+    }
+    private  class StudentIdStore {
+        private String s="0";
+        public void set(String s){
+            this.s = s;
+            //displayDetails();
+        }
+        public String get(){
+         return s;   
+        }        
     }
    public void searchTable(){
          search_field.textProperty().addListener(new InvalidationListener() {           
