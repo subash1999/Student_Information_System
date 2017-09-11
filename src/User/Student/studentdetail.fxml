@@ -198,24 +198,13 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="teachers_btn" layoutX="534.0" layoutY="153.0" mnemonicParsing="false" onMouseClicked="#teacher_btn_clicked" stylesheets="@../../stylesheet/bootstrap3.css" text="View Teachers">
+                  <Button fx:id="teachers_btn" layoutX="534.0" layoutY="153.0" mnemonicParsing="false" onMouseClicked="#teacher_btn_clicked" stylesheets="@../../stylesheet/bootstrap3.css" text="View Teachers and subjects">
                      <styleClass>
                         <String fx:value="action-btn" />
                         <String fx:value="success" />
                      </styleClass>
                   </Button>
-                  <Label layoutX="534.0" layoutY="111.0" text="Teachers">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="subjects_btn" layoutX="534.0" layoutY="258.0" mnemonicParsing="false" stylesheets="@../../stylesheet/bootstrap3.css" text="View Subjects">
-                     <styleClass>
-                        <String fx:value="action-btn" />
-                        <String fx:value="success" />
-                     </styleClass>
-                  </Button>
-                  <Label layoutX="534.0" layoutY="216.0" text="Subjects">
+                  <Label layoutX="534.0" layoutY="111.0" text="Teachers and Subjects">
                      <font>
                         <Font size="24.0" />
                      </font>

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="648.0" prefWidth="1026.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="User.Teacher.Teachers_of_studentController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="648.0" prefWidth="1026.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="User.Student.Teachers_of_studentController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -43,7 +43,7 @@
             </MenuBar>
             <DecorationPane prefHeight="71.0" prefWidth="600.0" style="-fx-background-color: #67c8ff;">
                <children>
-                  <Label prefHeight="48.0" style="-fx-text-fill: white;" stylesheets="@../../stylesheet/bootstrap3.css" text="TEACHERS OF A STUDENT">
+                  <Label prefHeight="48.0" style="-fx-text-fill: white;" stylesheets="@../../stylesheet/bootstrap3.css" text="TEACHERS AND SUBJECTS OF A STUDENT">
                      <font>
                         <Font name="Corbel" size="30.0" />
                      </font>
@@ -86,7 +86,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <TableView fx:id="search_table" layoutY="138.0" prefHeight="332.0" prefWidth="337.0" stylesheets="@../../stylesheet/bootstrap3.css" />
+                              <TableView fx:id="student_table" layoutY="138.0" prefHeight="332.0" prefWidth="337.0" stylesheets="@../../stylesheet/bootstrap3.css" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -140,12 +140,12 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label text="Teachers who teach the given students are : ">
+                        <Label text="Teachers who teach the given student are : ">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <TableView fx:id="teacher_table" prefHeight="295.0" prefWidth="502.0" stylesheets="@../../stylesheet/bootstrap3.css" />
+                        <TableView fx:id="teacher_table" prefHeight="295.0" prefWidth="622.0" stylesheets="@../../stylesheet/bootstrap3.css" />
                      </children>
                   </VBox>
                </children>

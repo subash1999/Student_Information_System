@@ -6,32 +6,32 @@
 package User.Teacher;
 
 import com.jfoenix.controls.JFXTextField;
-import java.io.IOException;
+import com.sun.javafx.collections.ObservableListWrapper;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 /**
  * FXML Controller class
@@ -69,10 +69,8 @@ public class TeacherController implements Initializable {
        //populating the table with the data and column from the database
        makeTable();
        searchTable();
-       choiceBox();
-       
-       
-           
+       choiceBox();     
+                  
   } 
    
     private void choiceBox(){
@@ -222,8 +220,7 @@ public class TeacherController implements Initializable {
             String SQL;
             ResultSet rs = null;
             try{
-                 SQL = "SELECT * FROM  teacher";
-                  
+                 SQL = "SELECT Teacher_id,Name,Phone,Address FROM  teacher";                  
                   rs = conn.createStatement().executeQuery(SQL);
             } catch(Exception e){
               e.printStackTrace();
@@ -254,8 +251,9 @@ public class TeacherController implements Initializable {
                 
                 table.getColumns().addAll(col);                 
             }
-        } catch (SQLException ex) {
-            System.out.println("Getting metadata error");
+
+           } catch (Exception ex) {
+            System.out.println("Getting metadata error  " + ex.getMessage());
         }
 
         try {
@@ -284,7 +282,9 @@ public class TeacherController implements Initializable {
          table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
          //setting the table menu button visible which lets user to select the column to view or hide
          table.setTableMenuButtonVisible(true);
-    }    
-    
+    }
+
 
 }
+    
+

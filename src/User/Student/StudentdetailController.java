@@ -5,7 +5,6 @@
  */
 package User.Student;
 
-import User.Teacher.Teachers_of_studentController;
 import com.jfoenix.controls.JFXTextField;
 import java.sql.*;
 import java.net.URL;
@@ -111,16 +110,15 @@ public class StudentdetailController implements Initializable {
     }
     public void teacher_btn_clicked(){
         try{    
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/User/Teacher/teachers_of_student.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("teachers_of_student.fxml"));
         
             Parent root = null;            
             root =  fxmlLoader.load();
-            
             Teachers_of_studentController controller = (Teachers_of_studentController) fxmlLoader.getController();
             controller.setStudentId(store_student_id.get());
             Scene scene = new Scene(root);
             Stage primaryStage = new Stage();
-            primaryStage.setTitle("Teachers of a Student ");
+            primaryStage.setTitle("Teachers and Subject of a Student ");
             primaryStage.setScene(scene);       
             primaryStage.show();
         }
