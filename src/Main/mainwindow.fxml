@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,18 +16,19 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.CalendarPicker?>
 
-<BorderPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="User.MainwindowController">
+<BorderPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main.MainwindowController">
    <top>
       <MenuBar id="menu" fx:id="menubar" prefHeight="37.0" prefWidth="694.0" stylesheets="@../stylesheet/bootstrap2.css" BorderPane.alignment="CENTER">
         <menus>
           <Menu id="file" fx:id="file" mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="view_session_menu_item" mnemonicParsing="false" text="View Session..." />
+                  <MenuItem fx:id="view_session_menu_item" mnemonicParsing="false" onAction="#viewSettingsMenuItemClicked" text="View Session..." />
                   <MenuItem fx:id="change_session_menuu_item" mnemonicParsing="false" text="Change Session..." />
-              <MenuItem fx:id="close_menu_item" mnemonicParsing="false" text="Close" />
+              <MenuItem fx:id="close_menu_item" mnemonicParsing="false" onAction="#closeMenuItemClicked" text="Close" />
             </items>
           </Menu>
           <Menu id="edit" fx:id="edit" mnemonicParsing="false" text="Edit">
@@ -39,15 +41,14 @@
               <MenuItem fx:id="about_menu_item" mnemonicParsing="false" text="About..." />
             </items>
           </Menu>
-            <Menu id="teacher" fx:id="teacher" mnemonicParsing="false" text="Teacher">
+            <Menu id="teacher" fx:id="teacher" mnemonicParsing="false" text="Settings">
               <items>
-                <MenuItem fx:id="view_all_menu_item" mnemonicParsing="false" text="View all..." />
-                  <MenuItem fx:id="view_classwise_menu_item" mnemonicParsing="false" text="View Classwise..." />
+                  <MenuItem fx:id="settings_menu_item" mnemonicParsing="false" onAction="#viewSettingsMenuItemClicked" text="View Settings" />
               </items>
             </Menu>
-            <Menu id="admin" fx:id="admin" mnemonicParsing="false" text="Admin">
+            <Menu mnemonicParsing="false" text="Teacher">
               <items>
-                <MenuItem fx:id="dashboard_menu_item" mnemonicParsing="false" text="Dashboard..." />
+                <MenuItem fx:id="add" mnemonicParsing="false" onAction="#addTeacherMenuItemOnAction" text="Add Teacher" />
               </items>
             </Menu>
             <Menu id="chat" fx:id="chat" mnemonicParsing="false" text="Chat">
@@ -64,24 +65,54 @@
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="148.0" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="369.0" minHeight="9.0" prefHeight="47.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="148.0" minHeight="0.0" prefHeight="126.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="369.0" minHeight="9.0" prefHeight="96.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="418.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label id="current_date" fx:id="current_date" alignment="CENTER" prefHeight="45.0" prefWidth="207.0" style="-fx-text-fill: white;" text="Current Date" textFill="#6e5c5c" GridPane.rowIndex="1">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <Label id="current_time" fx:id="current_time" alignment="CENTER" prefHeight="45.0" prefWidth="207.0" style="-fx-text-fill: white;" text="Current Time" textFill="#6e5c5c">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
+            <VBox prefHeight="172.0" prefWidth="210.0">
+               <children>
+                  <Label id="current_time" fx:id="current_time" alignment="CENTER" prefHeight="45.0" prefWidth="207.0" style="-fx-text-fill: white;" text="Current Time" textFill="#6e5c5c">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label id="current_date" fx:id="current_date" alignment="CENTER" prefHeight="45.0" prefWidth="207.0" style="-fx-text-fill: blue;" text="Current Date" textFill="#6e5c5c">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Separator prefHeight="71.0" prefWidth="210.0" />
+               </children>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </VBox>
+            <VBox GridPane.rowIndex="1">
+               <children>
+                  <VBox prefHeight="92.0" prefWidth="210.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="current_user" style="-fx-text-fill: white;" text="User :">
+                           <font>
+                              <Font name="Times New Roman" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="current_year" style="-fx-text-fill: white;" text="Year :">
+                           <font>
+                              <Font name="Times New Roman" size="30.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </VBox>
+                  <Separator prefHeight="38.0" prefWidth="216.0" />
+               </children>
+            </VBox>
          </children>
       </GridPane>
    </left>
@@ -106,7 +137,7 @@
                      <children>
                         <AnchorPane fx:id="student_anchor">
                            <children>
-                              <ImageView fx:id="student_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" onMouseClicked="#student_clicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="student_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" onMouseClicked="#studentClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/student.png" />
                                  </image>
@@ -123,7 +154,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                            <children>
-                              <ImageView fx:id="teacher_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="teacher_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#teacherClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/teacher.jpg" />
                                  </image>

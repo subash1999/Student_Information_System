@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ledger.LedgerController">
+   <left>
+      <HBox>
+         <children>
+            <VBox prefHeight="768.0" prefWidth="199.0" spacing="10.0">
+               <children>
+                  <AnchorPane prefHeight="146.0" prefWidth="236.0" style="-fx-background-color: white;">
+                     <children>
+                        <Label layoutX="117.0" layoutY="94.0" prefHeight="39.0" prefWidth="116.0" text="Mark Input">
+                           <font>
+                              <Font name="Arial Narrow" size="29.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="110.0" fitWidth="105.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/ledger.jpg" />
+                           </image>
+                        </ImageView>
+                        <Separator layoutY="130.0" prefHeight="13.0" prefWidth="261.0" />
+                     </children>
+                  </AnchorPane>
+                  <HBox>
+                     <children>
+                        <Label style="-fx-text-fill: blue;" text="Search Table  :">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="search_field" prefHeight="18.0" prefWidth="119.0" />
+                        <ImageView fitHeight="26.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/search.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <AnchorPane>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label style="-fx-text-fill: blue;" text="Examination">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="add_exam" layoutX="133.0" layoutY="-6.0" minWidth="78.0" mnemonicParsing="false" onMouseClicked="#clickAddExam" prefHeight="32.0" prefWidth="86.0" stylesheets="@../stylesheet/bootstrap2.css" text="Add exam">
+                           <styleClass>
+                              <String fx:value="action-btn" />
+                              <String fx:value="info" />
+                           </styleClass>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <ChoiceBox fx:id="exam_choicebox" prefWidth="177.0" stylesheets="@../stylesheet/bootstrap2.css" />
+                     </children>
+                  </AnchorPane>
+                  <Label style="-fx-text-fill: blue;" text="Grade ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="grade_choicebox" prefWidth="165.0" stylesheets="@../stylesheet/bootstrap2.css">
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </ChoiceBox>
+                  <Label style="-fx-text-fill: blue;" text="Section">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="section_choicebox" prefWidth="153.0" stylesheets="@../stylesheet/bootstrap2.css">
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </ChoiceBox>
+                  <AnchorPane />
+                  <AnchorPane fx:id="anchorpane_label">
+                     <children>
+                        <Label text="Selected mark ledger doesnot exists" textFill="#f20808">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="label1" layoutX="5.0" layoutY="17.0" text="You can create a new sheet for this" textFill="#f20808">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </AnchorPane>
+                  <Label style="-fx-text-fill: blue;" text="Result Date">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <AnchorPane>
+                     <children>
+                        <TextField fx:id="result_date_textfield" layoutX="24.0" layoutY="-1.0" prefHeight="29.0" prefWidth="125.0" />
+                        <Button fx:id="edit_result_date" layoutX="169.0" layoutY="-1.0" mnemonicParsing="false" onMouseClicked="#clickEditResultDate" prefHeight="32.0" prefWidth="71.0" stylesheets="@../stylesheet/bootstrap2.css" text="Edit" />
+                     </children>
+                  </AnchorPane>
+                  <Label style="-fx-text-fill: black;" text="Options">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <RadioButton fx:id="marks_input_radio_btn" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Marks  Input">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="options" />
+                     </toggleGroup>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="marks_to_grading_radio_btn" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Marks to Grading" toggleGroup="$options">
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </RadioButton>
+                  <AnchorPane />
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+         </children>
+      </HBox>
+   </left>
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <top>
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="117.0" layoutY="2.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="216.0" />
+                  <VBox layoutX="3.0" layoutY="6.0" prefHeight="112.0" prefWidth="221.0" spacing="10.0">
+                     <children>
+                        <Label style="-fx-text-fill: black;" text="Grade information">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox spacing="50.0">
+                           <children>
+                              <Label fx:id="grade_label" style="-fx-text-fill: firebrick;" text="Grade :" />
+                              <Label fx:id="section_label" style="-fx-text-fill: firebrick;" text="Section :" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="60.0">
+                           <children>
+                              <Label fx:id="male_label" style="-fx-text-fill: firebrick;" text="Male :" />
+                              <Label fx:id="female_label" style="-fx-text-fill: firebrick;" text="Female :" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="50.0">
+                           <children>
+                              <Label fx:id="passed_label" style="-fx-text-fill: firebrick;" text="Passed :" />
+                              <Label fx:id="failed_label" style="-fx-text-fill: firebrick;" text="Failed :" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <AnchorPane layoutX="282.0" layoutY="18.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="150.0" layoutX="220.0" layoutY="2.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="305.0" />
+                  <Label layoutX="227.0" layoutY="4.0" text="Add Subject to Current Ledger : ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="fm_textfield" layoutX="265.0" layoutY="86.0" prefHeight="27.0" prefWidth="41.0" />
+                  <Label layoutX="227.0" layoutY="33.0" style="-fx-text-fill: blue;" text="Subejct :" />
+                  <ChoiceBox fx:id="subject_choicebox" layoutX="295.0" layoutY="29.0" prefHeight="17.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
+                  <Label layoutX="228.0" layoutY="92.0" style="-fx-text-fill: blue;" text="FM :" />
+                  <TextField fx:id="pm_textfield" layoutX="357.0" layoutY="87.0" prefHeight="27.0" prefWidth="41.0" />
+                  <Label layoutX="320.0" layoutY="91.0" style="-fx-text-fill: blue;" text="PM :" />
+                  <RadioButton fx:id="theory_radiobtn" layoutX="316.0" layoutY="64.0" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Theory">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="subject_type" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <Label layoutX="227.0" layoutY="65.0" style="-fx-text-fill: blue;" text="Subejct Type :" />
+                  <RadioButton fx:id="practical_radiobtn" layoutX="385.0" layoutY="64.0" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Practical" toggleGroup="$subject_type" />
+                  <Button fx:id="add_subject_btn" layoutX="370.0" layoutY="116.0" mnemonicParsing="false" onMouseClicked="#clickAddSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Add Subject">
+                     <styleClass>
+                        <String fx:value="action-btn" />
+                        <String fx:value="primary" />
+                     </styleClass>
+                  </Button>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="135.0" layoutX="529.0" layoutY="2.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="201.0" />
+                  <Label layoutX="532.0" layoutY="5.0" text="Delete Subject from Current Ledger : " />
+                  <Label layoutX="534.0" layoutY="36.0" style="-fx-text-fill: blue;" text="Subejct Column :" />
+                  <ChoiceBox fx:id="subject_column_choicebox" layoutX="534.0" layoutY="59.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
+                  <Button fx:id="delete_subject_btn" layoutX="534.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#clickAddSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Delete Subject">
+                     <styleClass>
+                        <String fx:value="action-btn" />
+                        <String fx:value="danger" />
+                     </styleClass>
+                  </Button>
+                  <Label fx:id="add_subject_label" layoutX="230.0" layoutY="114.0" style="-fx-text-fill: red;" text="Selection already present" />
+               </children>
+            </AnchorPane>
+         </top>
+         <center>
+            <SpreadsheetView fx:id="table_spread" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="5.0" />
+               </BorderPane.margin>
+            </SpreadsheetView>
+         </center>
+         <bottom>
+            <AnchorPane prefHeight="72.0" prefWidth="933.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="new_sheet" accessibleRole="BUTTON" fitHeight="44.0" fitWidth="106.0" layoutX="11.0" layoutY="3.0" onMouseClicked="#clickCreateNewSheet" pickOnBounds="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../images/New%20Sheet.bmp" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="16.0" layoutY="45.0" text="Create New Sheet" />
+                  <ImageView fx:id="delete_ledger_btn" accessibleRole="BUTTON" fitHeight="44.0" fitWidth="148.0" layoutX="137.0" layoutY="3.0" onMouseClicked="#clickDeleteLedgerBtn" pickOnBounds="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../images/Delete%20Sheet.bmp" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="155.0" layoutY="45.0" prefHeight="17.0" prefWidth="119.0" text="Delete Current Sheet" />
+               </children>
+            </AnchorPane>
+         </bottom>
+      </BorderPane>
+   </center>
+</BorderPane>

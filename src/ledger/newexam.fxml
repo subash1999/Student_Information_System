@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="246.0" prefWidth="368.0" stylesheets="@../stylesheet/bootstrap2.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="ledger.NewexamController">
+   <children>
+      <Label layoutX="10.0" layoutY="3.0" prefHeight="66.0" prefWidth="316.0" text="NEW Examination" textFill="#29b592">
+         <font>
+            <Font name="French Script MT" size="50.0" />
+         </font>
+      </Label>
+      <Label layoutX="34.0" layoutY="65.0" text="Enter the name of exam:">
+         <font>
+            <Font name="Arial" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="exam_name" layoutX="27.0" layoutY="87.0" prefWidth="329.0" promptText="eg : - first_term, second_term, etc OR first_ut,second_ut,etc " text="eg : - first_term, second_term, etc OR first_ut,second_ut,etc " />
+      <Button fx:id="create_btn" layoutX="273.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#clickCreateBtn" text="Create">
+         <styleClass>
+            <String fx:value="action-btn" />
+            <String fx:value="success" />
+         </styleClass>
+      </Button>
+      <Label fx:id="label" layoutX="34.0" layoutY="207.0" style="-fx-text-fill: red;" text="Exam of similar name already exists" />
+      <Label layoutX="34.0" layoutY="119.0" style="-fx-text-fill: orange;" text="Note : Use underscore( _ ) instead of spacing for exam name" />
+      <TextField fx:id="result_date" layoutX="31.0" layoutY="161.0" prefWidth="209.0" promptText="yyyy/MM/dd" />
+      <Label layoutX="39.0" layoutY="138.0" text="Result date :">
+         <font>
+            <Font name="Arial" size="16.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

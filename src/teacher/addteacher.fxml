@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="463.0" prefWidth="688.0" stylesheets="@../stylesheet/bootstrap2.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teacher.AddteacherController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" style="-fx-text-fill: blue;" text="Register Teacher">
+         <font>
+            <Font name="Times New Roman" size="45.0" />
+         </font>
+      </Label>
+      <VBox layoutX="20.970703125" layoutY="83.0" spacing="20.0">
+         <children>
+            <AnchorPane>
+               <children>
+                  <Label text="Name : ">
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="name" layoutX="91.0" layoutY="-1.0" />
+                  <Label layoutX="251.0" layoutY="-7.0" style="-fx-text-fill: red;" text="*">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane>
+               <children>
+                  <Label layoutX="0.029296875" text="Address : ">
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="address" layoutX="90.029296875" layoutY="2.0" />
+                  <Label layoutX="249.0" layoutY="-6.0" style="-fx-text-fill: red;" text="*">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane>
+               <children>
+                  <Label text="Phone : ">
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="phone" layoutX="91.0" layoutY="-1.0" />
+                  <Label layoutX="249.0" layoutY="-5.0" style="-fx-text-fill: red;" text="*">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane>
+               <children>
+                  <RadioButton fx:id="male" layoutX="96.0" mnemonicParsing="false" text="Male">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="gender_tooglegroup" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="female" layoutX="175.0" layoutY="-1.0" mnemonicParsing="false" text="Female" toggleGroup="$gender_tooglegroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <Label text="Gender :">
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="78.0" layoutY="-3.0" style="-fx-text-fill: red;" text="*">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane>
+               <children>
+                  <Label text="Qualification :">
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="qualification" layoutX="131.0" layoutY="-3.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <Separator layoutX="326.0" layoutY="57.0" orientation="VERTICAL" prefHeight="405.0" prefWidth="18.0" />
+      <Label layoutX="344.0" layoutY="50.0" text="Assign Classes:">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="344.0" layoutY="88.0" style="-fx-text-fill: orange;" text="To Add : Fill the following and then press add ">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="table" layoutX="347.0" layoutY="256.0" prefHeight="200.0" prefWidth="321.0" />
+      <Label layoutX="344.0" layoutY="129.0" text="Subject :">
+         <font>
+            <Font name="Arial" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="344.0" layoutY="167.0" text="Grade :">
+         <font>
+            <Font name="Arial" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="344.0" layoutY="202.0" text="Section :">
+         <font>
+            <Font name="Arial" size="16.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="subject" layoutX="412.0" layoutY="124.0" prefWidth="150.0" stylesheets="@../stylesheet/bootstrap2.css" />
+      <ChoiceBox fx:id="grade" layoutX="404.0" layoutY="162.0" prefWidth="150.0" stylesheets="@../stylesheet/bootstrap3.css" />
+      <ChoiceBox fx:id="section" layoutX="412.0" layoutY="197.0" prefWidth="150.0" stylesheets="@../stylesheet/bootstrap3.css" />
+      <Button fx:id="add" layoutX="586.0" layoutY="123.0" mnemonicParsing="false" onAction="#addBtnOnAction" prefHeight="32.0" prefWidth="71.0" stylesheets="@../stylesheet/bootstrap2.css" text="Add">
+         <styleClass>
+            <String fx:value="action-btn" />
+            <String fx:value="success" />
+         </styleClass>
+      </Button>
+      <Button fx:id="delete" layoutX="586.0" layoutY="161.0" mnemonicParsing="false" onAction="#deleteBtnOnAction" prefHeight="39.0" prefWidth="71.0" stylesheets="@../stylesheet/bootstrap2.css" text="Delete">
+         <styleClass>
+            <String fx:value="action-btn" />
+            <String fx:value="danger" />
+         </styleClass>
+      </Button>
+      <Label layoutX="345.0" layoutY="106.0" style="-fx-text-fill: orange;" text="To delete :Select the class from table and press delete">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="346.0" layoutY="72.0" style="-fx-text-fill: orange;" text="Note :- ">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="237.0" layoutY="417.0" mnemonicParsing="false" onAction="#registerBtnOnAction" stylesheets="@../stylesheet/bootstrap2.css" text="Register">
+         <styleClass>
+            <String fx:value="action-btn" />
+            <String fx:value="info" />
+         </styleClass>
+      </Button>
+      <Label layoutX="6.0" layoutY="348.0" prefHeight="40.0" prefWidth="338.0" style="-fx-text-fill: red;" text="Note :-  Fields with the Star(*) are the required fields">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="label" layoutX="350.0" layoutY="221.0" prefHeight="40.0" prefWidth="338.0" style="-fx-text-fill: red;" text="Teacher already present for given class">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="label1" layoutX="350.0" layoutY="221.0" prefHeight="40.0" prefWidth="338.0" style="-fx-text-fill: red;" text="Selected subject is not present in the selected grade">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

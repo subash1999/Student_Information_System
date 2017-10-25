@@ -195,15 +195,16 @@
  *                                                                             *
  ******************************************************************************/
 .combo-box-base, .choice-box {
-	-fx-background-color: transparent;
+	-fx-background-color: black;
 	-fx-border-color: -swatch-grey;
+        -fx-mark-color: -swatch-grey;
 	-fx-border-width: 0 0 2 0;
 	-fx-background-radius: 0;
 	-fx-border-radius: 0;
 }
 
 .combo-box:focused, .choice-box:focused {
-	-fx-border-color: -swatch-500;
+	-fx-border-color: -swatch-grey;
 }
 
 .combo-box-base>.label, .choice-box>.label {
@@ -223,9 +224,13 @@
 	.spinner .decrement-arrow-button:hover .decrement-arrow {
 	-fx-background-color: -swatch-dark-grey;
 }
-
-.menu-item:focused {
-	-fx-background-color: -swatch-light-grey;
+.combo-box .context-menu,.choice-box .context-menu { -fx-background-color: black; }
+.combo-box .menu-item,.choice-box .menu-item > .label { -fx-text-fill: white; }
+.choice-box.menu-item:focused, .combo-box.menu-item:focused {
+	-fx-background-color: orange;
+}
+ .choice-box-popup > .list-view {
+    -fx-pref-width: 100;
 }
 
 /*******************************************************************************

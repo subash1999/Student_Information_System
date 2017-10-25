@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="278.0" prefWidth="529.0" stylesheets="@../stylesheet/bootstrap2.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="subject.AddsubjectController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="187.0" layoutX="17.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="501.0" />
+      <AnchorPane layoutX="25.0" layoutY="49.0" prefHeight="172.0" prefWidth="484.0">
+         <children>
+            <Label layoutX="10.0" layoutY="39.0" text="Subject Name :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="74.0" text="Full Marks(T) :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="114.0" text="Pass Marks(T) :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="148.0" text="GPA :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="152.0" layoutY="74.0" text="Full Marks (Th) :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="319.0" layoutY="74.0" text="Full Marks(Pr) :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="159.0" layoutY="113.0" text="Pass Marks (Th) :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="321.0" layoutY="113.0" text="Pass Marks(Pr) :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="6.0" layoutY="4.0" text="Grade :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="grade" layoutX="58.0" layoutY="2.0" prefWidth="150.0" />
+            <Label layoutX="223.0" layoutY="4.0" text="Section :">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="section" layoutX="282.0" layoutY="2.0" prefWidth="150.0" />
+     
+            <TextField fx:id="subject" layoutX="109.0" layoutY="37.0" prefHeight="25.0" prefWidth="159.0" />
+            <TextField fx:id="fm_tot" layoutX="99.0" layoutY="72.0" prefHeight="25.0" prefWidth="49.0" />
+            <TextField fx:id="fm_th" layoutX="256.0" layoutY="72.0" prefHeight="25.0" prefWidth="49.0" />
+            <TextField fx:id="fm_pr" layoutX="417.0" layoutY="72.0" prefHeight="25.0" prefWidth="49.0" />
+            <TextField fx:id="pm_tot" layoutX="104.0" layoutY="111.0" prefHeight="25.0" prefWidth="49.0" />
+            <TextField fx:id="pm_th" layoutX="265.0" layoutY="111.0" prefHeight="25.0" prefWidth="49.0" />
+            <TextField fx:id="pm_pr" layoutX="421.0" layoutY="111.0" prefHeight="25.0" prefWidth="49.0" />
+            
+            <TextField fx:id="gpa" layoutX="56.0" layoutY="145.0" prefHeight="25.0" prefWidth="49.0" />
+                </children>
+      </AnchorPane>
+      <Label layoutX="24.0" layoutY="14.0" style="-fx-text-fill: black;" text="Add Subject to Selected Grade">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="add_btn" layoutX="435.0" layoutY="235.0" mnemonicParsing="false" text="Add">
+         <styleClass>
+            <String fx:value="action-btn" />
+            <String fx:value="success" />
+         </styleClass></Button>
+      <Label layoutX="7.0" layoutY="235.0" style="-fx-text-fill: orange;" text="Note : If the given subject has no practical type '0' and FM (Total) = FM (Theory) " />
+   </children>
+</AnchorPane>

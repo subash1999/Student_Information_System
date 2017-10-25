@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package User.Student;
+package student;
 
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -33,6 +33,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import login.LoginController;
 /**
  * FXML Controller class
  *
@@ -149,14 +150,11 @@ public class StudentController implements Initializable {
     }
     private void updateFilterTable(String choice){
          ObservableList tableItems = FXCollections.observableArrayList();
-
-                ObservableList<TableColumn> cols = table.getColumns();                
+                ObservableList<TableColumn> cols = table.getColumns();               
                     
-                for(int i=0; i<data.size(); i++) {                   
-                    
+                for(int i=0; i<data.size(); i++) {                                       
                     TableColumn col = new TableColumn();
-                      switch(choice.toLowerCase()){
-                          
+                      switch(choice.toLowerCase()){                          
                         case "all":
                             for(int j=0; j<cols.size(); j++) {
                              col = cols.get(j);
@@ -449,7 +447,7 @@ public class StudentController implements Initializable {
             String SQL;
             ResultSet rs = null;
             try{
-                 SQL = "SELECT * FROM  student";
+                 SQL = "SELECT * FROM Year_" +LoginController.current_year+"_student";
                   
                   rs = conn.createStatement().executeQuery(SQL);
             } catch(Exception e){
@@ -462,8 +460,9 @@ public class StudentController implements Initializable {
              * TABLE COLUMN ADDED DYNAMICALLY *
              **********************************/
             column_count=rs.getMetaData().getColumnCount();
-            column_name = new String[column_count];
-            for(int i=0 ; i<rs.getMetaData().getColumnCount(); i++){
+            column_name = new String[column_count-1];
+            
+            for(int i=0, k=0; i<rs.getMetaData().getColumnCount(); i++){
                 //We are using non property style for making dynamic table
                 final int j = i;                
                 TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i+1));
@@ -472,16 +471,21 @@ public class StudentController implements Initializable {
                 col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                    
                     @Override
                     public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
+                        //System.out.println(param.getValue().get(j).toString());
                         return  new SimpleStringProperty(param.getValue().get(j).toString());
                         
                     }                    
                 });
-                column_name[i]=col.getText();
+                
                 if("previous_school".equalsIgnoreCase(col.getText())){
                     col.setVisible(false);
                 }
-                
-                table.getColumns().addAll(col);                 
+                if(!"Grade_id".equals(col.getText())){
+                    table.getColumns().addAll(col);
+                    column_name[k]=col.getText();
+                    k++;
+                }
+                                 
             }
         } catch (SQLException ex) {
             System.out.println("Getting metadata error");

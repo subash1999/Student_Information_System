@@ -3,36 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package User.Teacher;
+package teacher;
 
 import com.jfoenix.controls.JFXTextField;
-import com.sun.javafx.collections.ObservableListWrapper;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import login.LoginController;
 /**
  * FXML Controller class
  *
@@ -70,15 +72,47 @@ public class TeacherController implements Initializable {
        makeTable();
        searchTable();
        choiceBox();     
-                  
+       onRowClick();           
   } 
    
+     private void onRowClick(){
+        table.setRowFactory( tv -> {
+    TableRow row = new TableRow<>();
+    row.setOnMouseClicked(event -> {
+        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+        ObservableList<TableColumn> cols = table.getColumns();
+        TableColumn col = cols.get(0);
+        ObservableList<ObservableList> table_data = FXCollections.observableArrayList() ;
+        table_data=table.getItems();
+        teacher_id = col.getCellData(row.getIndex()).toString();
+        //the two code below do the same job as the code above
+        //String student_id = col.getCellData(table.getSelectionModel().getSelectedIndex()).toString();
+        //String student_id = col.getCellData(table_data.get(table.getSelectionModel().getSelectedIndex())).toString();
+       try{
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("teacherdetail.fxml"));
+        
+            Parent root1 = null;            
+            root1 =  fxmlLoader.load();
+            TeacherdetailController controller = (TeacherdetailController)fxmlLoader.getController();
+            //passing the id of the selected student to the studentdetail.fxml file
+            controller.setTeacherId(teacher_id);            
+            Stage stage = new Stage();           
+            stage.setTitle("Teacher Detail" );
+            stage.setScene(new Scene(root1));
+            stage.show();
+       }
+            catch (IOException ex) {
+                System.out.println("FXML loader error" + ex.getMessage());
+            }
+   }
+    });
+    return row ;
+});
+    }  
     private void choiceBox(){
         ObservableList<String> choice_list= FXCollections.observableArrayList();
         choice_list.add("All");
-        for(String col : column_name){
-            choice_list.add(col);
-        }
+        choice_list.addAll(Arrays.asList(column_name));
         search_choice.getSelectionModel().select("All");
         search_choice.setItems(choice_list);
         //adding listner to the choice box so that when ever the value changes
@@ -93,7 +127,6 @@ public class TeacherController implements Initializable {
     }
     private void searchTable(){
          search_field.textProperty().addListener(new InvalidationListener() {           
-
              @Override
              public void invalidated(javafx.beans.Observable observable) {
                 
@@ -220,7 +253,7 @@ public class TeacherController implements Initializable {
             String SQL;
             ResultSet rs = null;
             try{
-                 SQL = "SELECT Teacher_id,Name,Phone,Address FROM  teacher";                  
+                 SQL = "SELECT Teacher_id,Name,Phone,Address FROM  Year_"+LoginController.current_year+"_teacher";                  
                   rs = conn.createStatement().executeQuery(SQL);
             } catch(Exception e){
               e.printStackTrace();
@@ -283,7 +316,7 @@ public class TeacherController implements Initializable {
          //setting the table menu button visible which lets user to select the column to view or hide
          table.setTableMenuButtonVisible(true);
     }
-
+       
 
 }
     

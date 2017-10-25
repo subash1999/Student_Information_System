@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package User.Student;
+package student;
 
 import com.jfoenix.controls.JFXTextField;
 import java.sql.*;
@@ -27,6 +27,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import login.LoginController;
 
 
 /**
@@ -193,7 +194,7 @@ public class StudentdetailController implements Initializable {
         ResultSet result = null;
         String query;
         try{
-            query = "SELECT Student_id,Grade,Roll,Name FROM student;";
+            query = "SELECT Student_id,Grade,Roll,Name FROM Year_" + LoginController.current_year + "_student;";
             result=conn.createStatement().executeQuery(query);
         }
         catch(Exception ex){
@@ -261,7 +262,7 @@ public class StudentdetailController implements Initializable {
     }    
     public void displayDetails(){           
           Connection conn=database.Connection.conn;          
-          String query = "SELECT * FROM STUDENT WHERE Student_id = " + store_student_id.get();
+          String query = "SELECT * FROM Year_"+LoginController.current_year+"_student WHERE Student_id = " + store_student_id.get();
           ResultSet result = null;
           try {              
               result = conn.createStatement().executeQuery(query);

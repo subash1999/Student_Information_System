@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package User.Student;
+package student;
 
 import com.jfoenix.controls.JFXTextField;
 import java.sql.*;
@@ -22,6 +22,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
+import login.LoginController;
 
 
 /**
@@ -80,7 +81,7 @@ public class Teachers_of_studentController implements Initializable {
         ResultSet result = null;
         String query;
         try{
-            query = "select Name,Grade,Section,Roll from student where Student_id=" + store_student_id.get();
+            query = "select Name,Grade,Section,Roll from Year_"+LoginController.current_year+"_student where Student_id=" + store_student_id.get();
             result = conn.createStatement().executeQuery(query);
             while(result.next()){
             name.setText("Name : "+result.getString("Name"));
@@ -119,37 +120,34 @@ public class Teachers_of_studentController implements Initializable {
         try{
             Statement statement = conn.createStatement();
             statement.addBatch("create temporary table temp_teacher(\n" +
-"	Subject_id INT,	\n" +
+"	Teacher_id INT,	\n" +
 "	Name VARCHAR(200),\n" +
 "	Phone VARCHAR(200),\n" +
 "	Address VARCHAR(200)	\n" +
 ");");
-        statement.addBatch("create temporary table temp_student(\n" +
-"	Subject_id INT,	\n" +
+        statement.addBatch("create temporary table temp_subject(\n" +
+"	Teacher_id INT,	\n" +
 "	Subject VARCHAR(200)\n" +
 "		\n" +
 ");");            
-        statement.addBatch("insert temp_teacher select teacher.Subject_id,teacher.Name,teacher.Phone,teacher.Address from teacher where teacher.Teacher_id \n" +
-"in(select teacher.Teacher_id from teacher where teacher.Subject_id in \n" +
-"(select subject.Subject_id from subject where subject.Grade in\n" +
-"(select grade from student where student.Student_id=" + store_student_id.get() + ")));");
-        statement.addBatch("insert temp_student select subject.Subject_id,subject.Subject_name from subject where subject.Subject_id in( select teacher.Subject_id from teacher where teacher.Teacher_id \n" +
-"in(select teacher.Teacher_id from teacher where teacher.Subject_id in \n" +
-"(select subject.Subject_id from subject where subject.Grade in\n" +
-"(select grade from student where student.Student_id="+ store_student_id.get() +"))));");
+        statement.addBatch("insert temp_teacher select Teacher_id,Name,Phone,Address from"
+                + " Year_"+LoginController.current_year+"_teacher where Teacher_id \n" +"in" +
+"(select Teacher_id from Year_"+LoginController.current_year+"_subject where Grade in\n" +
+"(select grade from Year_"+LoginController.current_year+"_student where Student_id=" + store_student_id.get() + "));");
+        statement.addBatch("insert temp_subject select Teacher_id,Subject_name from Year_"+LoginController.current_year+"_subject where Grade_id in\n" +
+"(select Grade_id from Year_"+LoginController.current_year+"_student where Student_id="+ store_student_id.get() +");");
         statement.addBatch("create TEMPORARY TABLE final(\n" +
 "	`S.N` INT not null  AUTO_INCREMENT, \n" +
-"     `Teacher's Name` VARCHAR(200),\n" +
+"     `Name` VARCHAR(200),\n" +
 "     Subject VARCHAR(200),\n" +
 "     Phone VARCHAR(200),\n" +
 "     Address VARCHAR(200),\n" +
 "    PRIMARY key  (`S.N`)\n" +
 ");");
-        statement.addBatch("INSERT into final(`Teacher's Name`,Subject,Phone,Address) \n" +
+        statement.addBatch("INSERT into final(`Name`,Subject,Phone,Address) \n" +
 "select Name,Subject,Phone,Address \n" +
 "from temp_teacher\n" +
-"inner join temp_student on temp_teacher.Subject_id=temp_student.Subject_id; ");
-        
+"inner join temp_subject on temp_teacher.Teacher_id=temp_subject.Teacher_id; ");
         statement.executeBatch();
         result = statement.executeQuery("select * from final");
         }
@@ -216,7 +214,7 @@ public class Teachers_of_studentController implements Initializable {
         ResultSet result = null;
         String query;
         try{
-            query = "SELECT Student_id,Grade,Section,Roll,Name FROM student;";
+            query = "SELECT Student_id,Grade,Section,Roll,Name FROM Year_"+LoginController.current_year+"_student;";
             result=conn.createStatement().executeQuery(query);
         }
         catch(Exception ex){

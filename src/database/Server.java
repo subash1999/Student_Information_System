@@ -20,13 +20,7 @@ public class Server {
     public void startServer(){
        boolean apache_running = isServerRunning(85);
        boolean my_sql_running = isServerRunning(3308);
-       //creating an alert
-       Alert alert = new Alert(Alert.AlertType.INFORMATION);
-       alert.setHeaderText("Server and Database Starting...");
-       alert.setContentText("Waiting for the apache server and My sql to start. Please wait 5 more seconds ...");
-       alert.initModality(Modality.APPLICATION_MODAL);
        if(!apache_running || !my_sql_running){
-           alert.show();
            runApache();
            runMySql();
            try {
@@ -36,6 +30,7 @@ public class Server {
             error.setContentText(ex.getMessage());
             error.setHeaderText("Error while running the thread 1st time");
             error.setTitle("Error");
+            
             error.initModality(Modality.APPLICATION_MODAL);
             error.showAndWait();
         }
@@ -43,22 +38,14 @@ public class Server {
       apache_running = isServerRunning(85);
       my_sql_running = isServerRunning(3308);
       if(apache_running && my_sql_running){
-          alert.close();
       }       
       else {
           try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
-            Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setContentText(ex.getMessage());
-            error.setHeaderText("Error while running the thread 2nd time");
-            error.setTitle("Error");
-            error.initModality(Modality.APPLICATION_MODAL);
-            error.showAndWait();
         }
       }
-       Connection.connect();
-       alert.close();
+       database.Connection.connect();
     }
     
     public boolean isServerRunning(int port){
@@ -76,14 +63,14 @@ public class Server {
     public void runMySql(){
         try {
             Process process1 = Runtime.getRuntime().exec("C:\\xampp\\xampp_start.exe");
-            Process process2 = Runtime.getRuntime().exec("C:\\xampp\\mysql\\bin\\mysqld.exe");
+            //Process process2 = Runtime.getRuntime().exec("C:\\xampp\\mysql\\bin\\mysqld.exe");
         } catch (IOException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("My SQL cannot be started");
             alert.setContentText(ex.getMessage());
             alert.setTitle("My SQL Error");
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.showAndWait();
+            alert.show();
             try {
                 Thread.sleep(6000);
             } catch (InterruptedException ex1) {
