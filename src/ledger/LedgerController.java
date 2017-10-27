@@ -6,6 +6,7 @@
 package ledger;
 
 import com.jfoenix.controls.JFXTextField;
+import com.sun.javaws.progress.Progress;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,12 +14,15 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,6 +34,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -150,6 +155,8 @@ public class LedgerController implements Initializable {
     
     @FXML
     private Button recalculate_btn;
+    @FXML
+    private ProgressIndicator progress_indicator;
     
     private  StringProperty ledger_id = new SimpleStringProperty() ;
    
@@ -467,7 +474,7 @@ public class LedgerController implements Initializable {
                //column is done by the programmer with the help of code only
                ObservableList<String> not_editable_column_list = FXCollections.observableArrayList();
                not_editable_column_list.addAll(Arrays.asList("Division","Total","Percentage",
-                       "CRank","Rank","Result","Remarks"));
+                       "ClassRank","Rank","Result","Remarks"));
                not_editable_column_list.addAll(Arrays.asList("Student_id","Roll","Name"));
                for(int column = 0;column<grid.getColumnCount();++column){
                    String column_header  = grid.getColumnHeaders().get(column);
@@ -476,8 +483,7 @@ public class LedgerController implements Initializable {
                   //by adding listner i can update each and every changes to the database
                   //automatically whenever any changes occurs to the spreadsheet
                    s.itemProperty().addListener(e->{
-                       try{
-                      
+                       try{                      
                        s.getColumn();
                        s.getRow();
                        }
@@ -497,6 +503,7 @@ public class LedgerController implements Initializable {
                rows.add(list);               
            }
             grid.setRows(rows);
+            table_spread.getColumns().clear();
             table_spread.setGrid(grid);
            for(int i=0;i<table_spread.getGrid().getColumnCount();i++){                
                if("Student_id".equals(table_spread.getGrid().getColumnHeaders().get(i))
@@ -633,9 +640,6 @@ public class LedgerController implements Initializable {
         String fm = this.fm_textfield.getText();
         String pm = this.pm_textfield.getText();
         String subject = subject_choicebox.getSelectionModel().getSelectedItem().toString();
-        System.out.println(subject);
-        System.out.println(fm);
-        System.out.println(pm);
         if(!"".equals(subject) && !"".equals(fm) && !"".equals(pm)){
         Alert a= new Alert(AlertType.CONFIRMATION);
         a.setHeaderText("Are you sure you want to add subject");
@@ -905,6 +909,69 @@ public class LedgerController implements Initializable {
     }
     @FXML
     private void clickReCalculateBtn(MouseEvent event) {
+    progress_indicator.setVisible(true);
+    String led_id = ledger_id.get();
+    final Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                if(ledger_id.get()!=null){
+                CalculateResult c = new CalculateResult(ledger_id.get());
+                c.calculateTotal();
+                updateProgress(1,10);
+                c.calculatePercentage();
+                updateProgress(2,10);
+                c.calculateResult();
+                updateProgress(3,10);
+                c.calculateDivision();
+                updateProgress(4.5,10);
+                c.calculateClassRank();
+                updateProgress(6,10);
+                c.calculateRank();
+                updateProgress(8,10);
+                c.calculateRemarks();
+                updateProgress(9,10);
+                
+                if(!ledger_id.get().equals(led_id)){
+                    updateProgress(10,10);
+                    updateProgress(0,1);
+                }
+                else{
+                listnerForChoiceBox();
+                updateProgress(10,10);
+                }
+                }
+                else{
+                    updateProgress(1,1);
+                }
+                
+                return null;
+            }
+        };
+        
+          
+       //binding the progress bar to the task
+        progress_indicator.progressProperty().bind(
+                task.progressProperty()
+        );
+        
+        // color the bar green when the work is complete.
+        progress_indicator.progressProperty().addListener(observable -> {
+            if (progress_indicator.getProgress() >= 1 ) {
+                progress_indicator.setStyle("-fx-accent: forestgreen;");
+            }
+            else{
+             progress_indicator.setStyle("progress-indicator");                
+            }
+        });  
+        final Thread thread = new Thread(task, "task-thread");
+          try {
+              thread.join();
+          } catch (InterruptedException ex) {
+              Logger.getLogger(LedgerController.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        thread.setDaemon(true);
+        thread.start();
+        
     }
     public void refresh(){
         String exam = exam_choicebox.getSelectionModel().getSelectedItem().toString();

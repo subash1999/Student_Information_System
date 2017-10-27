@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -250,6 +251,7 @@
                         <String fx:value="success" />
                      </styleClass>
                   </Button>
+                  <ProgressIndicator fx:id="progress_indicator" layoutX="803.0" layoutY="103.0" prefHeight="53.0" prefWidth="44.0" progress="0.0" />
                </children>
             </AnchorPane>
          </top>

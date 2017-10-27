@@ -29,6 +29,7 @@ public class CalculateResult {
     String year = LoginController.current_year;
     String table_name;
     CalculateResult(){
+        listnerForLedgerId();    
         try{
            st = conn.createStatement();
         }
@@ -37,11 +38,11 @@ public class CalculateResult {
                     + "at CalcualteResult : " + e.getMessage());
             e.printStackTrace();
         }
-        listnerForLedgerId();
     }
     
     
     CalculateResult(String ledger_id ){
+        listnerForLedgerId();
         this.ledger_id.set(ledger_id);
            try{
            st = conn.createStatement();
@@ -51,13 +52,12 @@ public class CalculateResult {
                     + "at CalcualteResult : " + e.getMessage());
             e.printStackTrace();
         }
-        listnerForLedgerId();
+        
     }
     
     public void listnerForLedgerId(){
         this.ledger_id.addListener(e->{
             try{
-                System.out.println("listner");
                 String query = "SELECT Table_name FROM year_"+year+"_ledger "
                         + "WHERE Ledger_id = "+ this.ledger_id.get();
                 result = conn.createStatement().executeQuery(query);
@@ -71,6 +71,7 @@ public class CalculateResult {
                  ex.printStackTrace();
             }
         });
+        
     }
     public void setLedgerId(String ledger_id){
         this.ledger_id.set(ledger_id);
@@ -99,24 +100,26 @@ public class CalculateResult {
         }
     }
     public void calculateTotal(){
+        
         String query;
         query = "SELECT Subject_title FROM year_"+year+"_marks WHERE Ledger_id = "+
                 ledger_id.get();
+        System.out.println(query);
         try{
+            Statement st = conn.createStatement();
             result = conn.createStatement().executeQuery(query);
             int i=0;
             while(result.next()){
                 i++;
             }
             String[] column_name = new String[i];
-            query = "SELECT Student_id,";
+            query = "SELECT Student_id";
             for(int j=0;j<column_name.length;i++){                
-                query = query + column_name[j]; 
-                if(j!=column_name.length){
-                    query = query + ",";
-                }                               
+                query = query +", "+ column_name[j]; 
+                                               
             }
             query = query + " " + " FROM "+table_name;
+            System.out.println(query);
             result = conn.createStatement().executeQuery(query);
             float total = 0;
             while(result.next()){
@@ -142,6 +145,7 @@ public class CalculateResult {
         query = "SELECT FM FROM year_"+year+"_marks WHERE Ledger_id = "+
                 ledger_id.get();
         try{
+            Statement st = conn.createStatement();
             result = conn.createStatement().executeQuery(query);
             float total_fm = 0;
             while(result.next()){
@@ -172,6 +176,7 @@ public class CalculateResult {
         query = "SELECT Subject_title,PM FROM year_"+year+"_marks WHERE Ledger_id = "+
                 ledger_id.get();
         try{
+            Statement st = conn.createStatement();
             result = conn.createStatement().executeQuery(query);
             ObservableList<ObservableList> pass_marks = FXCollections.observableArrayList();
             while(result.next()){
@@ -186,17 +191,17 @@ public class CalculateResult {
                 i++;
             }
             String[] column_name = new String[i];
-            query = "SELECT Student_id,";
+            query = "SELECT Student_id ";
             for(int j=0;j<column_name.length;i++){                
-                query = query + column_name[j]; 
-                if(j!=column_name.length){
-                    query = query + ",";
-                }                               
+                query = query +","+ column_name[j];                                                
             }
             query = query + " " + " FROM "+table_name;
             result = conn.createStatement().executeQuery(query);
             while(result.next()){
                 String res = "Pass";
+                if(result.getMetaData().getColumnCount()<=1){
+                    res = "Fail";
+                }
                 for(int j=2;j<result.getMetaData().getColumnCount();j++){
                    for(int k=0;k<pass_marks.size();k++){
                        if(pass_marks.get(k).get(0).equals(result.getMetaData().getColumnName(j))){
@@ -228,6 +233,7 @@ public class CalculateResult {
         String query = "SELECT Student_id,Percentage FROM "+table_name 
                 +" WHERE Result = 'Pass'" ;
             try{
+                Statement st = conn.createStatement();
             result = conn.createStatement().executeQuery(query);
             query = "SELECT `From`,`To`,`Division_name` FROM year_"+year+"_percentage ; ";
             ResultSet res = conn.createStatement().executeQuery(query);
@@ -239,7 +245,7 @@ public class CalculateResult {
                     Float from = Float.valueOf(res.getString("From"));
                     Float to = Float.valueOf(res.getString("To"));
                     if(from<=per && per<to){
-                        div = result.getString("Division_name");
+                        div = res.getString("Division_name");
                         break;
                     }
                 }
@@ -256,12 +262,14 @@ public class CalculateResult {
         catch(Exception e){
             System.out.println("Exception at calculateDivision() at "
                     + "CalculateResult : "+ e.getMessage());
+            e.printStackTrace();
         }
     }
     public void calculateClassRank(){
         System.out.println(table_name);
         String query;
         try{
+            Statement st = conn.createStatement();
         query = "CREATE TEMPORARY TABLE temp ("
                 + "Student_id INT, "
                 + "Total Decimal,"
@@ -306,7 +314,8 @@ public class CalculateResult {
     public void calculateRank(){
         String query;
         try{
-        query = "CREATE TEMPORARY TABLE temp ("
+        Statement st = conn.createStatement();
+        query = "CREATE TEMPORARY TABLE temp1 ("
                 + "Student_id INT, "
                 + "Total Decimal);";       
         st.addBatch(query);
@@ -322,7 +331,7 @@ public class CalculateResult {
        query = "SET @rank_count = 0;";
        st.addBatch(query);
        System.out.println(query);
-       query = "INSERT INTO temp (Student_id,Total) "
+       query = "INSERT INTO temp1 (Student_id,Total) "
                + "SELECT Student_id,cast(Total as decimal(10,2)) FROM "
                + table_name+" WHERE "+table_name+".Result = 'Pass';";
        st.addBatch(query);
@@ -368,7 +377,7 @@ public class CalculateResult {
                 i++;
             }
             for(i=0;i<table_names.length;i++){
-                query = "INSERT INTO temp (Student_id,Total) "
+                query = "INSERT INTO temp1 (Student_id,Total) "
                         + " SELECT Student_id, cast(Total as decimal(10,2)) FROM "
                         + table_names[i]
                         +" WHERE "+table_names[i]+".Result = 'Pass';";;
@@ -382,7 +391,7 @@ public class CalculateResult {
                 "    WHEN @prev_value := Total "
                     + "THEN @rank_count := @rank_count + 1\n" +
                 "END) AS Rank\n" +
-                "FROM temp \n" +
+                "FROM temp1 \n" +
                 "ORDER BY cast(Total as decimal(10,2)) DESC";                
         
         st.addBatch(query);
@@ -410,7 +419,7 @@ public class CalculateResult {
             
         }     
         catch(Exception e){
-            System.out.println("Exception at calculateResult() "
+            System.out.println("Exception at calculateRank() "
                     + "at CalculateResult: "+
                     e.getMessage());
             e.printStackTrace();
@@ -421,6 +430,7 @@ public class CalculateResult {
     public void calculateRemarks(){
         String query = "SELECT Student_id,Percentage,Result FROM "+table_name;
         try{
+            Statement st = conn.createStatement();
             result  = conn.createStatement().executeQuery(query);
             ResultSet res ;
             query  = "SELECT SUM(PM) FROM year_"+year+"_marks "

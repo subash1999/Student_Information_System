@@ -198,7 +198,8 @@ public class Addsession2Controller  extends SettingsController implements Initia
 "`Division` varchar(30) primary key,\n" +
 "`From` varchar(30) not null,\n" +
 "`To` varchar(30) not null,\n" +
-"`Division_name` varchar(30) not null\n" +
+"`Division_name`  varchar(30) not null UNIQUE,\n" +
+"CONSTRAINT unique_grade UNIQUE(`From`,`To`)\n"+
 "\n" +
 ");\n");
             statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_"+session +"_percentage','"+session +"','Percentage');\n" +

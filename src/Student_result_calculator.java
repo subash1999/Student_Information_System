@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import login.LoginController;
 
 /**
  *
@@ -33,6 +34,7 @@ private Stage primaryStage = null;
        Server server = new Server();
        server.startServer();
         try {
+            LoginController.current_year="2074";
             Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));
 //           Parent root = FXMLLoader.load(getClass().getResource("/teacher/addteacher.fxml"));
 //           Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
