@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -147,6 +148,9 @@ public class LedgerController implements Initializable {
     @FXML
     private Label add_subject_label;
     
+    @FXML
+    private Button recalculate_btn;
+    
     private  StringProperty ledger_id = new SimpleStringProperty() ;
    
     private String table_name;
@@ -157,7 +161,9 @@ public class LedgerController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         database.Connection.connect();
         anchorpane_label.setVisible(false);
-        table_spread.getColumns().clear();
+        table_spread.setShowRowHeader(false);
+        GridBase grid = new GridBase(0,0);
+        table_spread.setGrid(grid);
         result_date_textfield.setEditable(false);
         LoginController.current_year = "2074";
         choiceBox();
@@ -265,6 +271,7 @@ public class LedgerController implements Initializable {
             while(result.next()){
                 subject_choicebox.getItems().add(result.getString(1));
             }
+            subject_choicebox.getSelectionModel().selectFirst();
             //Making FullMarks textfield only accept integer and dot
            fm_textfield.lengthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
            if (newValue.intValue() > oldValue.intValue()) {
@@ -294,11 +301,14 @@ public class LedgerController implements Initializable {
         }
         //Setting the theory radio btn selected
         theory_radiobtn.setSelected(true);
+        listnerForAddSubject();
         //adding listner to subject_choicebox
-        subject_choicebox.selectionModelProperty().addListener(e->{
-            listnerForAddSubject();
-        });
-        //adding listner to subject_type togglegroup
+        subject_choicebox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String number, String number2) {
+        listnerForAddSubject();
+      }
+    });    //adding listner to subject_type togglegroup
         subject_type.selectedToggleProperty().addListener(e->{
             listnerForAddSubject();
         });
@@ -347,6 +357,7 @@ public class LedgerController implements Initializable {
         }
     }
     private void deleteSubject(){
+        subject_column_choicebox.getItems().clear();
         String ledger_id = this.ledger_id.get();
         Connection conn = database.Connection.conn;
         ResultSet result = null;
@@ -358,6 +369,7 @@ public class LedgerController implements Initializable {
             while(result.next()){
                 subject_column_choicebox.getItems().add(result.getString(1));
             }
+            subject_column_choicebox.getSelectionModel().selectFirst();
         }
         catch(Exception e){
             System.out.println("Exception at deleteSubject() at LedgerController : " + e.getMessage());
@@ -401,7 +413,7 @@ public class LedgerController implements Initializable {
            Statement st = conn.createStatement();
            query = "CREATE TEMPORARY TABLE temp ("
                    + "Student_id INT NOT NULL,"
-                   + "Roll INT ,"
+                   + "Roll INT Primary Key,"
                    + "Name VARCHAR(200)"
                    + ");";
            st.addBatch(query);
@@ -410,9 +422,10 @@ public class LedgerController implements Initializable {
            st.addBatch(query);
            st.executeBatch();
            query = "SELECT column_name FROM information_schema.columns"
-                   + " WHERE table_schema = 'school' and table_name='"+table_name+"'";
+                   + " WHERE table_schema = 'school' AND table_name='"+table_name+"'"
+                   + "AND column_name!='Roll'";
            result = conn.createStatement().executeQuery(query);
-           query = "SELECT temp.Student_id,temp.Roll,temp.Name";           
+           query = "SELECT temp.Roll,temp.Student_id,temp.Name";           
            while(result.next()){
                query = query + ","+table_name+".`"+result.getString(1)+"`";
            }
@@ -484,7 +497,6 @@ public class LedgerController implements Initializable {
                rows.add(list);               
            }
             grid.setRows(rows);
-            table_spread.getColumns().clear();
             table_spread.setGrid(grid);
            for(int i=0;i<table_spread.getGrid().getColumnCount();i++){                
                if("Student_id".equals(table_spread.getGrid().getColumnHeaders().get(i))
@@ -496,8 +508,9 @@ public class LedgerController implements Initializable {
                    table_spread.hideColumn(table_spread.getColumns().get(i));
                }               
             }
-           
-            table_spread.getColumns().get(1).fitColumn();
+            table_spread.getColumns().get(1).fitColumn(); 
+            table_spread.getColumns().get(2).fitColumn();
+            table_spread.getColumns().get(3).fitColumn();
             table_spread.setShowRowHeader(false);
         }
         catch(Exception e){
@@ -695,15 +708,14 @@ public class LedgerController implements Initializable {
             while(result.next()){
                 table_name = result.getString(1);
             }
+            subject_title=subject_title+" "+pm+"/"+fm;            
             query = "INSERT INTO year_"+year+"_marks(Subject_id,Subject_title,Ledger_id,FM,PM,Type) "
                     + "VALUES("+subject_id+",'"+subject_title+"',"+ledger_id.get()
                     +","+fm+","+pm+",'"+type+"');";
             Statement st = conn.createStatement();
             st.addBatch(query);  
-            System.out.println(query);
-            query = "ALTER TABLE "+table_name + " ADD `"+subject_title+" "+pm+"/"+fm+"` "
+            query = "ALTER TABLE "+table_name + " ADD `"+subject_title+"` "
                     + " FLOAT DEFAULT '0' AFTER `"+after_column+"`;";
-            System.out.println(query);
             st.addBatch(query);            
             st.executeBatch();
             refresh();
@@ -721,7 +733,46 @@ public class LedgerController implements Initializable {
          a.show();
         }
     }
-
+    @FXML
+    private void clickDeleteSubject(MouseEvent event){
+        Alert a = new Alert(AlertType.CONFIRMATION);
+        a.setHeaderText("Are you sure you want to delete "+ subject_column_choicebox.getSelectionModel().getSelectedItem().toString());
+        a.setContentText("Deleting a subject column means deleting all the "
+                + "marks entered in it");
+        Optional<ButtonType> button = a.showAndWait();
+        if(button.get()==ButtonType.OK){
+            String subject_column = subject_column_choicebox.getSelectionModel().getSelectedItem().toString();
+            String year = LoginController.current_year;
+            Connection conn = database.Connection.conn;
+            ResultSet result ;
+            String query;
+            try{
+                 Statement st = conn.createStatement();
+                 query = "SELECT Table_name FROM year_"+2074+"_ledger WHERE Ledger_id = "+ledger_id.get()+" ;";
+                 result = conn.createStatement().executeQuery(query);
+                 String table_name = null;
+                 while(result.next()){
+                     table_name = result.getString(1);
+                 }
+                 query = "DELETE FROM year_"+year+"_marks WHERE Ledger_id = "+ledger_id.get()
+                        +" AND Subject_title = '"+subject_column+"' ; ";
+                 st.addBatch(query);
+                 query = "ALTER TABLE "+table_name+" DROP COLUMN `"+subject_column+"` ;";
+                 st.addBatch(query);
+                 st.executeBatch();
+                 a.setAlertType(AlertType.INFORMATION);
+                 a.setHeaderText("Deletion of Column successful");
+                 a.setContentText("The column "+subject_column+" was deleted"
+                         + " successfully along \n with all the data entered in it");
+                 a.show();
+                 refresh();
+            }
+            catch(Exception e){
+                System.out.println("Exception at clickDeleteSubject() at LedgerController : "+ e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
     @FXML
     private void clickAddExam(MouseEvent event) {
         try{
@@ -752,8 +803,8 @@ public class LedgerController implements Initializable {
             System.out.println("Error at clickAddExam at LedgerController : " + e.getMessage());
         }
     }
-     @FXML
-    void clickCreateNewSheet(MouseEvent event) {
+    @FXML
+    private void clickCreateNewSheet(MouseEvent event) {
         try{
         Parent root = FXMLLoader.load(getClass().getResource("/ledger/newsheet.fxml"));
         Scene scene = new Scene(root);
@@ -833,7 +884,8 @@ public class LedgerController implements Initializable {
                 sql = "DELETE FROM year_"+year+"_marks WHERE Ledger_id =  "+ledger_id+" ;";
                 st.addBatch(sql);
                 st.executeBatch();
-                table_spread.getColumns().clear();
+                GridBase grid = new GridBase(0,0);
+                table_spread.setGrid(grid);                
                 al  = new Alert(AlertType.INFORMATION);
                 al.setHeaderText("Deletion of the ledger of exam : "+exam_choicebox.getSelectionModel().getSelectedItem().toString()
                         +", of grade : "+grade_choicebox.getSelectionModel().getSelectedItem().toString()+
@@ -842,7 +894,7 @@ public class LedgerController implements Initializable {
                 al.setContentText("Operation was successful ");
                 al.show();
                 choiceBox();
-                listnerForChoiceBox();
+                
             }
             catch(Exception e){
                 System.out.println("Exception at clickDeleteLedgerBtn() at LedgerController : " + e.getMessage());
@@ -851,7 +903,9 @@ public class LedgerController implements Initializable {
         }
     }
     }
-    
+    @FXML
+    private void clickReCalculateBtn(MouseEvent event) {
+    }
     public void refresh(){
         String exam = exam_choicebox.getSelectionModel().getSelectedItem().toString();
         String grade = grade_choicebox.getSelectionModel().getSelectedItem().toString();
@@ -862,6 +916,7 @@ public class LedgerController implements Initializable {
         section_choicebox.getSelectionModel().select(section);
         listnerForChoiceBox();
         addSubject();
+        deleteSubject();
     }
     
 }

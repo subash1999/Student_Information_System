@@ -207,16 +207,18 @@ public class NewsheetController implements Initializable {
 //            for(i=0;i<subject_col.length;i++){
 //                query = query + " , \n `" +subject_col[i]+"` VARCHAR(30) DEFAULT '0'";
 //            }
-             query =   query + " , \n `Total` VARCHAR(30) DEFAULT '0'"
+             query =   query + " , \n `Roll` Int Primary key "
+                     + " , \n `Total` VARCHAR(30) DEFAULT '0'"
                      + " , \n `Percentage` VARCHAR(30) DEFAULT '0'"
                      + " , \n `Result` VARCHAR(30) DEFAULT 'Fail'"
                      + " , \n `Division` VARCHAR(30) DEFAULT 'Failed'"
-                     + " , \n `CRank` VARCHAR(30) DEFAULT '0'"
+                     + " , \n `ClassRank` VARCHAR(30) DEFAULT '0'"
                      + " , \n `Rank` VARCHAR(30) DEFAULT '0'"
                      + " , \n `Remarks` VARCHAR(255) DEFAULT 'None' );";     
              System.out.println(query);
              st.addBatch(query);
-             query = "INSERT INTO "+table_name+" (Student_id) SELECT Student_id"
+             st.executeBatch();
+             query = "INSERT INTO "+table_name+" (Student_id,Roll) SELECT Student_id,Roll"
                      + " FROM year_"+year+"_student WHERE Grade_id = "+grade_id+" ;";
              st.addBatch(query);
              st.executeBatch();            
@@ -233,6 +235,7 @@ public class NewsheetController implements Initializable {
         }
         catch(Exception e){
             System.out.println("Exception at clickCreateBtn in NewsheetController :" + e.getMessage());
-            }
+            e.printStackTrace();
+        }
     }
 }

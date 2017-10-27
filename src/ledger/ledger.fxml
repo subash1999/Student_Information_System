@@ -237,13 +237,19 @@
                   <Label layoutX="532.0" layoutY="5.0" text="Delete Subject from Current Ledger : " />
                   <Label layoutX="534.0" layoutY="36.0" style="-fx-text-fill: blue;" text="Subejct Column :" />
                   <ChoiceBox fx:id="subject_column_choicebox" layoutX="534.0" layoutY="59.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
-                  <Button fx:id="delete_subject_btn" layoutX="534.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#clickAddSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Delete Subject">
+                  <Button fx:id="delete_subject_btn" layoutX="534.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#clickDeleteSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Delete Subject">
                      <styleClass>
                         <String fx:value="action-btn" />
                         <String fx:value="danger" />
                      </styleClass>
                   </Button>
                   <Label fx:id="add_subject_label" layoutX="230.0" layoutY="114.0" style="-fx-text-fill: red;" text="Selection already present" />
+                  <Button fx:id="recalculate_btn" layoutX="870.0" layoutY="117.0" mnemonicParsing="false" onMouseClicked="#clickReCalculateBtn" stylesheets="@../stylesheet/bootstrap2.css" text="Re Calculate Marks">
+                     <styleClass>
+                        <String fx:value="action-btn" />
+                        <String fx:value="success" />
+                     </styleClass>
+                  </Button>
                </children>
             </AnchorPane>
          </top>
