@@ -5,6 +5,7 @@
  */
 package ledger;
 
+import calculator.CalculateGrade;
 import calculator.CalculateResult;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -25,6 +26,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -179,9 +181,24 @@ public class LedgerController implements Initializable {
         resultDays();
         addSubject();
         deleteSubject();
+        listnerForOptionsToggleGroup();
     }
     private void listnerForOptionsToggleGroup(){
-        
+        options.selectedToggleProperty().addListener(e->{
+            System.out.println("Options Listner called");
+            String exam = exam_choicebox.getSelectionModel().getSelectedItem().toString();
+            String grade = grade_choicebox.getSelectionModel().getSelectedItem().toString();
+            String section = section_choicebox.getSelectionModel().getSelectedItem().toString();
+            if(marks_to_grading_radio_btn.isSelected()){
+                getMarksToGradingLedger(exam,grade,section);
+                System.out.println("Marks to grading radio btn");
+            }
+            else if(marks_input_radio_btn.isSelected()){
+                getMarksInputLedger(exam,grade,section);
+                System.out.println("Marks input radio btn");
+            }
+            System.out.println("Listner Over");
+        });        
     }
     private void setTableName(String table_name) {
         this.table_name = table_name;
@@ -284,8 +301,11 @@ public class LedgerController implements Initializable {
         ResultSet result;
         String year = LoginController.current_year;
         try {
-            String query = "SELECT Subject_name FROM year_" + year + "_subject WHERE "
-                    + " Grade = " + grade_choicebox.getSelectionModel().getSelectedItem().toString() + " ;";
+            String query = null;
+            if(!grade_choicebox.getSelectionModel().getSelectedItem().toString().isEmpty()){
+                query = "SELECT Subject_name FROM year_" + year + "_subject WHERE "
+                    + " Grade = '" + grade_choicebox.getSelectionModel().getSelectedItem().toString() + "' ;";
+            }
             result = conn.createStatement().executeQuery(query);
             while (result.next()) {
                 subject_choicebox.getItems().add(result.getString(1));
@@ -316,6 +336,7 @@ public class LedgerController implements Initializable {
 
         } catch (Exception e) {
             System.out.println("Exception at addSubject() at LedgerController : " + e.getMessage());
+            e.printStackTrace();
         }
         //Setting the theory radio btn selected
         //adding listner to subject_choicebox
@@ -355,7 +376,9 @@ public class LedgerController implements Initializable {
                     already_present.add(temp);
                 }
                 ObservableList selected = FXCollections.observableArrayList();
+                if(subject_choicebox.getItems().size()!=0){
                 selected.add(subject_choicebox.getSelectionModel().getSelectedItem().toString());
+                }
                 String th_pr_type = null;
                 if (theory_radiobtn.isSelected()) {
                     th_pr_type = "Theory";
@@ -372,6 +395,7 @@ public class LedgerController implements Initializable {
                 }
             } catch (Exception e) {
                 System.out.println("Exception at listnerForAddSubject() at LedgerController : " + e.getMessage());
+                
             }
         
     }
@@ -395,11 +419,150 @@ public class LedgerController implements Initializable {
         subject_column_choicebox.getSelectionModel().selectFirst();
 
     }
+    private void getMarksToGradingLedger(String exam,String grade,String section){
+        Task<Void> getting_grading_ledger_task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                //setting the cursor to wait mode while task is being performed
+                exam_choicebox.getScene().setCursor(Cursor.WAIT);
+                table_spread.getColumns().clear();
+                Connection conn = database.Connection.conn;
+                ResultSet result = null;
+                String query = "SELECT Grade_id FROM `year_" + LoginController.current_year + "_grade`"
+                        + " WHERE Grade= '" + grade + "' AND Section = '" + section + "' ;";
+                String grade_id = null;
+                try {
+                    result = conn.createStatement().executeQuery(query);
+                    while (result.next()) {
+                        grade_id = String.valueOf(result.getInt(1));
+                    }
 
+                    String exam_id = null;
+                    String year = LoginController.current_year;
+                    query = "SELECT Exam_id FROM year_" + year + "_exam WHERE `Name` = '" + exam + "';";
+                    result = conn.createStatement().executeQuery(query);
+                    while (result.next()) {
+                        exam_id = result.getString(1);
+                    }
+                    query = "SELECT Table_name,Ledger_id FROM year_" + LoginController.current_year + "_ledger"
+                            + " WHERE Exam_id = " + exam_id + " AND Grade_id = " + grade_id + ";";
+                    result = conn.createStatement().executeQuery(query);
+                    String table_name = null;
+                    while (result.next()) {
+                        table_name = result.getString(1);
+                        setTableName(table_name);
+                        final String led_id = String.valueOf(result.getInt(2));
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ledger_id.set(led_id);
+                            }
+                        });
+                    }
+                    //Calculating the grade and retriving the resultset of the grade
+                    CalculateGrade c = new CalculateGrade(ledger_id.get());
+                    result = c.calculateAllGrade();
+                    int columnCount = result.getMetaData().getColumnCount();
+                    int rowCount = 0;
+                    ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+                    while (result.next()) {
+                        rowCount++;
+                    }
+                    result.beforeFirst();
+                    ObservableList<ObservableList> data = FXCollections.observableArrayList();
+                    while (result.next()) {
+                        ObservableList list = FXCollections.observableArrayList();
+                        list.add(String.valueOf(result.getInt(1)));
+                        list.add(String.valueOf(result.getInt(2)));
+                        list.add(String.valueOf(result.getString(3)));
+                        for (int i = 4; i <= result.getMetaData().getColumnCount(); i++) {
+                            list.add(String.valueOf(result.getString(i)));
+                        }
+                        data.add(list);
+                    }
+                    GridBase grid = new GridBase(rowCount, columnCount);
+                    ObservableList column_headers = FXCollections.observableArrayList();
+                    for (int i = 0; i < result.getMetaData().getColumnCount(); i++) {
+                        column_headers.add(result.getMetaData().getColumnName(i + 1));
+                    }
+
+                    grid.getColumnHeaders().addAll(column_headers);
+
+                    for (int row = 0; row < grid.getRowCount(); ++row) {
+                        ObservableList values = data.get(row);
+                        final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
+                        //creating a list of column which cannot be edited. The editon in these 
+                        //column is done by the programmer with the help of code only
+                        ObservableList<String> not_editable_column_list = FXCollections.observableArrayList();
+                        not_editable_column_list.addAll(Arrays.asList("Division", "Total", "Percentage",
+                                "ClassRank", "Rank", "Result", "Remarks"));
+                        not_editable_column_list.addAll(Arrays.asList("Student_id", "Roll", "Name"));
+                        for (int column = 0; column < grid.getColumnCount(); ++column) {
+                            String column_header = grid.getColumnHeaders().get(column);
+                            SpreadsheetCell s;
+                            s = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, values.get(column).toString());
+                            s.setEditable(false);
+                            list.add(s);
+                        }
+                        rows.add(list);
+                    }
+                    grid.setRows(rows);
+                    table_spread.getColumns().clear();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            table_spread.setGrid(grid);
+                        }
+                    });
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                                                for (int i = 0; i < table_spread.getGrid().getColumnCount(); i++) {
+                        if ("Student_id".equals(table_spread.getGrid().getColumnHeaders().get(i))
+                                || "Roll".equals(table_spread.getGrid().getColumnHeaders().get(i))
+                                || "Name".equals(table_spread.getGrid().getColumnHeaders().get(i))) {
+                            table_spread.getColumns().get(i).setFixed(true);
+                        }
+                        if ("Student_id".equals(table_spread.getGrid().getColumnHeaders().get(i))) {
+                            table_spread.hideColumn(table_spread.getColumns().get(i));
+                        }
+                    }
+}
+                    });
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            table_spread.getColumns().get(1).fitColumn();
+                            table_spread.getColumns().get(2).fitColumn();
+                        }
+                    });
+
+                    table_spread.setShowRowHeader(false);
+                    
+                }
+                catch(Exception e){
+                    System.out.println("Exception at getMarksToGradingLedger() "
+                            + "at LedgerController : "+ e.getMessage());
+                    e.printStackTrace();
+                }
+                //returning the cursor back to normal after the task is completed
+                exam_choicebox.getScene().setCursor(Cursor.DEFAULT);
+                return null;
+            }            
+        };
+        Thread th = new Thread(getting_grading_ledger_task);
+        th.setDaemon(true);
+        th.setPriority(10);
+        th.start();
+        
+    }
     private void getMarksInputLedger(String exam, String grade, String section) {
         Task<Void> getting_ledger_task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                //making the cursor wait while the scene changes
+                exam_choicebox.getScene().setCursor(Cursor.WAIT);                
                 table_spread.getColumns().clear();
                 Connection conn = database.Connection.conn;
                 ResultSet result = null;
@@ -442,15 +605,22 @@ public class LedgerController implements Initializable {
                         result_date_textfield.setText(result.getString(1));
                     }
                     Statement st = conn.createStatement();
-                    query = "CREATE TEMPORARY TABLE temp ("
-                            + "Student_id INT NOT NULL,"
-                            + "Roll INT Primary Key,"
-                            + "Name VARCHAR(200) , "
+                    query = "CREATE TEMPORARY TABLE IF NOT EXISTS temp ("
+                            + "Student_id INT ,"
+                            + "Roll INT PRIMARY KEY ,"
+                            + "Name VARCHAR(200)  "
                             + ");";
                     st.addBatch(query);
-                    query = "INSERT temp SELECT Student_id,Roll,Name FROM year_" + LoginController.current_year + "_student"
+                    System.out.println(query);
+                    System.out.println("Temp created");
+                    //emptying the table temp
+                    query = "TRUNCATE TABLE temp";
+                    st.addBatch(query);
+                    //adding the student_id,roll,name
+                    query = "INSERT INTO temp(Student_id,Roll,Name) SELECT Student_id,Roll,Name FROM year_" + LoginController.current_year + "_student"
                             + " WHERE Student_id in (SELECT Student_id FROM " + table_name + ")";
                     st.addBatch(query);
+                    System.out.println(query);
                     st.executeBatch();
                     query = "SELECT column_name FROM information_schema.columns"
                             + " WHERE table_schema = 'school' AND table_name='" + table_name + "'"
@@ -578,12 +748,16 @@ public class LedgerController implements Initializable {
                             table_spread.getColumns().get(2).fitColumn();
                         }
                     });
-
+                    //deleting the temporary table
+                    query = "DROP TEMPORARY TABLE IF EXISTS temp;";
+                    st.execute(query);                    
                     table_spread.setShowRowHeader(false);
                 } catch (Exception e) {
-                    System.out.println("Error at getLedger at LedgerController : " + e.getMessage());
+                    System.out.println("Error at getMarksInputLedger at LedgerController : " + e.getMessage());
                     e.printStackTrace();
                 }
+                //changing cursor back to normal after job done and scene is changed
+                exam_choicebox.getScene().setCursor(Cursor.DEFAULT);
                 return null;
             }
         };
@@ -834,7 +1008,12 @@ public class LedgerController implements Initializable {
                     getMarksInputLedger(exam, grade, section);
                 }
                 else if(marks_to_grading_radio_btn.isSelected()){
-                    
+                    //only selecting this will change the data in the spreadsheet
+                    //because this has a listner inside the listner the
+                    //function getMarksInputLedger(exam, grade, section);
+                    // is called so only selecting is now enough for this
+                    // program to change the value in spreadsheet view
+                    marks_input_radio_btn.setSelected(true);
                 }
             } else {
                 anchorpane_label.setVisible(true);

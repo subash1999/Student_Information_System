@@ -21,7 +21,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -38,6 +37,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ledger.LedgerController;
 import login.LoginController;
 
 /**
@@ -157,6 +157,24 @@ public class MainwindowController implements Initializable {
             System.out.println("Error while loading the file : " + ex.getMessage());
         }
     }
+    @FXML
+    public void ledgerClicked(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ledger/ledger.fxml"));
+            
+            Parent root1 = null;            
+            root1 =  fxmlLoader.load();
+            LedgerController controller = (LedgerController)fxmlLoader.getController();
+            //passing the id of the selected student to the studentdetail.fxml file
+            Stage stage = new Stage();           
+            stage.setTitle("Ledger");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (Exception ex) {
+            System.out.println("Error while loading the file : " + ex.getMessage());
+        }
+    }
+    
 //GADGETS PORTION AT THE END OF THE CODE i.e The gadgets included are
 //i) date and time display
 //ii)Calculator

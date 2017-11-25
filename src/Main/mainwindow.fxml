@@ -187,7 +187,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="ledger_label" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="ledger_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#ledgerClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/ledger.jpg" />
                                  </image>

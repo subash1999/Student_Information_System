@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ledger;
+package calculator;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,7 +28,7 @@ public class CalculateResult {
     Statement st;
     String year = LoginController.current_year;
     String table_name;
-    CalculateResult(){
+    public CalculateResult(){
         listnerForLedgerId();    
         try{
            st = conn.createStatement();
@@ -41,7 +41,7 @@ public class CalculateResult {
     }
     
     
-    CalculateResult(String ledger_id ){
+    public CalculateResult(String ledger_id ){
         listnerForLedgerId();
         this.ledger_id.set(ledger_id);
            try{
@@ -112,18 +112,26 @@ public class CalculateResult {
             while(result.next()){
                 i++;
             }
+            System.out.println(i);
             String[] column_name = new String[i];
+            result.beforeFirst();
+            i=0;
+            while(result.next()){
+                column_name[i]=result.getString(1);
+                i++;
+            }
             query = "SELECT Student_id";
-            for(int j=0;j<column_name.length;i++){                
-                query = query +", "+ column_name[j]; 
-                                               
+            System.out.println(column_name.length);
+            for(int j=0;j<column_name.length;j++){                
+                query = query +", `"+ column_name[j]+"`"; 
             }
             query = query + " " + " FROM "+table_name;
             System.out.println(query);
             result = conn.createStatement().executeQuery(query);
             float total = 0;
             while(result.next()){
-                for(int j=2;j<result.getMetaData().getColumnCount();j++){
+                total = 0;
+                for(int j=2;j<=result.getMetaData().getColumnCount();j++){
                     total = total + result.getFloat(j);
                 }
                 query = "UPDATE "+ table_name + " SET Total = "
@@ -150,15 +158,17 @@ public class CalculateResult {
             float total_fm = 0;
             while(result.next()){
                 total_fm = total_fm + result.getFloat(1);
+                
             }
             
             query ="SELECT Student_id,Total " + " FROM "+table_name;
             result = conn.createStatement().executeQuery(query);
             float total = 0;
             while(result.next()){
-                float per = result.getFloat(2)/total_fm;
+                double per = Math.round((result.getFloat(2)/total_fm)*100*100D)/100D;
+                Double perc = per;
                 query = "UPDATE "+ table_name + " SET Percentage = "
-                        +String.valueOf(total) +" WHERE Student_id = "+ 
+                        +String.valueOf(perc.floatValue()) +" WHERE Student_id = "+ 
                         String.valueOf(result.getInt(1));
                 conn.createStatement().executeUpdate(query);                
             }
@@ -192,8 +202,14 @@ public class CalculateResult {
             }
             String[] column_name = new String[i];
             query = "SELECT Student_id ";
-            for(int j=0;j<column_name.length;i++){                
-                query = query +","+ column_name[j];                                                
+            result.beforeFirst();
+            i=0;
+            while(result.next()){
+                column_name[i]=result.getString(1);
+                i++;
+            }
+            for(int j=0;j<column_name.length;j++){                
+                query = query +",`"+ column_name[j]+"`";                                                
             }
             query = query + " " + " FROM "+table_name;
             result = conn.createStatement().executeQuery(query);
@@ -202,7 +218,7 @@ public class CalculateResult {
                 if(result.getMetaData().getColumnCount()<=1){
                     res = "Fail";
                 }
-                for(int j=2;j<result.getMetaData().getColumnCount();j++){
+                for(int j=2;j<=result.getMetaData().getColumnCount();j++){
                    for(int k=0;k<pass_marks.size();k++){
                        if(pass_marks.get(k).get(0).equals(result.getMetaData().getColumnName(j))){
                            if(result.getFloat(j)<Float.valueOf(pass_marks.get(k).get(1).toString())){
@@ -270,7 +286,7 @@ public class CalculateResult {
         String query;
         try{
             Statement st = conn.createStatement();
-        query = "CREATE TEMPORARY TABLE temp ("
+        query = "CREATE TEMPORARY TABLE tempo ("
                 + "Student_id INT, "
                 + "Total Decimal,"
                 +"Rank Int);";
@@ -282,7 +298,7 @@ public class CalculateResult {
        query = "SET @rank_count = 0;";
        System.out.println(query);
        st.addBatch(query);
-        query = "INSERT INTO temp (Student_id,Total,Rank) "
+        query = "INSERT INTO tempo (Student_id,Total,Rank) "
                +"SELECT Student_id, Total, (CASE\n" +
                 "    WHEN @prev_value = Total THEN @rank_count\n" +
                 "    WHEN @prev_value := Total "
@@ -290,12 +306,12 @@ public class CalculateResult {
                 "END) AS Rank\n" +
                 "FROM "+table_name+"\n" +
                 " WHERE Result = 'Pass' "+
-                "ORDER BY cast(Total as decimal(10,3)) DESC";                
+                "ORDER BY cast(Total as decimal(10,2)) DESC";                
         st.addBatch(query);
         System.out.println(query);
-        query = "UPDATE "+ table_name +" INNER JOIN temp "
-                + " ON "+table_name + ".Student_id = temp.Student_id "
-                + " SET "+table_name+".ClassRank="+"temp.Rank;";
+        query = "UPDATE "+ table_name +" INNER JOIN tempo "
+                + " ON "+table_name + ".Student_id = tempo.Student_id "
+                + " SET "+table_name+".ClassRank ="+"tempo.Rank;";
         st.addBatch(query);
         System.out.println(query);
         query = "UPDATE "+ table_name +" SET ClassRank = '0' "
@@ -305,7 +321,7 @@ public class CalculateResult {
         st.executeBatch();
         }        
         catch(Exception e){
-            System.out.println("Exception at calculateResult() at CalculateResult: "+
+            System.out.println("Exception at calculateClassRank() at CalculateResult: "+
                     e.getMessage());
             e.printStackTrace();
             
