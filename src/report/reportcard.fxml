@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="report_BorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="490.0" style="-fx-background-color: white;" stylesheets="@../stylesheet/bootstrap2.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="report.ReportcardController">
+   <top>
+      <BorderPane prefHeight="91.0" prefWidth="463.0" BorderPane.alignment="CENTER">
+         <left>
+            <VBox prefHeight="91.0" prefWidth="492.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox>
+                     <children>
+                        <StackPane>
+                           <children>
+                              <Label fx:id="label1" text="Label" />
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Label fx:id="label2" text="Label" />
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="17.0" prefWidth="441.0">
+                           <children>
+                              <Label fx:id="label3" text="Label" />
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Label fx:id="label4" text="Label" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+                  <AnchorPane maxWidth="623.0" minHeight="18.0" prefHeight="18.0" prefWidth="623.0">
+                     <children>
+                        <ImageView fx:id="school_logo" fitHeight="70.0" fitWidth="81.0" layoutX="14.0" layoutY="-38.0" pickOnBounds="true" preserveRatio="true" />
+                        <StackPane layoutX="173.0" layoutY="4.0">
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="23.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="142.0" />
+                              <Label prefHeight="29.0" prefWidth="121.0" text="PROGRESS REPORT">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </left>
+      </BorderPane>
+   </top>
+   <center>
+      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+         <children>
+            <VBox spacing="4.0">
+               <children>
+                  <HBox spacing="10.0">
+                     <children>
+                        <Label prefHeight="26.0" text="Name :" />
+                        <Label fx:id="name_label" prefHeight="27.0" text="Label" underline="true" />
+                        <Label prefHeight="28.0" text="Roll No :" />
+                        <Label fx:id="roll_label" prefHeight="27.0" text="Label" underline="true" />
+                     </children>
+                  </HBox>
+                  <HBox spacing="10.0">
+                     <children>
+                        <Label prefHeight="26.0" text="Grade :" />
+                        <Label fx:id="grade_label" prefHeight="27.0" text="Label" underline="true" />
+                        <Label prefHeight="26.0" text="Section :" />
+                        <Label fx:id="section_label" prefHeight="27.0" text="Label" underline="true" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <StackPane>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+               <children>
+                  <GridPane fx:id="marks_table" prefWidth="483.0">
+                    <rowConstraints>
+                      <RowConstraints vgrow="SOMETIMES" />
+                      <RowConstraints vgrow="SOMETIMES" />
+                      <RowConstraints vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+               </children>
+            </StackPane>
+            <VBox>
+               <children>
+                  <VBox prefHeight="170.0" prefWidth="388.0">
+                     <children>
+                        <HBox prefHeight="95.0" prefWidth="457.0" spacing="8.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label text="GRADING SYSTEM">
+                                       <font>
+                                          <Font name="System Bold" size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <GridPane fx:id="grading_system_table">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                    </GridPane>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox prefHeight="62.0">
+                                 <children>
+                                    <Label text="NOTE :-">
+                                       <font>
+                                          <Font name="System Bold" size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="17.0" text="A-Absent   AVG-Average Marks">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font></Label>
+                                    <Label prefHeight="17.0" text="FM-Full Marks">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="PM-Pass Marks">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="17.0" text="OM - Obtained Marks">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="17.0" text="HM - Highest Marks">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label text="RESULT :" />
+                                          <Label fx:id="result_label" text="Label" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label text="PERCENTAGE :" />
+                                          <Label fx:id="percentage_label" text="Label" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label text="DIVISION :" />
+                                          <Label fx:id="division_label" text="Label" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label text="RANK :" />
+                                          <Label fx:id="rank_label" text="Label" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label text="CLASS RANK :" />
+                                          <Label fx:id="class_rank_label" text="Label" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label text="GPA :" />
+                                          <Label fx:id="gpa_label" text="Label" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Label text="REMARKS : -">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <TextArea fx:id="remarks_textarea" prefHeight="35.0" prefWidth="449.0" style="-fx-border-width: 1; -fx-border-color: black;" stylesheets="@../stylesheet/bootstrap2.css">
+                           <font>
+                              <Font size="11.0" />
+                           </font></TextArea>
+                        <HBox>
+                           <children>
+                              <Label prefHeight="27.0" prefWidth="64.0" text="Issue Date : " />
+                              <Label fx:id="issue_date_label" prefHeight="26.0" text="Label" underline="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="68.0" prefWidth="601.0">
+                     <children>
+                        <VBox prefHeight="43.0" prefWidth="153.0">
+                           <padding>
+                              <Insets right="20.0" top="35.0" />
+                           </padding>
+                           <children>
+                              <Line endX="40.0" startX="-100.0" />
+                              <StackPane prefHeight="16.0" prefWidth="140.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Class Teacher" />
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="43.0" prefWidth="148.0">
+                           <padding>
+                              <Insets left="10.0" right="30.0" top="35.0" />
+                           </padding>
+                           <children>
+                              <Line endX="40.0" startX="-100.0" />
+                              <StackPane>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exam Coordinator" />
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="43.0" prefWidth="136.0">
+                           <padding>
+                              <Insets top="35.0" />
+                           </padding>
+                           <children>
+                              <Line endX="40.0" startX="-100.0" />
+                              <StackPane>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Principal" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets right="20.0" />
+                                 </padding>
+                              </StackPane>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </VBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

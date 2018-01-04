@@ -5,8 +5,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import database.Server;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,15 +12,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import login.LoginController;
+import report.ReportcardController;
 
 /**
  *
  * @author subas
  */
 public class Student_result_calculator extends Application {
-private Stage primaryStage = null;
+
+    private Stage primaryStage = null;
+
     @Override
-    public void start(Stage primaryStage)  {
+    public void start(Stage primaryStage) {
 //        Runnable r = new Runnable(){
 //            @Override
 //        public void run(){
@@ -31,26 +32,30 @@ private Stage primaryStage = null;
 //            }
 //        };
 //        new Thread(r).start();
-       Server server = new Server();
-       server.startServer();
+        Server server = new Server();
+        server.startServer();
         try {
-            LoginController.current_year="2074";
-            Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));
-//           Parent root = FXMLLoader.load(getClass().getResource("/teacher/addteacher.fxml"));
-//           Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
+            LoginController.current_year = "2074";           
+            System.out.println(System.getProperty("java.io.tmpdir"));
+//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/report/reportcard.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("/report/reportcard.fxml"));
+//          Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));    
+           Parent root = FXMLLoader.load(getClass().getResource("/report/report.fxml"));
+//            Parent root = fxml.load();
+//              ReportcardController controller = (ReportcardController) fxml.getController();
+            // controller.setValues("25","34");
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-              //primaryStage.setResizable(flse);
+            //primaryStage.setResizable(false);
             primaryStage.toFront();
             primaryStage.show();
-            
-           //this.primaryStage=primaryStage;
-            
+
+            //this.primaryStage=primaryStage;
         } catch (Exception ex) {
             System.out.println("File not found" + ex.getLocalizedMessage());
             ex.printStackTrace();
         }
-       
+
     }
 
     /**
@@ -59,5 +64,5 @@ private Stage primaryStage = null;
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

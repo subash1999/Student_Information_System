@@ -38,6 +38,9 @@ public class NewexamController implements Initializable {
 
     @FXML
     private Label label;
+    
+    @FXML
+    private TextField full_exam_name;
 
     @FXML
     private TextField result_date;    
@@ -97,8 +100,13 @@ public class NewexamController implements Initializable {
         if("".equals(date)){
             date = "0000/00/00";
         }
-        String query = "INSERT INTO year_"+LoginController.current_year+"_exam (Name,Result_date)"
-                + " VALUES ('"+name+"','"+date+"')";
+        String full_name = full_exam_name.getText();
+        if("".equals(full_name)){
+            full_name = "null";
+        }
+        String query = "INSERT INTO year_"+LoginController.current_year+"_exam"
+                + " (Name,Result_date,Full_name)"
+                + " VALUES ('"+name+"','"+date+"','"+full_name+"')";
         Connection conn = database.Connection.conn;
         ResultSet result = null;
         try{
