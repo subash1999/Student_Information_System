@@ -36,11 +36,12 @@ public class Student_result_calculator extends Application {
         server.startServer();
         try {
             LoginController.current_year = "2074";           
-            System.out.println(System.getProperty("java.io.tmpdir"));
-//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/report/reportcard.fxml"));
+              FXMLLoader fxml = new FXMLLoader(getClass().getResource("/report/reportcard.fxml"));
 //            Parent root = FXMLLoader.load(getClass().getResource("/report/reportcard.fxml"));
 //          Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));    
            Parent root = FXMLLoader.load(getClass().getResource("/report/report.fxml"));
+//           Parent root = FXMLLoader.load(getClass().getResource("/organization/organization.fxml"));
+
 //            Parent root = fxml.load();
 //              ReportcardController controller = (ReportcardController) fxml.getController();
             // controller.setValues("25","34");

@@ -7,11 +7,14 @@ package report;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,10 +28,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -37,6 +45,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javax.imageio.ImageIO;
 import login.LoginController;
@@ -59,6 +71,15 @@ public class ReportController implements Initializable {
 
     @FXML
     private ComboBox roll_combobox;
+
+    @FXML
+    private ComboBox save_from_combobox;
+
+    @FXML
+    private ComboBox save_to_combobox;
+
+    @FXML
+    private ProgressIndicator progress_indicator;
 
     @FXML
     private Button view_report_btn;
@@ -163,6 +184,8 @@ public class ReportController implements Initializable {
         //deactivate both save buttons
         save_current_btn.setDisable(true);
         save_all_btn.setDisable(true);
+        //hiding the progress indicator
+        progress_indicator.setVisible(false);
     }
 
     private void listenerForLedgerId() {
@@ -192,8 +215,18 @@ public class ReportController implements Initializable {
                                 }
                             }
                             rollChoiceBox();
+                            //clearing value if existed fot save_from and save_to combobox
+                            save_from_combobox.getItems().clear();
+                            save_to_combobox.getItems().clear();
+                            //adding value to the save_from and save_to combobox
+                            save_from_combobox.getItems().addAll(roll_no_list);
+                            save_to_combobox.getItems().addAll(roll_no_list);
+                            //selecting first and last element resp for from and to
+                            save_from_combobox.getSelectionModel().selectFirst();
+                            save_to_combobox.getSelectionModel().selectLast();
+                            //setting progress indicator not visible
+                            progress_indicator.setVisible(false);
                         }
-
                     });
                     stackpane.getScene().setCursor(Cursor.DEFAULT);
                     return null;
@@ -330,7 +363,8 @@ public class ReportController implements Initializable {
             query = "SELECT Student_id,Roll,Name FROM year_" + year + "_student "
                     + "NATURAL JOIN " + table_name
                     + " WHERE " + table_name + ".Student_id = "
-                    + "year_" + year + "_student.Student_id ";
+                    + "year_" + year + "_student.Student_id "
+                    + "ORDER BY Roll";
             result = conn.createStatement().executeQuery(query);
             ObservableList<ObservableList> data = FXCollections.observableArrayList();
             student_id_list.clear();
@@ -398,9 +432,9 @@ public class ReportController implements Initializable {
             String grade = grade_choicebox.getSelectionModel().getSelectedItem().toString();
             String section = section_choicebox.getSelectionModel().getSelectedItem().toString();
             Platform.runLater(() -> {
-                examination_label.setText("Examination : " + exam);
-                grade_label.setText("Grade: " + grade);
-                section_label.setText("Section :" + section);
+                examination_label.setText(exam);
+                grade_label.setText(grade);
+                section_label.setText(section);
             });
 
             //finding and assigning gender count
@@ -543,20 +577,19 @@ public class ReportController implements Initializable {
             while (result.next()) {
                 String date = result.getString(1);
                 Platform.runLater(() -> {
-                    final String res_date = date;  
+                    final String res_date = date;
                     date_textfield.clear();
                     date_textfield.setText(date);
                 });
                 File temp_file = new File("temp_exam_date.txt");
-                System.out.println(temp_file.getAbsolutePath());
                 temp_file.deleteOnExit();
-                if(!temp_file.exists()){
+                if (!temp_file.exists()) {
                     temp_file.createNewFile();
                 }
                 //false in the argument clears the existing data and write to the file
                 //if it was true then it will append to the existing data
-                FileWriter file_writer = new FileWriter(temp_file,false);
-                file_writer.write(date);                
+                FileWriter file_writer = new FileWriter(temp_file, false);
+                file_writer.write(date);
                 file_writer.close();
             }
         } catch (Exception e) {
@@ -585,28 +618,27 @@ public class ReportController implements Initializable {
     @FXML
     private void clickEditDateBtn(MouseEvent event) {
         String btn_name = edit_date_btn.getText();
-        if("Edit".equals(btn_name)){
+        if ("Edit".equals(btn_name)) {
             date_textfield.setEditable(true);
             edit_date_btn.setText("Done");
-        }
-        else if("Done".equals(btn_name)){
+        } else if ("Done".equals(btn_name)) {
             try {
                 String temp_date = date_textfield.getText();
                 File temp_file = new File("temp_exam_date.txt");
                 temp_file.deleteOnExit();
-                if(!temp_file.exists()){
+                if (!temp_file.exists()) {
                     temp_file.createNewFile();
                 }
                 //false in the argument clears the existing data and write to the file
                 //if it was true then it will append to the existing data
-                FileWriter file_writer = new FileWriter(temp_file,false);
+                FileWriter file_writer = new FileWriter(temp_file, false);
                 file_writer.write(temp_date);
-                file_writer.close();                
+                file_writer.close();
                 date_textfield.setEditable(false);
                 edit_date_btn.setText("Edit");
             } catch (Exception ex) {
                 System.out.println("Exception at clickEditDateBtn() "
-                        + "at ReportController : "+ ex.getMessage());
+                        + "at ReportController : " + ex.getMessage());
             }
         }
     }
@@ -614,24 +646,23 @@ public class ReportController implements Initializable {
     @FXML
     private void clickEditExamNameBtn(MouseEvent event) {
         String btn_name = edit_exam_name_btn.getText();
-        if("Edit".equals(btn_name)){
+        if ("Edit".equals(btn_name)) {
             exam_name_textfield.setEditable(true);
             edit_exam_name_btn.setText("Done");
-        }
-        else if("Done".equals(btn_name)){
+        } else if ("Done".equals(btn_name)) {
             String full_name = exam_name_textfield.getText();
-            String exam_name = exam_choicebox.getSelectionModel().getSelectedItem().toString();
+            String exam_name = examination_label.getText();;
             database.Connection.connect();
             Connection conn = database.Connection.conn;
-            String query = "UPDATE year_"+year+"_exam SET Full_name ="
-                    + " '"+full_name+"' WHERE Name = '"+exam_name+"' ;";
+            String query = "UPDATE year_" + year + "_exam SET Full_name ="
+                    + " '" + full_name + "' WHERE Name = '" + exam_name + "' ;";
             try {
                 conn.createStatement().executeUpdate(query);
             } catch (SQLException ex) {
-                exam_name_textfield.setEditable(true);            
+                exam_name_textfield.setEditable(true);
                 System.out.println("Exception at clickEditExamNameBtn(MouseEvent event) "
-                        + "at ReportController : "+ ex.getMessage());
-            }                    
+                        + "at ReportController : " + ex.getMessage());
+            }
             exam_name_textfield.setEditable(false);
             edit_exam_name_btn.setText("Edit");
         }
@@ -659,29 +690,184 @@ public class ReportController implements Initializable {
 
     @FXML
     private void clickSaveAllBtn(MouseEvent event) {
+        if (save_from_combobox.getSelectionModel().getSelectedItem() == null) {
+            save_from_combobox.getSelectionModel().selectFirst();
+        } else if (save_to_combobox.getSelectionModel().getSelectedItem() == null) {
+            save_from_combobox.getSelectionModel().selectLast();
+        } else if (save_from_combobox.getSelectionModel().getSelectedItem() == null
+                && save_to_combobox.getSelectionModel().getSelectedItem() == null) {
+            save_from_combobox.getSelectionModel().selectFirst();
+            save_to_combobox.getSelectionModel().selectLast();
+        }
+        String save_from = save_from_combobox.getSelectionModel().getSelectedItem().toString();
+        String save_to = save_to_combobox.getSelectionModel().getSelectedItem().toString();
+        if (Double.valueOf(save_from) > Double.valueOf(save_to)) {
+            Alert a = new Alert(AlertType.ERROR);
+            a.setHeaderText("'From' Must be Greater than 'To' \n i.e. To>From");
+            a.setContentText("Report to save from is always less than report to save "
+                    + "to");
+            a.show();
+        } else {
+            try {
+                DirectoryChooser file_chooser = new DirectoryChooser();
+                file_chooser.setTitle("Save Bulk Report Card");
+                file_chooser.setInitialDirectory(
+                        new File(System.getProperty("user.home"))
+                );
+                //storing the current_roll_no in a var so that it can be 
+                //reassigned once the task of saving all is completed
+                String stored_roll_no = roll_combobox.getSelectionModel().getSelectedItem().toString();
 
+                Stage stage = (Stage) save_all_btn.getScene().getWindow();
+                File path_file = file_chooser.showDialog(stage);
+                if (path_file != null) {
+                    progress_indicator.setVisible(true);
+                    Task<Void> task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            int from = roll_no_list.indexOf(save_from);
+                            int to = roll_no_list.indexOf(save_to);
+                            //Exam name,grade,section for file naming
+                            String exam = examination_label.getText();
+                            String grade = grade_label.getText();
+                            String section = section_label.getText();
+                            //getting the col having of the student's name
+                            TableColumn col = (TableColumn) students_table.getColumns().get(2);
+                            String file_name = exam + "_" + grade + "_" + section + "_";
+                            Platform.runLater(() -> {
+                                for (int i = from, j = 1; i <= to; i++, j++) {
+                                    String current_file_name = file_name + roll_no_list.get(i);
+                                    String student_name = col.getCellData(i).toString();
+                                    current_file_name = current_file_name + "_" + student_name + ".png";
+                                    String path = path_file.getAbsolutePath();
+                                    path = path + "/" + current_file_name;
+                                    final File file_to_save = new File(path);
+                                    final int index = i;
+                                    BorderPane report_card = new BorderPane();
+                                    FXMLLoader fxml = new FXMLLoader(getClass().getResource("/report/reportcard.fxml"));
+                                    try {
+                                        report_card = fxml.load();
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(ReportController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                    ReportcardController controller = (ReportcardController) fxml.getController();
+                                    final String student_id = student_id_list.get(index);
+                                    final BorderPane report_borderpane = report_card;
+                                    final double progress_made = j;
+                                    final double total_task = (to - from + 1);
+
+                                    save_all_btn.getScene().setCursor(Cursor.WAIT);
+                                    controller.setValues(student_id, ledger_id.get());
+                                    Scene scene = new Scene(report_borderpane);
+                                    Stage window = new Stage();
+                                    window.setScene(scene);
+                                    window.show();
+                                    //taking the snapshot of the broderpane object i.e report_card
+                                    //created above
+                                    //i.e marksheet, so creating
+                                    //an object to store that snapshot
+                                    SnapshotParameters screenshot = new SnapshotParameters();
+                                    //snapshot of borderpane is take and is assigned to WritableImage
+                                    WritableImage report = report_borderpane.snapshot(new SnapshotParameters(), null);
+                                    //closing window
+                                    window.close();
+                                    try {
+                                        ImageIO.write(SwingFXUtils.fromFXImage(report, null), "png", file_to_save);
+                                    } catch (IOException ex) {
+                                        System.out.println("Exception while writing image "
+                                                + "inside task at saveAllBtn() "
+                                                + "at ReportController : "
+                                                + ex.getMessage());
+                                    }
+                                    save_all_btn.getScene().setCursor(Cursor.DEFAULT);
+                                    updateProgress(progress_made, total_task);
+                                
+                                }
+                            });
+
+                            roll_combobox.getSelectionModel().select(stored_roll_no);
+
+                            return null;
+                        }
+                    };
+                    //binding the progress indicator to the task
+                    progress_indicator.progressProperty().bind(
+                            task.progressProperty()
+                    );
+                    // color the indicator green when the work is complete.
+                    progress_indicator.progressProperty().addListener(observable -> {
+                        if (progress_indicator.getProgress() >= 1) {
+                            progress_indicator.setStyle("-fx-accent: forestgreen;");
+                        } else {
+                            progress_indicator.setStyle("progress-indicator");
+                        }
+                    });
+                    Thread t = new Thread(task, "Save all button thread");
+                    t.setPriority(10);
+                    t.start();
+                }
+                roll_no.set(stored_roll_no);
+            } catch (Exception e) {
+                System.out.println("Exception at clickSaveAllBtn(MOuseEvent event)"
+                        + " at ReportController : "
+                        + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
     }
 
     @FXML
     private void clickSaveCurrentBtn(MouseEvent event) {
-        try{
-            //taking the snapshot of the broderpane i.e marksheet, so creating
-            //an object to store that snapshot
-            SnapshotParameters screenshot = new SnapshotParameters();
-            //snapshot of borderpane is take and is assigned to WritableImage
-            WritableImage report = borderpane.snapshot(new SnapshotParameters(),null );
-            File report_card = new File("File.png");
-            ImageIO.write(SwingFXUtils.fromFXImage(report, null),"png",report_card);
-        }
-        catch(Exception e){
+        try {
+            FileChooser file_chooser = new FileChooser();
+            file_chooser.setInitialFileName("Filename.png");
+            file_chooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("All", "*.*"),
+                    new FileChooser.ExtensionFilter("PNG (*.Png)", "*.png")
+            );
+            file_chooser.setTitle("Save Report Card");
+            file_chooser.setInitialDirectory(
+                    new File(System.getProperty("user.home"))
+            );
+            Stage stage = (Stage) save_current_btn.getScene().getWindow();
+            File report_card = file_chooser.showSaveDialog(stage);
+            if (report_card != null) {
+                //taking the snapshot of the broderpane i.e marksheet, so creating
+                //an object to store that snapshot
+                SnapshotParameters screenshot = new SnapshotParameters();
+                //snapshot of borderpane is take and is assigned to WritableImage
+                WritableImage report = borderpane.snapshot(new SnapshotParameters(), null);
+                ImageIO.write(SwingFXUtils.fromFXImage(report, null), "png", report_card);
+
+            }
+        } catch (Exception e) {
             System.out.println("Exception at clickSaveCurrentBtn(MouseEvent event) "
-                    + "at ReportController : "+e.getMessage());
+                    + "at ReportController : " + e.getMessage());
         }
     }
 
     @FXML
     private void clickViewOrgBtn(MouseEvent event) {
+        try {
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/organization/organization.fxml"));
+            Parent root = fxml.load();
+            Scene scene = new Scene(root);
+            Stage window = new Stage();
+            window.setScene(scene);
+            window.initModality(Modality.APPLICATION_MODAL);
+            window.show();
+            window.setOnCloseRequest(e -> {
+                if (!(roll_no.get() == null || ledger_id.get() == null)) {
+                    marksReport();
 
+                }
+
+            });
+        } catch (Exception e) {
+            System.out.println("Exception at clickViewOrgBtn() at ReportController "
+                    + e.getMessage());
+        }
     }
 
     @FXML
@@ -696,7 +882,6 @@ public class ReportController implements Initializable {
                     Platform.runLater(() -> {
                         roll_no.set(roll);
                         roll_combobox.getSelectionModel().select(roll);
-
                     });
                 }
                 return null;
@@ -711,7 +896,7 @@ public class ReportController implements Initializable {
     private void clickViewReportBtn(MouseEvent event) {
         try {
             Connection conn = database.Connection.conn;
-            String exam = exam_choicebox.getSelectionModel().getSelectedItem().toString();
+            String exam = exam_choicebox.getSelectionModel().getSelectedItem().toString();;
             String grade = grade_choicebox.getSelectionModel().getSelectedItem().toString();
             String section = section_choicebox.getSelectionModel().getSelectedItem().toString();
             if (!exam.isEmpty() && !grade.isEmpty() && !section.isEmpty()) {

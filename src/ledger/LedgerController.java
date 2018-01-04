@@ -1409,12 +1409,12 @@ public class LedgerController implements Initializable {
             }
         };
 
-        //binding the progress bar to the task
+        //binding the progress indicator to the task
         progress_indicator.progressProperty().bind(
                 task.progressProperty()
         );
 
-        // color the bar green when the work is complete.
+        // color the indicator green when the work is complete.
         progress_indicator.progressProperty().addListener(observable -> {
             if (progress_indicator.getProgress() >= 1) {
                 progress_indicator.setStyle("-fx-accent: forestgreen;");
