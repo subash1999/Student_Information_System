@@ -15,7 +15,14 @@ public class NewClass {
     public static void main(String[] args){
         database.Connection.connect();
         LoginController.current_year="2074";
-        CalculateGrade c = new CalculateGrade("34");        
-        c.calculateAllGrade();
+        CalculateHighestMarkOfSubject ca = new CalculateHighestMarkOfSubject();        
+        double a = ca.getHighestOfSection("first_term", "8", "null","English_th 40/100" );
+        double b = ca.getHighestOfGrade("first_term", "8", "null","English_th 40/100" );
+        double c = ca.getHighestOfSection("year_2074_first_term_1", "English_th 40/100");
+        double d = ca.getHighestOfGrade("year_2074_first_term_1", "English_th 40/100");
+        System.out.println("Section 1 : "+a);
+        System.out.println("Section 2 : "+c);
+        System.out.println("Grade1 : "+b);
+        System.out.println("Grade 2 : "+ d);
     }
 }

@@ -5,10 +5,15 @@
  */
 package report;
 
+import calculator.CalculateAverageMarkOfSubject;
 import calculator.CalculateGrade;
+import calculator.CalculateHighestMarkOfSubject;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,6 +29,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -134,7 +140,7 @@ public class ReportcardController implements Initializable {
      * find the table_name of the ledger whose ledger_id is given
      *
      */
-    public void findTableName() {
+    private void findTableName() {
         Connection conn = database.Connection.conn;
         String query = "SELECT Table_name FROM year_" + year + "_ledger WHERE "
                 + "Ledger_id = " + ledger_id;
@@ -158,6 +164,11 @@ public class ReportcardController implements Initializable {
         task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                fillLabel1();
+                fillLabel2();
+                fillLabel3();
+                fillLabel4();
+                fillLogo();
                 fillRemarks();
                 updateProgress(1, 10);
                 fillFinalDatas();
@@ -240,15 +251,28 @@ public class ReportcardController implements Initializable {
                 while (res.next()) {
                     ob_marks = String.valueOf(res.getFloat(1));
                 }
-                //finding average and max/highest marks of a subject
-                query = "SELECT AVG(`" + subject_title + "`)"
-                        + ",MAX(`" + subject_title + "`)"
-                        + " FROM " + table_name + " ;";
-                res = conn.createStatement().executeQuery(query);
-                while (res.next()) {
-                    avg = String.valueOf(Math.round(res.getFloat(1) * 100D) / 100D);
-                    max = String.valueOf(res.getFloat(2));
-                }
+                //finding average  marks of a subject
+                CalculateAverageMarkOfSubject average_marks = new CalculateAverageMarkOfSubject();
+                double average = average_marks.getAverageOfGrade(table_name, subject_title);
+                avg = String.valueOf(Math.round(average * 100D) / 100D);
+                //finding highest/max marks of a subject
+                CalculateHighestMarkOfSubject highest_marks = new CalculateHighestMarkOfSubject();
+                double highest = highest_marks.getHighestOfGrade(table_name, subject_title);
+                max = String.valueOf(Math.round(highest * 100D) / 100D);
+                /*
+                for the single section of a grade the following code will work fine
+                but when it comes to multiple section it won't work
+                
+                 */
+//                System.out.println("Average of "+subject_title + " : " + avg);
+//                query = "SELECT AVG(`" + subject_title + "`)"
+//                        + ",MAX(`" + subject_title + "`)"
+//                        + " FROM " + table_name + " ;";
+//                res = conn.createStatement().executeQuery(query);
+//                while (res.next()) {
+//                    avg = String.valueOf(Math.round(res.getFloat(1) * 100D) / 100D);
+//                    max = String.valueOf(res.getFloat(2));
+//                }
                 query = "INSERT INTO temp2(`Subject_title`"
                         + ",`OM`,`AVG`,`HM`) "
                         + "VALUES ('" + subject_title + "','" + ob_marks + "'"
@@ -343,35 +367,130 @@ public class ReportcardController implements Initializable {
     }
 
     /**
+     * fills the image view with the school logo from the database, simply
+     * assigns the logo of the school in mark sheet(mark report)
+     */
+    private void fillLogo() {
+        try {
+            database.Connection.connect();
+            Connection conn = database.Connection.conn;
+            String query = "SELECT Logo FROM organization ;";
+            ResultSet result = conn.createStatement().executeQuery(query);
+            while (result.next()) {
+                InputStream is = result.getBinaryStream(1);
+                File logo_file = new File("school_logo.png");
+                logo_file.deleteOnExit();
+                OutputStream out = new FileOutputStream(logo_file);
+                String st = result.getString(1);
+                int len = st.length();
+                byte[] contents = new byte[len];
+                int size = 0;
+                while ((size = is.read(contents)) != -1) {
+                    out.write(contents, 0, size);
+                }
+                Image image = new Image("file:school_logo.png");
+                school_logo.setImage(image);
+
+            }
+        } catch (Exception e) {
+            System.out.println("Exception at fillLogo() at ReportcardController : "
+                    + e.getMessage());
+        }
+    }
+
+    /**
      * fills the label at the top of report card and also sets the font value
      * based on the font value inserted for the label1
      */
-    private void filllabel1() {
+    private void fillLabel1() {
+        label1.setText("");
+        try {
+            database.Connection.connect();
+            Connection conn = database.Connection.conn;
+            String query = "SELECT Name FROM organization ;";
+            ResultSet result = conn.createStatement().executeQuery(query);
+            while (result.next()) {
+                if (!result.getString(1).isEmpty()) {
+                    label1.setText(result.getString(1));
+                }
 
+            }
+            label1.setFont(Font.font("Times New Roman", 17));
+        } catch (Exception e) {
+            System.out.println("Exception at fillLabel1() at ReportcardController : "
+                    + e.getMessage());
+        }
     }
 
     /**
      * fills the label at the second top of report card and also sets the font
      * value based on the font value inserted for the label1
      */
-    private void filllabel2() {
-
+    private void fillLabel2() {
+        label2.setText("");
+        try {
+            database.Connection.connect();
+            Connection conn = database.Connection.conn;
+            String query = "SELECT Established,Year_format FROM organization ;";
+            ResultSet result = conn.createStatement().executeQuery(query);
+            while (result.next()) {
+                if (!result.getString(1).isEmpty()) {
+                    label2.setText("Estd : " + result.getString(1) + " " + result.getString(2));
+                }
+            }
+            label2.setFont(Font.font("Times New Roman"));
+        } catch (Exception e) {
+            System.out.println("Exception at fillLabel2() at ReportcardController : "
+                    + e.getMessage());
+        }
     }
 
     /**
      * fills the label at the third top of report card and also sets the font
      * value based on the font value inserted for the label1
      */
-    private void filllabel3() {
-
+    private void fillLabel3() {
+        label3.setText("");
+        try {
+            database.Connection.connect();
+            Connection conn = database.Connection.conn;
+            String query = "SELECT Address FROM organization ;";
+            ResultSet result = conn.createStatement().executeQuery(query);
+            while (result.next()) {
+                if (!result.getString(1).isEmpty()) {
+                    label3.setText(result.getString(1));
+                }
+            }
+            label3.setFont(Font.font("Times New Roman"));
+        } catch (Exception e) {
+            System.out.println("Exception at fillLabel3() at ReportcardController : "
+                    + e.getMessage());
+        }
     }
 
     /**
      * fills the label at the fourth top of report card and also sets the font
      * value based on the font value inserted for the label1
      */
-    private void filllabel4() {
-
+    private void fillLabel4() {
+        label4.setText("");
+        try {
+            database.Connection.connect();
+            Connection conn = database.Connection.conn;
+            String query = "SELECT Full_name FROM year_" + year + "_exam WHERE Exam_id IN "
+                    + "(SELECT Exam_id FROM year_" + year + "_ledger WHERE Ledger_id "
+                    + " = " + ledger_id + ") ;";
+            ResultSet result = conn.createStatement().executeQuery(query);
+            while (result.next()) {
+                if (!result.getString(1).isEmpty()) {
+                    label4.setText(result.getString(1));
+                }
+            }
+            label4.setFont(Font.font("Times New Roman", 15));
+        } catch (Exception e) {
+            System.out.println("Exception at fillLabel4() at ReportcardController : "
+                    + e.getMessage());
+        }
     }
 
     /**
@@ -481,7 +600,6 @@ public class ReportcardController implements Initializable {
                 System.out.println("Exception while reading file "
                         + "at fillIssueDate() "
                         + "at ReportcardController : " + e.getMessage());
-                e.printStackTrace();
                 issue_date_label.setText(result_date);
             }
         } catch (Exception e) {

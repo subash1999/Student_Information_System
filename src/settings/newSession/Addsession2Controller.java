@@ -5,14 +5,14 @@
  */
 package settings.newSession;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -80,7 +80,11 @@ public class Addsession2Controller extends SettingsController implements Initial
     }
 
     public void choiceBox() {
-        import_year.getItems().addAll(session_name);
+        for (String session : session_name) {
+            if (!session.equals("0")) {
+                import_year.getItems().add(session);
+            }
+        }
         import_year.getSelectionModel().selectedItemProperty().addListener(e -> {
             import_year_choice = import_year.getSelectionModel().getSelectedItem().toString();
         });
@@ -104,11 +108,12 @@ public class Addsession2Controller extends SettingsController implements Initial
         if ("Next".equals(next_btn.getText())) {
 
         } else if ("Finish".equals(next_btn.getText())) {
-            
+
             try {
                 ResultSet result = null;
                 database.Connection.connect();
                 Connection conn = database.Connection.conn;
+                conn.setAutoCommit(false);
                 Statement statement = conn.createStatement();
                 //deleting any table of same session if present
                 statement.addBatch("DROP TABLE IF EXISTS `Year_" + session + "_student` ;");
@@ -165,8 +170,8 @@ public class Addsession2Controller extends SettingsController implements Initial
                         + "Subject_id int NOT NULL,\n"
                         + "Subject_title VARCHAR(100) NOT NULL,\n"
                         + "Ledger_id int  NOT NULL ,\n"
-                        + "FM float INT NOT NULL,\n"
-                        + "PM float INT NOT NULL,\n"
+                        + "FM float  NOT NULL,\n"
+                        + "PM float  NOT NULL,\n"
                         + "Type VARCHAR(50) NOT NULL DEFAULT 'Theory'\n"
                         + ");\n");
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_" + session + "_marks','" + session + "','Marks');\n"
@@ -175,10 +180,10 @@ public class Addsession2Controller extends SettingsController implements Initial
                 statement.addBatch("CREATE TABLE Year_" + session + "_teacher (\n"
                         + "Teacher_id int primary key AUTO_INCREMENT,\n"
                         + "Name varchar(100) NOT NULL,\n"
-                        + "Gender varchar(30) NOT NULL"
+                        + "Gender varchar(30) NOT NULL,"
                         + "Phone varchar(30) NOT NULL,\n"
                         + "Address varchar(200) NOT NULL,\n"
-                        + "Qualification varchar(200) NULL,\n"
+                        + "Qualification varchar(200) NULL\n"
                         + ");\n");
 
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_" + session + "_teacher','" + session + "','Teacher');\n"
@@ -219,23 +224,34 @@ public class Addsession2Controller extends SettingsController implements Initial
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) "
                         + "VALUES ('Year_" + session + "_grading','" + session + "','Grading');\n");
                 statement.executeBatch();
-                conn.commit();                
+                conn.commit();
 
             } catch (Exception e) {
                 System.out.println("exception at adddsession 2 while creating completely new sesssion");
                 System.out.println(e.getMessage());
+                e.printStackTrace();
                 try {
                     database.Connection.conn.rollback();
                 } catch (SQLException ex) {
                     System.out.println("Exception while rolling back changes in "
                             + "nextBtn() at Addsession2Controller : "
-                            +ex.getMessage());
+                            + ex.getMessage());
                 }
             }
 
             Stage window = new Stage();
-            session_table.refresh();
             window = (Stage) next_btn.getScene().getWindow();
+            Stage stage = new Stage();
+            try {
+                Parent parent = FXMLLoader.load(getClass().getResource("/settings/settings.fxml"));
+                Scene sc = new Scene(parent);
+                stage.setScene(sc);
+                stage.show();
+            } catch (IOException ex) {
+                System.out.println("Exception at onNextBtnClicked() "
+                        + "at Addsession1Controller : " + ex.getMessage());
+                ex.printStackTrace();
+            }
             window.close();
 
         }

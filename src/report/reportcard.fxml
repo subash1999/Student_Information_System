@@ -49,7 +49,7 @@
                   </VBox>
                   <AnchorPane maxWidth="623.0" minHeight="18.0" prefHeight="18.0" prefWidth="623.0">
                      <children>
-                        <ImageView fx:id="school_logo" fitHeight="70.0" fitWidth="81.0" layoutX="14.0" layoutY="-38.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="school_logo" fitHeight="70.0" fitWidth="81.0" layoutX="17.0" layoutY="-43.0" pickOnBounds="true" preserveRatio="true" />
                         <StackPane layoutX="173.0" layoutY="4.0">
                            <children>
                               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="23.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="142.0" />

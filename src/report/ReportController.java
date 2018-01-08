@@ -34,6 +34,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -49,6 +50,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import javax.imageio.ImageIO;
 import login.LoginController;
@@ -252,11 +254,12 @@ public class ReportController implements Initializable {
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    stackpane.getScene().setCursor(Cursor.WAIT);
                     Platform.runLater(() -> {
+                        stackpane.getScene().setCursor(Cursor.WAIT);
                         marksReport();
+                        stackpane.getScene().setCursor(Cursor.DEFAULT);
+
                     });
-                    stackpane.getScene().setCursor(Cursor.DEFAULT);
                     return null;
                 }
             };
@@ -300,6 +303,7 @@ public class ReportController implements Initializable {
                         + exam_choicebox.getSelectionModel().getSelectedItem().toString()
                         + "'));";
                 grade_choicebox.getItems().clear();
+                section_choicebox.getItems().clear();
                 try {
                     final ResultSet res = conn.createStatement().executeQuery(sql);
                     while (res.next()) {
@@ -450,13 +454,13 @@ public class ReportController implements Initializable {
                 if ("Male".equalsIgnoreCase(gen) || "M".equalsIgnoreCase(gen)) {
                     Platform.runLater(() -> {
                         final int cnt = count;
-                        male_label.setText("Male : " + String.valueOf(cnt));
+                        male_label.setText(String.valueOf(cnt));
 
                     });
                 } else if ("Female".equalsIgnoreCase(gen) || "F".equalsIgnoreCase(gen)) {
                     Platform.runLater(() -> {
                         final int cnt = count;
-                        female_label.setText("Female : " + String.valueOf(cnt));
+                        female_label.setText(String.valueOf(cnt));
 
                     });
                 }
@@ -479,13 +483,13 @@ public class ReportController implements Initializable {
                 if ("Pass".equalsIgnoreCase(gen) || "passed".equalsIgnoreCase(gen)) {
                     Platform.runLater(() -> {
                         final int cnt = count;
-                        passed_label.setText("Passed : " + String.valueOf(cnt));
+                        passed_label.setText(String.valueOf(cnt));
                     });
 
                 } else if ("Fail".equalsIgnoreCase(gen) || "Failed".equalsIgnoreCase(gen)) {
                     Platform.runLater(() -> {
                         final int cnt = count;
-                        failed_label.setText("Failed : " + String.valueOf(cnt));
+                        failed_label.setText(String.valueOf(cnt));
                     });
 
                 }
@@ -547,12 +551,13 @@ public class ReportController implements Initializable {
                         if (index == (roll_combobox.getItems().size() - 1)) {
                             next_label.setVisible(false);
                         }
+                        try {
+                            roll_no.set(roll_combobox.getSelectionModel().getSelectedItem().toString());
+                        } catch (Exception ex) {
+                            System.out.println(ex.getMessage());
+                        }
+
                     });
-                    try {
-                        roll_no.set(roll_combobox.getSelectionModel().getSelectedItem().toString());
-                    } catch (Exception ex) {
-                        System.out.println(ex.getMessage());
-                    }
                     roll_combobox.getScene().setCursor(Cursor.DEFAULT);
                     return null;
                 }
@@ -670,21 +675,15 @@ public class ReportController implements Initializable {
 
     @FXML
     private void clickNextLabel(MouseEvent event) {
-        roll_combobox.getScene().setCursor(Cursor.DEFAULT);
-        roll_combobox.getScene().setCursor(Cursor.WAIT);
         int curr_index = roll_combobox.getSelectionModel().getSelectedIndex();
         roll_combobox.getSelectionModel().select(curr_index + 1);
-        roll_combobox.getScene().setCursor(Cursor.DEFAULT);
 
     }
 
     @FXML
     private void clickPrevLabel(MouseEvent event) {
-        roll_combobox.getScene().setCursor(Cursor.DEFAULT);
-        roll_combobox.getScene().setCursor(Cursor.WAIT);
         int curr_index = roll_combobox.getSelectionModel().getSelectedIndex();
         roll_combobox.getSelectionModel().select(curr_index - 1);
-        roll_combobox.getScene().setCursor(Cursor.DEFAULT);
 
     }
 
@@ -714,17 +713,22 @@ public class ReportController implements Initializable {
                 file_chooser.setInitialDirectory(
                         new File(System.getProperty("user.home"))
                 );
-                //storing the current_roll_no in a var so that it can be 
-                //reassigned once the task of saving all is completed
-                String stored_roll_no = roll_combobox.getSelectionModel().getSelectedItem().toString();
 
                 Stage stage = (Stage) save_all_btn.getScene().getWindow();
                 File path_file = file_chooser.showDialog(stage);
                 if (path_file != null) {
+                    final Alert saving = new Alert(AlertType.WARNING);
+                    saving.setHeaderText("Please Wait");
+                    saving.setContentText("The reports are being saved do not cancel");
+                    saving.show();
                     progress_indicator.setVisible(true);
                     Task<Void> task = new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
+                            //storing the current_roll_no in a var so that it can be 
+                            //reassigned once the task of saving all is completed
+                            String stored_roll_no = roll_combobox.getSelectionModel().getSelectedItem().toString();
+                            System.out.println(stored_roll_no);
                             int from = roll_no_list.indexOf(save_from);
                             int to = roll_no_list.indexOf(save_to);
                             //Exam name,grade,section for file naming
@@ -735,6 +739,9 @@ public class ReportController implements Initializable {
                             TableColumn col = (TableColumn) students_table.getColumns().get(2);
                             String file_name = exam + "_" + grade + "_" + section + "_";
                             Platform.runLater(() -> {
+                                save_all_btn.getScene().setCursor(Cursor.WAIT);
+                                BorderPane stored_report = new BorderPane();
+                                stored_report = borderpane;
                                 for (int i = from, j = 1; i <= to; i++, j++) {
                                     String current_file_name = file_name + roll_no_list.get(i);
                                     String student_name = col.getCellData(i).toString();
@@ -743,34 +750,27 @@ public class ReportController implements Initializable {
                                     path = path + "/" + current_file_name;
                                     final File file_to_save = new File(path);
                                     final int index = i;
-                                    BorderPane report_card = new BorderPane();
                                     FXMLLoader fxml = new FXMLLoader(getClass().getResource("/report/reportcard.fxml"));
                                     try {
-                                        report_card = fxml.load();
+                                        borderpane = fxml.load();
                                     } catch (IOException ex) {
                                         Logger.getLogger(ReportController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
                                     ReportcardController controller = (ReportcardController) fxml.getController();
                                     final String student_id = student_id_list.get(index);
-                                    final BorderPane report_borderpane = report_card;
                                     final double progress_made = j;
                                     final double total_task = (to - from + 1);
-
-                                    save_all_btn.getScene().setCursor(Cursor.WAIT);
+                                    stackpane.getChildren().setAll(borderpane);
                                     controller.setValues(student_id, ledger_id.get());
-                                    Scene scene = new Scene(report_borderpane);
-                                    Stage window = new Stage();
-                                    window.setScene(scene);
-                                    window.show();
                                     //taking the snapshot of the broderpane object i.e report_card
                                     //created above
                                     //i.e marksheet, so creating
                                     //an object to store that snapshot
                                     SnapshotParameters screenshot = new SnapshotParameters();
                                     //snapshot of borderpane is take and is assigned to WritableImage
-                                    WritableImage report = report_borderpane.snapshot(new SnapshotParameters(), null);
+                                    WritableImage report = stackpane.snapshot(new SnapshotParameters(), null);
                                     //closing window
-                                    window.close();
+                                    //window.close();
                                     try {
                                         ImageIO.write(SwingFXUtils.fromFXImage(report, null), "png", file_to_save);
                                     } catch (IOException ex) {
@@ -779,14 +779,25 @@ public class ReportController implements Initializable {
                                                 + "at ReportController : "
                                                 + ex.getMessage());
                                     }
-                                    save_all_btn.getScene().setCursor(Cursor.DEFAULT);
                                     updateProgress(progress_made, total_task);
-                                
+                                    if (i == to) {
+                                        roll_combobox.getSelectionModel().select(roll_no_list.get(index));
+                                    }
+
                                 }
+                                save_all_btn.getScene().setCursor(Cursor.DEFAULT);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException ex) {
+                                    Logger.getLogger(ReportController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                saving.setAlertType(AlertType.INFORMATION);
+                                saving.setHeaderText("Saving Done");
+                                saving.setContentText("All the files are saved in "
+                                        + "the location : " + path_file.getAbsolutePath());
+                                
                             });
-
-                            roll_combobox.getSelectionModel().select(stored_roll_no);
-
+                            
                             return null;
                         }
                     };
@@ -806,7 +817,7 @@ public class ReportController implements Initializable {
                     t.setPriority(10);
                     t.start();
                 }
-                roll_no.set(stored_roll_no);
+
             } catch (Exception e) {
                 System.out.println("Exception at clickSaveAllBtn(MOuseEvent event)"
                         + " at ReportController : "

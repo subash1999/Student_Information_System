@@ -35,14 +35,14 @@ public class Student_result_calculator extends Application {
         Server server = new Server();
         server.startServer();
         try {
-            LoginController.current_year = "2074";           
-              FXMLLoader fxml = new FXMLLoader(getClass().getResource("/report/reportcard.fxml"));
+            LoginController.current_year = "2074";
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/login/login.fxml"));
 //            Parent root = FXMLLoader.load(getClass().getResource("/report/reportcard.fxml"));
 //          Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));    
-           Parent root = FXMLLoader.load(getClass().getResource("/report/report.fxml"));
+//           Parent root = FXMLLoader.load(getClass().getResource("chart/chart.fxml"));
 //           Parent root = FXMLLoader.load(getClass().getResource("/organization/organization.fxml"));
 
-//            Parent root = fxml.load();
+            Parent root = fxml.load();
 //              ReportcardController controller = (ReportcardController) fxml.getController();
             // controller.setValues("25","34");
             Scene scene = new Scene(root);

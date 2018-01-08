@@ -89,6 +89,7 @@ public class OrganizationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        getOrganizationDetails();
         edit_label.setVisible(false);
         progress_indicator.setVisible(false);
         browse_btn.setDisable(true);
@@ -96,7 +97,7 @@ public class OrganizationController implements Initializable {
         year_format_combobox.setDisable(true);
         year_format_combobox.getItems().addAll("B.S", "A.D");
         year_format_combobox.getSelectionModel().select("B.S");
-        getOrganizationDetails();
+        
         validateEstablishedYearInput();
         validatePhoneInput();
 
@@ -150,8 +151,10 @@ public class OrganizationController implements Initializable {
                 year_format_combobox.getSelectionModel().select(result.getString(3));
                 address_textfield.setText(result.getString(5));
                 phone_textfield.setText(result.getString(6));
+                //below getting the image from the database and assigning to image view
                 InputStream is = result.getBinaryStream(4);
-                File logo_file = new File("logo.png");
+                logo_file = new File("logo.png");
+                logo_file.deleteOnExit();
                 OutputStream out = new FileOutputStream(logo_file);
                 String st = result.getString(4);
                 int len = st.length();
@@ -170,9 +173,7 @@ public class OrganizationController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    @FXML
-    private void clickBrowseBtn(MouseEvent event) {
+    private void fileChooser(){
         FileChooser file_chooser = new FileChooser();
         file_chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(" All ", "*.*"),
@@ -182,8 +183,8 @@ public class OrganizationController implements Initializable {
         file_chooser.setTitle("Select Logo Of Organization");
         Stage stage = (Stage) browse_btn.getScene().getWindow();
         logo_file = file_chooser.showOpenDialog(stage);
-        if(logo_file.length()<950000){
-        if (logo_file != null) {
+        if (logo_file != null) {        
+        if(logo_file.length()<600000){
             try {
                 BufferedImage image = ImageIO.read(logo_file);
                 Image photo = new Image(logo_file.toURI().toString());
@@ -195,13 +196,19 @@ public class OrganizationController implements Initializable {
                 ex.printStackTrace();
             }
         }
-    }
         else{
             Alert a = new Alert(AlertType.INFORMATION);
-            a.setHeaderText("Please select file less than  or equal 900 kB");
-            a.setContentText("Only file less than or equal 900 kb are accepted");
+            a.setHeaderText("Please select file less than  or equal 500 kB");
+            a.setContentText("Only file less than or equal 500 kb are accepted");
             a.showAndWait();
+            fileChooser();
         }
+    }
+        
+    }
+    @FXML
+    private void clickBrowseBtn(MouseEvent event) {
+        fileChooser();
     }
 
     @FXML
@@ -218,12 +225,12 @@ public class OrganizationController implements Initializable {
         address_textfield.setEditable(true);
         phone_textfield.setEditable(true);
         //storing the old datas
-        String o_name = name_textfield.getText();
-        String o_established = estd_textfield.getText();
-        String o_address = address_textfield.getText();
-        String o_phone = phone_textfield.getText();
-        File o_logo_file = logo_file;
-        String o_year_format = year_format_combobox.getSelectionModel().getSelectedItem().toString();
+        o_name = name_textfield.getText();
+        o_established = estd_textfield.getText();
+        o_address = address_textfield.getText();
+        o_phone = phone_textfield.getText();
+        o_logo_file = logo_file;
+        o_year_format = year_format_combobox.getSelectionModel().getSelectedItem().toString();
 
     }
     private void changeBackToOldValues(){
@@ -295,7 +302,9 @@ public class OrganizationController implements Initializable {
     private void clickSaveBtn(MouseEvent event) {
         database.Connection.connect();
         Connection conn = database.Connection.conn;
-        if (!name_textfield.getText().isEmpty() && !address_textfield.getText().isEmpty()) {
+        if (!name_textfield.getText().isEmpty() && !address_textfield.getText().isEmpty()
+                && !estd_textfield.getText().isEmpty() && !phone_textfield.getText().isEmpty()
+                ) {
             try {
                 String name = name_textfield.getText();
                 String established = estd_textfield.getText();
@@ -306,16 +315,22 @@ public class OrganizationController implements Initializable {
                 PreparedStatement pst = null;
                 query = "TRUNCATE TABLE organization";
                 conn.createStatement().execute(query);
-                if (logo_file != null) {
-                    System.out.println("not null");
+                if (logo_file != null) {                   
                     query = "INSERT INTO organization(Name,Established,year_format"
                             + ",Address,Contact,Logo) "
                             + "VALUES(?,?,?,?,?,?)";
                     pst = conn.prepareStatement(query);
                     FileInputStream fis = new FileInputStream(logo_file.getAbsoluteFile());
                     pst.setBinaryStream(6, fis, fis.available());
-                } else {
-                    System.out.println("null");
+                }else if(o_logo_file!=null){
+                    query = "INSERT INTO organization(Name,Established,year_format"
+                            + ",Address,Contact,Logo) "
+                            + "VALUES(?,?,?,?,?,?)";
+                    pst = conn.prepareStatement(query);
+                    FileInputStream fis = new FileInputStream(o_logo_file.getAbsoluteFile());
+                    pst.setBinaryStream(6, fis, fis.available());
+                }
+                else{                    
                     query = "INSERT INTO organization(Name,Established,year_format"
                             + ",Address,Contact) "
                             + "VALUES(?,?,?,?,?)";
@@ -356,8 +371,8 @@ public class OrganizationController implements Initializable {
             }
         } else {
             Alert a = new Alert(AlertType.ERROR);
-            a.setHeaderText("Name and address cannot be null");
-            a.setContentText("Name and address are compulsory");
+            a.setHeaderText("Name,Phone,Established,address and Logo cannot be empty");
+            a.setContentText("All fields are compulsory/required");
             a.show();
         }
 

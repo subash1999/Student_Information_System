@@ -121,11 +121,10 @@
          <content>
             <AnchorPane>
                <children>
-                  <GridPane layoutX="81.0" layoutY="14.0" prefHeight="717.0" prefWidth="1075.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                  <GridPane layoutX="81.0" layoutY="7.0" prefHeight="724.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="7.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="216.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="216.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
                     </columnConstraints>
@@ -168,12 +167,12 @@
                         </AnchorPane>
                         <AnchorPane fx:id="marksheet_anchor" GridPane.rowIndex="1">
                            <children>
-                              <Label fx:id="marksheet_label" layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text=" Marksheet">
+                              <Label fx:id="marksheet_label" layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text="     Report Card">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="marksheet_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="marksheet_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/marksheet.jpg" />
                                  </image>
@@ -182,7 +181,7 @@
                         </AnchorPane>
                         <AnchorPane fx:id="legder_anchor" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Label fx:id="ledger_label" layoutX="14.0" layoutY="163.0" prefHeight="27.0" prefWidth="201.0" text=" Legder">
+                              <Label fx:id="ledger_label" layoutX="14.0" layoutY="163.0" prefHeight="27.0" prefWidth="201.0" text="        Legder">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -194,16 +193,16 @@
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="attendance_anchor" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <AnchorPane fx:id="attendance_anchor" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
                               <AnchorPane fx:id="chart_anchor">
                                  <children>
-                                    <Label fx:id="chart_label" layoutY="167.0" prefHeight="27.0" prefWidth="216.0" text=" Comparative Chart">
+                                    <Label fx:id="chart_label" layoutY="163.0" prefHeight="27.0" prefWidth="216.0" text="        Charts">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <ImageView fx:id="chart_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                    <ImageView fx:id="chart_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                        <image>
                                           <Image url="@../images/chart.jpg" />
                                        </image>
@@ -212,7 +211,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="session_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <AnchorPane fx:id="session_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                            <children>
                               <ImageView fx:id="session_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
@@ -226,28 +225,84 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="classwise_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.rowIndex="2">
+                        <AnchorPane fx:id="classwise_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2">
                            <children>
-                              <ImageView fx:id="classwise_anchor" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="classwise_anchor1" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
-                                    <Image url="@../images/class.png" />
+                                    <Image url="@../images/book.jpg" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="classwise_label" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Classwise information">
+                              <Label fx:id="classwise_label1" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Subjects Information">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="classwise_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2">
+                        <AnchorPane fx:id="session_anchor1" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3">
                            <children>
-                              <ImageView fx:id="classwise_anchor1" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="session_image1" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutX="-1.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
-                                    <Image url="@../images/book.jpg" />
+                                    <Image url="@../images/grade.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="classwise_label1" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Subjects Information">
+                              <Label fx:id="session_label1" layoutX="-1.0" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="  Grades/Classes">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="session_anchor2" prefHeight="219.0" prefWidth="291.0" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fx:id="session_image2" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/user.jpg" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="session_label2" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="         User">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="session_anchor21" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fx:id="session_image21" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/setting.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="session_label21" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="         Settings">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="chart_anchor1" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Label fx:id="chart_label1" layoutY="163.0" prefHeight="27.0" prefWidth="216.0" text="Exam Management">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="chart_image1" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/examination.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="session_anchor3" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fx:id="session_image3" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/organization.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="session_label3" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Organization Details">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
