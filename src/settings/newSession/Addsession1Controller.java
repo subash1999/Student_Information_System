@@ -12,8 +12,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,7 +26,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import settings.SettingsController;
 
@@ -172,6 +169,7 @@ public class Addsession1Controller extends SettingsController implements Initial
             while (result.next()) {
                 session_name.add(result.getString("Year"));
             }
+            session_name.add("First Use");            
         } catch (Exception f) {
             System.out.println("Exception at checking session name");
             System.out.println(f.getMessage());
@@ -189,7 +187,7 @@ public class Addsession1Controller extends SettingsController implements Initial
             }
             try {
                 for (String s : session_name) {
-                    if (!s.equals(session_year.getSelectionModel().getSelectedItem().toString())) {
+                    if (!s.equalsIgnoreCase(session_year.getSelectionModel().getSelectedItem().toString())) {
                         check.setText("√");
                         check.setStyle("-fx-text-fill : green;");
                         next_btn.setDisable(false);

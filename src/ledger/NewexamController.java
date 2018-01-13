@@ -58,7 +58,8 @@ public class NewexamController implements Initializable {
                 create_btn.setDisable(true);
             }
             else{
-            String query ="SELECT * FROM year_"+LoginController.current_year+"_exam "
+                String year = LoginController.current_year;
+            String query ="SELECT * FROM year_"+year+"_exam "
                     + " WHERE `Name` = '"+name+"'";
             ResultSet result = null;
             Connection conn = database.Connection.conn;
@@ -104,7 +105,8 @@ public class NewexamController implements Initializable {
         if("".equals(full_name)){
             full_name = "null";
         }
-        String query = "INSERT INTO year_"+LoginController.current_year+"_exam"
+        String year = LoginController.current_year;
+        String query = "INSERT INTO year_"+year+"_exam"
                 + " (Name,Result_date,Full_name)"
                 + " VALUES ('"+name+"','"+date+"','"+full_name+"')";
         Connection conn = database.Connection.conn;

@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="student.StudentdetailController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="student.StudentdetailController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -59,7 +59,7 @@
       </VBox>
    </top>
    <left>
-      <ScrollPane prefHeight="699.0" prefWidth="353.0" BorderPane.alignment="CENTER">
+      <ScrollPane prefHeight="600.0" prefWidth="353.0" BorderPane.alignment="CENTER">
          <content>
             <BorderPane prefHeight="379.0" prefWidth="235.0">
                <top>
@@ -101,7 +101,7 @@
       </ScrollPane>
    </left>
    <center>
-      <ScrollPane>
+      <ScrollPane prefHeight="600.0" prefWidth="927.0">
          <content>
             <AnchorPane prefHeight="366.0" prefWidth="385.0">
                <children>
@@ -187,22 +187,30 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <Button fx:id="result_btn" layoutX="534.0" layoutY="56.0" mnemonicParsing="false" stylesheets="@../../stylesheet/bootstrap3.css" text="View Result">
+                  <Button fx:id="edit_btn" layoutX="534.0" layoutY="56.0" mnemonicParsing="false" onMouseClicked="#clickEditBtn" text="Edit">
                      <styleClass>
                         <String fx:value="action-btn" />
-                        <String fx:value="success" />
+                        <String fx:value="primary" />
                      </styleClass>
+                     <stylesheets>
+                        <URL value="@../../stylesheet/bootstrap3.css" />
+                        <URL value="@../stylesheet/bootstrap3.css" />
+                     </stylesheets>
                   </Button>
-                  <Label layoutX="534.0" layoutY="14.0" text="Result">
+                  <Label layoutX="550.0" layoutY="14.0" text="Edit">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="teachers_btn" layoutX="534.0" layoutY="153.0" mnemonicParsing="false" onMouseClicked="#teacher_btn_clicked" stylesheets="@../../stylesheet/bootstrap3.css" text="View Teachers and subjects">
+                  <Button fx:id="teachers_btn" layoutX="534.0" layoutY="153.0" mnemonicParsing="false" onMouseClicked="#teacher_btn_clicked" text="View Teachers and subjects">
                      <styleClass>
                         <String fx:value="action-btn" />
-                        <String fx:value="success" />
+                        <String fx:value="info" />
                      </styleClass>
+                     <stylesheets>
+                        <URL value="@../../stylesheet/bootstrap3.css" />
+                        <URL value="@../stylesheet/bootstrap3.css" />
+                     </stylesheets>
                   </Button>
                   <Label layoutX="534.0" layoutY="111.0" text="Teachers and Subjects">
                      <font>

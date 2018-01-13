@@ -355,7 +355,7 @@ public class ChartController implements Initializable {
         }
         bar_chart.getData().addAll(result_series);
         //assigning the maximum*1.3 value in the chart as the range
-        maximum = maximum * 1.3;
+        maximum = maximum * 1.4;
         y_axis.setAutoRanging(false);
         y_axis.setUpperBound(Math.round(maximum / 5) * 5);
         grade_chart_vbox.getChildren().setAll(bar_chart);
@@ -415,8 +415,8 @@ public class ChartController implements Initializable {
                 maximum = (Integer) d.get(1);
             }
         }
-        //assigning maximum * 1.3 as the maximum y axis bound
-        maximum = maximum * 1.3;
+        //assigning maximum * 1.4 as the maximum y axis bound
+        maximum = maximum * 1.4;
         y_axis.setAutoRanging(false);
         y_axis.setUpperBound(Math.round(maximum / 5) * 5);
         bar_chart.getData().addAll(division_series);
@@ -473,8 +473,8 @@ public class ChartController implements Initializable {
                 maximum = (Integer) d.get(1);
             }
         }
-        //setting the maximum bound of y-axis, as maximum*1.3
-        maximum = 1.3 * maximum;
+        //setting the maximum bound of y-axis, as maximum*1.4
+        maximum = 1.4 * maximum;
         y_axis.setAutoRanging(false);
         y_axis.setUpperBound(Math.round(maximum * 5) / 5);
         bar_chart.getData().addAll(male_series, female_series);

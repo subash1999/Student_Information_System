@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -81,7 +83,7 @@ public class Addsession2Controller extends SettingsController implements Initial
 
     public void choiceBox() {
         for (String session : session_name) {
-            if (!session.equals("0")) {
+            if (!session.equals("0") && !session.trim().equalsIgnoreCase("firstuse")) {
                 import_year.getItems().add(session);
             }
         }
@@ -128,11 +130,11 @@ public class Addsession2Controller extends SettingsController implements Initial
                 statement.addBatch("INSERT INTO `session` (`Year`, `Format`,`From`,`To` ) VALUES ('" + session + "','B.S','" + session_start + "','" + session_end + "');");
                 statement.addBatch("CREATE TABLE Year_" + session + "_grade (\n"
                         + "Grade_id int primary key AUTO_INCREMENT,\n"
-                        + "Grade varchar(20)  , \n"
-                        + "Section varchar(20),\n"
-                        + "Male varchar(20),\n"
-                        + "Female varchar(20),\n"
-                        + "No_of_students int\n"
+                        + "Grade varchar(20) NULL DEFAULT 'null' , \n"
+                        + "Section varchar(20) NULL DEFAULT 'null',\n"
+                        + "Male  INT NULL DEFAULT 0,\n"
+                        + "Female INT NULL DEFAULT 0,\n"
+                        + "No_of_students INT NULL DEFAULT 0\n"
                         + "\n"
                         + ");\n");
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_" + session + "_grade','" + session + "','Grade');\n"
@@ -146,12 +148,13 @@ public class Addsession2Controller extends SettingsController implements Initial
                         + "Section varchar(20) NULL DEFAULT 'null',\n"
                         + "Gender varchar(10) NOT  NULL,\n"
                         + "DOB varchar(30) 	NULL DEFAULT 'null',\n"
-                        + "Address varchar(200)  NULL,\n"
-                        + "Phone varchar(20)  NULL DEFAULT 'null',\n"
+                        + "Address varchar(200)  NULL DEFAULT 'null',\n"
+                        + "Phone varchar(200)  NULL DEFAULT 'null',\n"
                         + "Father_name varchar(100)  NULL DEFAULT 'null',\n"
                         + "Mother_name varchar(100)  NULL DEFAULT 'null',\n"
                         + "Guardian_name varchar(100)  NULL DEFAULT 'null',\n"
-                        + "Previous_school varchar(100) NULL DEFAULT 'null'\n"
+                        + "Previous_school varchar(100) NULL DEFAULT 'null',\n"
+                        + "Active varchar(20) NULL DEFAULT 'Yes'\n"
                         + "\n"
                         + ");\n");
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_" + session + "_student','" + session + "','Student');\n"
@@ -159,9 +162,8 @@ public class Addsession2Controller extends SettingsController implements Initial
                 statement.addBatch("CREATE TABLE Year_" + session + "_subject (\n"
                         + "Subject_id  int primary key AUTO_INCREMENT,\n"
                         + "Subject_name varchar(30) NOT NULL,\n"
-                        + "Grade_id int  NULL DEFAULT 0 UNIQUE,\n"
                         + "Grade varchar(30) NULL DEFAULT 'null',\n"
-                        + "Teacher_id varchar(10) NULL DEFAULT '0'\n"
+                        + "Active varchar(20) NULL DEFAULT 'yes'\n"
                         + ");\n");
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_" + session + "_subject','" + session + "','Subject');\n"
                         + "\n");
@@ -181,9 +183,10 @@ public class Addsession2Controller extends SettingsController implements Initial
                         + "Teacher_id int primary key AUTO_INCREMENT,\n"
                         + "Name varchar(100) NOT NULL,\n"
                         + "Gender varchar(30) NOT NULL,"
-                        + "Phone varchar(30) NOT NULL,\n"
+                        + "Phone varchar(200) NOT NULL,\n"
                         + "Address varchar(200) NOT NULL,\n"
-                        + "Qualification varchar(200) NULL\n"
+                        + "Qualification varchar(200) NULL DEFAULT 'null',"
+                        + "Active varchar(20) NULL DEFAULT 'yes' \n"
                         + ");\n");
 
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_" + session + "_teacher','" + session + "','Teacher');\n"
@@ -197,7 +200,7 @@ public class Addsession2Controller extends SettingsController implements Initial
 
                 statement.addBatch("CREATE TABLE year_" + session + "_exam(Exam_id INT PRIMARY KEY AUTO_INCREMENT,"
                         + "Name  Varchar(255) NOT NULL,"
-                        + "Result_date varchar(30) NULL, "
+                        + "Result_date varchar(30) NULL default 'null', "
                         + "Full_name varchar(255)  NULL default 'null'"
                         + "     );");
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) VALUES ('Year_" + session + "_term','" + session + "','Exam');\n"
@@ -223,6 +226,14 @@ public class Addsession2Controller extends SettingsController implements Initial
                         + ");\n");
                 statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) "
                         + "VALUES ('Year_" + session + "_grading','" + session + "','Grading');\n");
+                statement.addBatch("CREATE TABLE Year_" + session + "_teacher_teaches ("
+                        + "`Teacher_id` INT NOT NULL ,"
+                        + "`Subject_id` INT NOT NULL ,"
+                        + "`Grade_id` INT NOT NULL ,"
+                        + "UNIQUE KEY `unique_subject` (`Subject_id`,`Grade_id`)"
+                        + ");");
+                statement.addBatch("INSERT INTO table_details(Table_name,`Year`,`Type`) "
+                        + "VALUES ('Year_" + session + "_teacher_teaches','" + session + "','Teaching Relation');\n");
                 statement.executeBatch();
                 conn.commit();
 
@@ -251,6 +262,17 @@ public class Addsession2Controller extends SettingsController implements Initial
                 System.out.println("Exception at onNextBtnClicked() "
                         + "at Addsession1Controller : " + ex.getMessage());
                 ex.printStackTrace();
+                Parent parent = null;
+                try {
+                    parent = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
+                } catch (IOException ex1) {
+                    System.out.println("Exception at nextbtn() at displaying login "
+                            + "at Addsession2Controller :  "+ex1.getMessage());
+                            ex1.printStackTrace();
+                }
+                Scene sc = new Scene(parent);
+                stage.setScene(sc);
+                stage.show();            
             }
             window.close();
 

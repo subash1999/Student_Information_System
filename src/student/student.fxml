@@ -11,10 +11,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="529.0" prefWidth="1049.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="student.StudentController">
+<BorderPane prefHeight="529.0" prefWidth="1049.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="student.StudentController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -39,22 +41,89 @@
             </MenuBar>
             <AnchorPane prefHeight="59.0" prefWidth="800.0">
                <children>
-                  <JFXTextField fx:id="search_field" focusColor="#40a9db" layoutX="270.0" layoutY="5.0" promptText="Search" unFocusColor="#1c2221f7">
+                  <JFXTextField fx:id="search_field" focusColor="#40a9db" layoutX="742.0" layoutY="22.0" promptText="Search" unFocusColor="#1c2221f7">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXTextField>
-                  <Label layoutX="25.0" layoutY="9.0" prefHeight="27.0" prefWidth="103.0" stylesheets="@../../stylesheet/bootstrap2.css" text="Search by : ">
+                  <Label layoutX="497.0" layoutY="26.0" prefHeight="27.0" prefWidth="103.0" stylesheets="@../../stylesheet/bootstrap2.css" text="Search by : ">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="search_icon" accessibleRole="BUTTON" fitHeight="28.0" fitWidth="39.0" layoutX="444.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="search_icon" accessibleRole="BUTTON" fitHeight="28.0" fitWidth="39.0" layoutX="916.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../images/search.png" />
+                        <Image url="@../images/search.png" />
                      </image>
                   </ImageView>
-                  <ChoiceBox fx:id="search_choice" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@../../stylesheet/bootstrap2.css" />
+                  <ChoiceBox fx:id="search_choice" layoutX="602.0" layoutY="27.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@../../stylesheet/bootstrap2.css" />
+                  <ImageView fx:id="add_student_image" accessibleRole="BUTTON" fitHeight="118.0" fitWidth="65.0" layoutX="28.0" onMouseClicked="#clickAddStudent" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../images/add_student.jpg" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="25.0" layoutY="58.0" text="Add Student ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="edit_student_image" accessibleRole="BUTTON" fitHeight="57.0" fitWidth="57.0" layoutX="130.0" layoutY="4.0" onMouseClicked="#clickEditStudent" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../images/edit_student.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="212.0" layoutY="58.0" text="Delete Selected  Students ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="delete_student_image" accessibleRole="BUTTON" fitHeight="57.0" fitWidth="57.0" layoutX="242.0" layoutY="4.0" onMouseClicked="#clickDeleteStudent" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../images/delete_student.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="119.0" layoutY="58.0" text="Edit Selected ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="653.0" layoutY="60.0" style="-fx-text-fill: orange;" text="Double Click the row to get the details of that Student " />
+                  <VBox layoutX="393.0" layoutY="26.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="Total : " />
+                              <Label fx:id="total_count_label" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Male :" />
+                              <Label fx:id="male_count_label" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Female : " />
+                              <Label fx:id="female_count_label" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="952.0" layoutY="26.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="Total result Found  " />
+                           </children>
+                        </HBox>
+                        <StackPane>
+                           <children>
+                              <Label fx:id="search_count_label" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
          </children>
@@ -63,7 +132,4 @@
    <center>
       <TableView fx:id="table" prefHeight="370.0" prefWidth="842.0" style="-fx-background-color: ;" stylesheets="@../../stylesheet/bootstrap2.css" />
    </center>
-   <left>
-      <AnchorPane BorderPane.alignment="CENTER" />
-   </left>
 </BorderPane>

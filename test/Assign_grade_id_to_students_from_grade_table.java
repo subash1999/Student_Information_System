@@ -1,6 +1,7 @@
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import login.LoginController;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,7 +22,9 @@ public class Assign_grade_id_to_students_from_grade_table {
         database.Connection.connect();
         Connection conn =database.Connection.conn;
         ResultSet result = null;
-        String query1= "SELECT `Grade`,`Section` FROM `year_2074_student`;";
+        String year = LoginController.current_year;
+        String query1= "SELECT `Grade`,`Section` FROM `year_"+year+"_student` "
+                + "WHERE Active = 'yes' ;";
         String[] grade;
         String [] section ;
         try{           
@@ -41,7 +44,7 @@ public class Assign_grade_id_to_students_from_grade_table {
                section[i] = result.getString("Section");
                i++;
            }
-           query1 = "select Grade_id,Grade,Section FROM year_2074_grade";
+           query1 = "select Grade_id,Grade,Section FROM year_"+year+"_grade";
            result = conn.createStatement().executeQuery(query1);
            i=0;
            while(result.next()){
@@ -68,7 +71,7 @@ public class Assign_grade_id_to_students_from_grade_table {
             for(int k=0;k<grade_row;k++){
                 System.out.println("");
                    if((grade[j] == null ? grade1[k] == null : grade[j].equals(grade1[k])) && (section[j] == null ? section1[k] == null : section[j].equals(section1[k]))){
-                       query1= "UPDATE year_2074_student "
+                       query1= "UPDATE year_+"+year+"_student "
                                + "SET Grade_id = "+grade_id[k] +" WHERE Student_id = "+String.valueOf(j+1) +"  ";
                         conn.prepareStatement(query1).execute();
                        System.out.println(grade_id[k]);

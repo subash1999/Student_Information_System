@@ -14,7 +14,7 @@ import login.LoginController;
 public class NewClass {
     public static void main(String[] args){
         database.Connection.connect();
-        LoginController.current_year="2074";
+        String year = LoginController.current_year;
         CalculateHighestMarkOfSubject ca = new CalculateHighestMarkOfSubject();        
         double a = ca.getHighestOfSection("first_term", "8", "null","English_th 40/100" );
         double b = ca.getHighestOfGrade("first_term", "8", "null","English_th 40/100" );

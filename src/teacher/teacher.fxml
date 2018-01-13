@@ -11,10 +11,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="433.0" prefWidth="708.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teacher.TeacherController">
+<BorderPane prefHeight="465.0" prefWidth="824.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teacher.TeacherController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -34,22 +35,65 @@
             </MenuBar>
             <AnchorPane prefHeight="59.0" prefWidth="800.0">
                <children>
-                  <JFXTextField fx:id="search_field" focusColor="#40a9db" layoutX="270.0" layoutY="5.0" promptText="Search" unFocusColor="#1c2221f7">
+                  <JFXTextField fx:id="search_field" focusColor="#40a9db" layoutX="600.0" layoutY="24.0" promptText="Search" unFocusColor="#1c2221f7">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXTextField>
-                  <Label layoutX="25.0" layoutY="9.0" prefHeight="27.0" prefWidth="103.0" stylesheets="@../../stylesheet/bootstrap2.css" text="Search by : ">
+                  <Label layoutX="355.0" layoutY="28.0" prefHeight="27.0" prefWidth="103.0" stylesheets="@../../stylesheet/bootstrap2.css" text="Search by : ">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="search_icon" accessibleRole="BUTTON" fitHeight="28.0" fitWidth="39.0" layoutX="444.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="search_icon" accessibleRole="BUTTON" fitHeight="28.0" fitWidth="39.0" layoutX="784.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/search.png" />
                      </image>
                   </ImageView>
-                  <ChoiceBox fx:id="search_choice" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@../../stylesheet/bootstrap2.css" />
+                  <ChoiceBox fx:id="search_choice" layoutX="460.0" layoutY="29.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@../../stylesheet/bootstrap2.css" />
+                  <VBox layoutX="23.0" layoutY="-4.0">
+                     <children>
+                        <StackPane prefHeight="56.0" prefWidth="89.0">
+                           <children>
+                              <ImageView fx:id="add_teacher_image" accessibleRole="BUTTON" fitHeight="49.0" fitWidth="47.0" onMouseClicked="#clickAddTeacher" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/add_teacher.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </StackPane>
+                        <Label text="    Add Teacher" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="122.0" layoutY="5.0">
+                     <children>
+                        <StackPane>
+                           <children>
+                              <ImageView fx:id="edit_teacher_image" accessibleRole="BUTTON" fitHeight="49.0" fitWidth="47.0" onMouseClicked="#clickEditTeacher" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/edit_teacher.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </StackPane>
+                        <Label text="Edit Teacher" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="204.0" layoutY="2.0" prefHeight="71.0" prefWidth="79.0">
+                     <children>
+                        <StackPane prefHeight="51.0" prefWidth="69.0">
+                           <children>
+                              <ImageView fx:id="delete_teacher_image" accessibleRole="BUTTON" fitHeight="54.0" fitWidth="47.0" onMouseClicked="#clickDeleteTeacher" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@../images/delete_teacher.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </StackPane>
+                        <Label prefHeight="17.0" prefWidth="81.0" text="Delete Teacher" />
+                     </children>
+                  </VBox>
+                  <Label layoutX="295.0" layoutY="33.0" text="Total :" />
                </children>
             </AnchorPane>
          </children>

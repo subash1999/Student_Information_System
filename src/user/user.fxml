@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="493.0" prefWidth="821.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user.UserController">
+    <center>
+        <BorderPane BorderPane.alignment="CENTER">
+            <center>
+                <TableView fx:id="table" prefHeight="331.0" prefWidth="327.0" stylesheets="@../stylesheet/bootstrap2.css">
+                    <BorderPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" />
+                    </BorderPane.margin>
+                </TableView>
+            </center>
+            <top>
+                <VBox prefHeight="143.0" prefWidth="196.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <AnchorPane prefHeight="143.0" prefWidth="443.0">
+                            <children>
+                                <ImageView accessibleRole="BUTTON" fitHeight="81.0" fitWidth="85.0" layoutX="402.0" layoutY="41.0" onMouseClicked="#clickDeleteUser" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                    <image>
+                                        <Image url="@../images/delete_user.jpg" />
+                                    </image>
+                                </ImageView>
+                                <Label layoutX="411.0" layoutY="123.0" text="Delete User" />
+                                <ImageView accessibleRole="BUTTON" fitHeight="81.0" fitWidth="85.0" layoutX="275.0" layoutY="41.0" onMouseClicked="#clickEditUser" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                    <image>
+                                        <Image url="@../images/edit_user.png" />
+                                    </image>
+                                </ImageView>
+                                <Label layoutX="256.0" layoutY="123.0" text="Edit/Change Password " />
+                                <ComboBox fx:id="search_by" layoutX="75.0" layoutY="65.0" prefWidth="122.0" stylesheets="@../stylesheet/bootstrap2.css" visibleRowCount="5" />
+                                <JFXTextField fx:id="search_field" layoutX="8.0" layoutY="110.0" prefHeight="25.0" prefWidth="194.0" />
+                                <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="172.0" layoutY="107.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/search.png" />
+                                    </image>
+                                </ImageView>
+                                <Label layoutX="3.0" layoutY="71.0" text="Search By :">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </VBox>
+            </top>
+        </BorderPane>
+    </center>
+    <left>
+      <HBox prefHeight="493.0" prefWidth="305.0" BorderPane.alignment="CENTER">
+         <children>
+              <VBox prefHeight="493.0" prefWidth="315.0">
+                  <children>
+                      <HBox>
+                          <children>
+                              <StackPane prefHeight="64.0" prefWidth="225.0">
+                                  <children>
+                                      <Label prefHeight="30.0" prefWidth="160.0" text="User Registration" textFill="#2ca5bf">
+                                          <font>
+                                              <Font size="20.0" />
+                                          </font>
+                                      </Label>
+                                  </children>
+                              </StackPane>
+                              <ImageView fitHeight="64.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                                  <HBox.margin>
+                                      <Insets bottom="5.0" top="5.0" />
+                                  </HBox.margin>
+                                  <image>
+                                      <Image url="@../images/add_user.png" />
+                                  </image>
+                              </ImageView>
+                          </children>
+                      </HBox>
+                      <GridPane prefHeight="303.0" prefWidth="297.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="143.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="150.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                          <children>
+                              <Label text="Name :">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                              </Label>
+                              <Label text="Phone :" GridPane.rowIndex="1">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                              </Label>
+                              <Label text="Username :" GridPane.rowIndex="2">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                              </Label>
+                              <Label text="Password :" GridPane.rowIndex="3">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                              </Label>
+                              <Label text="Re-Enter Password :" GridPane.rowIndex="4">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                              </Label>
+                              <Label text="User Type :" GridPane.rowIndex="5">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                              </Label>
+                              <Label style="-fx-text-fill: red;" text="Please Fill all the fields" GridPane.rowIndex="6" />
+                              <JFXTextField fx:id="name" GridPane.columnIndex="1" />
+                              <JFXTextField fx:id="phone" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <JFXTextField fx:id="username" prefWidth="164.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <children>
+                                    <JFXPasswordField fx:id="password" />
+                              <Label fx:id="password_strength" text="Strength :">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                              <JFXPasswordField fx:id="re_enter_password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <ComboBox fx:id="user_type" prefWidth="150.0" stylesheets="@../stylesheet/bootstrap2.css" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Button fx:id="register_btn" mnemonicParsing="false" onMouseClicked="#clickRegisterBtn" stylesheets="@../stylesheet/bootstrap2.css" text="Register" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                  <styleClass>
+                                      <String fx:value="action-btn" />
+                                      <String fx:value="success" />
+                                  </styleClass>
+                                  <GridPane.margin>
+                                      <Insets left="50.0" />
+                                  </GridPane.margin>
+                              </Button>
+                          </children>
+                          <padding>
+                              <Insets bottom="20.0" left="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets right="5.0" />
+                          </VBox.margin>
+                      </GridPane>
+                  </children>
+              </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+         </children>
+      </HBox>
+    </left>
+</BorderPane>

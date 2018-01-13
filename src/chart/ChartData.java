@@ -298,7 +298,7 @@ public class ChartData {
                         + "INNER JOIN year_"+year+"_student "
                         + "WHERE "+table_name_1+".Student_id = "
                         + "year_"+year+"_student.Student_id AND (Gender = 'Male' "
-                        + " OR Gender = 'M')"
+                        + " OR Gender = 'M') AND Active = 'yes'"
                         + " GROUP BY Result  ";
                 pst = conn.prepareStatement(query);
                 result = pst.executeQuery();
@@ -363,7 +363,7 @@ public class ChartData {
                         + "INNER JOIN year_"+year+"_student "
                         + "WHERE "+table_name_1+".Student_id = "
                         + "year_"+year+"_student.Student_id AND (Gender = 'Female' "
-                        + " OR Gender = 'f')"
+                        + " OR Gender = 'f') AND Active = 'yes' "
                         + " GROUP BY Result  ";
                 pst = conn.prepareStatement(query);
                 result = pst.executeQuery();

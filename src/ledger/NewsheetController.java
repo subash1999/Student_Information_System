@@ -50,26 +50,26 @@ public class NewsheetController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        label.setVisible(false);
-        LoginController.current_year="2074";
+        label.setVisible(false);       
         database.Connection.connect();
         choiceBox();
     }
     private void choiceBox(){
         Connection conn = database.Connection.conn;
         ResultSet result = null;
-        String query = "SELECT DISTINCT Name FROM year_"+LoginController.current_year+"_exam";
+        String year = LoginController.current_year;
+        String query = "SELECT DISTINCT Name FROM year_"+year+"_exam";
         try{
             result = conn.createStatement().executeQuery(query);
             while(result.next()){
                 this.exam.getItems().add(result.getString(1));
             }
-            query = "SELECT DISTINCT Grade FROM year_"+LoginController.current_year+"_grade";
+            query = "SELECT DISTINCT Grade FROM year_"+year+"_grade";
             result = conn.createStatement().executeQuery(query);
             while(result.next()){
                 grade.getItems().add(result.getString(1));
             }
-            query = "SELECT DISTINCT Section FROM year_"+LoginController.current_year+"_grade";
+            query = "SELECT DISTINCT Section FROM year_"+year+"_grade";
             result = conn.createStatement().executeQuery(query);
             while(result.next()){
                 section.getItems().add(result.getString(1));
@@ -97,7 +97,8 @@ public class NewsheetController implements Initializable {
         Connection conn = database.Connection.conn;
         ResultSet result = null;
         ObservableList list  = FXCollections.observableArrayList();
-        String query = "SELECT Grade_id FROM year_"+LoginController.current_year+"_grade "
+        String year = LoginController.current_year;
+        String query = "SELECT Grade_id FROM year_"+year+"_grade "
                 + "WHERE Grade = '"+grade.getSelectionModel().getSelectedItem().toString()+"' "
                 + "AND `Section` = '"+section.getSelectionModel().getSelectedItem().toString()+"' ;";
         try{
@@ -109,8 +110,8 @@ public class NewsheetController implements Initializable {
                 list.add(this.exam.getSelectionModel().getSelectedItem().toString());
                 list.add(grade_id);
             }            
-            query = "SELECT DISTINCT Name,Grade_id FROM year_"+LoginController.current_year+"_exam"
-                    + " CROSS JOIN year_"+LoginController.current_year+"_grade ;";
+            query = "SELECT DISTINCT Name,Grade_id FROM year_"+year+"_exam"
+                    + " CROSS JOIN year_"+year+"_grade ;";
                     
             result = conn.createStatement().executeQuery(query);
             ObservableList<ObservableList> data = FXCollections.observableArrayList();
@@ -120,8 +121,8 @@ public class NewsheetController implements Initializable {
                 list2.add(result.getString(2));
                 data.add(list2);
             }
-            String year = LoginController.current_year;
-            query = "SELECT DISTINCT `Name`,Grade_id FROM year_"+LoginController.current_year+"_ledger INNER JOIN "
+            
+            query = "SELECT DISTINCT `Name`,Grade_id FROM year_"+year+"_ledger INNER JOIN "
                     + "year_"+year+"_exam "
                     + "WHERE year_"+year+"_ledger.Exam_id = year_"+year+"_exam.Exam_id";
             result = conn.createStatement().executeQuery(query);
@@ -219,7 +220,8 @@ public class NewsheetController implements Initializable {
              st.addBatch(query);
              st.executeBatch();
              query = "INSERT INTO "+table_name+" (Student_id,Roll) SELECT Student_id,Roll"
-                     + " FROM year_"+year+"_student WHERE Grade_id = "+grade_id+" ;";
+                     + " FROM year_"+year+"_student WHERE Grade_id = "+grade_id+" AND "
+                     + "Active = 'yes';";
              st.addBatch(query);
              st.executeBatch();            
             //alert for successful addition

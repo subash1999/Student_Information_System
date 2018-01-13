@@ -12,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import login.LoginController;
-import report.ReportcardController;
 
 /**
  *
@@ -35,8 +34,9 @@ public class Student_result_calculator extends Application {
         Server server = new Server();
         server.startServer();
         try {
-            LoginController.current_year = "2074";
             FXMLLoader fxml = new FXMLLoader(getClass().getResource("/login/login.fxml"));
+//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/student/student.fxml"));
+//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/teacher/addteacher.fxml"));
 //            Parent root = FXMLLoader.load(getClass().getResource("/report/reportcard.fxml"));
 //          Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));    
 //           Parent root = FXMLLoader.load(getClass().getResource("chart/chart.fxml"));
@@ -47,6 +47,7 @@ public class Student_result_calculator extends Application {
             // controller.setValues("25","34");
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
+            primaryStage.toFront();
             //primaryStage.setResizable(false);
             primaryStage.toFront();
             primaryStage.show();

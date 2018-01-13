@@ -353,7 +353,7 @@ public class CalculateResult {
        st.addBatch(query);
        System.out.println(query);
         //check
-        query = "SELECT Exam_id FROM year_"+2074+"_ledger "
+        query = "SELECT Exam_id FROM year_"+year+"_ledger "
                 + "WHERE Ledger_id = "+ ledger_id.get();
         
         result = conn.createStatement().executeQuery(query);

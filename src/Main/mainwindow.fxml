@@ -60,7 +60,7 @@
       </MenuBar>
    </top>
    <left>
-      <GridPane id="left_gridpane" fx:id="left_gridpane" prefHeight="460.0" prefWidth="210.0" style="-fx-background-color: #141414;" BorderPane.alignment="CENTER">
+      <GridPane id="left_gridpane" prefHeight="460.0" prefWidth="210.0" style="-fx-background-color: #141414;" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -113,6 +113,20 @@
                   <Separator prefHeight="38.0" prefWidth="216.0" />
                </children>
             </VBox>
+            <AnchorPane GridPane.rowIndex="2">
+               <children>
+                  <ImageView fitHeight="83.0" fitWidth="86.0" layoutX="50.0" onMouseClicked="#changePasswordClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../images/change_password.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="current_user1" layoutX="26.0" layoutY="83.0" style="-fx-text-fill: white;" text="Change Password">
+                     <font>
+                        <Font name="Times New Roman" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </children>
       </GridPane>
    </left>
@@ -134,21 +148,21 @@
                         <RowConstraints maxHeight="208.0" minHeight="10.0" prefHeight="208.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <AnchorPane fx:id="student_anchor">
+                        <AnchorPane>
                            <children>
                               <ImageView fx:id="student_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" onMouseClicked="#studentClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/student.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="student_label" layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text="  Student Information">
+                              <Label layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text="  Student Information">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="teacher_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1">
+                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
@@ -158,30 +172,30 @@
                                     <Image url="@../images/teacher.jpg" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="teacher_label" layoutY="156.0" prefHeight="27.0" prefWidth="201.0" text="  Teacher information">
+                              <Label layoutY="156.0" prefHeight="27.0" prefWidth="201.0" text="  Teacher information">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="marksheet_anchor" GridPane.rowIndex="1">
+                        <AnchorPane GridPane.rowIndex="1">
                            <children>
-                              <Label fx:id="marksheet_label" layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text="     Report Card">
+                              <Label layoutY="167.0" prefHeight="21.0" prefWidth="186.0" text="     Report Card">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="marksheet_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="report_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" onMouseClicked="#reportClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/marksheet.jpg" />
                                  </image>
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="legder_anchor" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Label fx:id="ledger_label" layoutX="14.0" layoutY="163.0" prefHeight="27.0" prefWidth="201.0" text="        Legder">
+                              <Label layoutX="14.0" layoutY="163.0" prefHeight="27.0" prefWidth="201.0" text="        Legder">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -193,16 +207,16 @@
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="attendance_anchor" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <AnchorPane GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
-                              <AnchorPane fx:id="chart_anchor">
+                              <AnchorPane>
                                  <children>
-                                    <Label fx:id="chart_label" layoutY="163.0" prefHeight="27.0" prefWidth="216.0" text="        Charts">
+                                    <Label layoutY="163.0" prefHeight="27.0" prefWidth="216.0" text="        Charts">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <ImageView fx:id="chart_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                    <ImageView fx:id="chart_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" onMouseClicked="#chartsClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                        <image>
                                           <Image url="@../images/chart.jpg" />
                                        </image>
@@ -211,98 +225,98 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="session_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fx:id="session_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="backup_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#backupRestoreClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
-                                    <Image url="@../images/previous_session.png" />
+                                    <Image url="@../images/database_backup.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="session_label" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Change Session">
+                              <Label layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="  Backup/Restore">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="classwise_anchor" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2">
+                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2">
                            <children>
-                              <ImageView fx:id="classwise_anchor1" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="subject_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="11.0" onMouseClicked="#subjectInformationClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/book.jpg" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="classwise_label1" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Subjects Information">
+                              <Label layoutY="167.0" prefHeight="27.0" prefWidth="201.0" text="Subjects Information">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="session_anchor1" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3">
+                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3">
                            <children>
-                              <ImageView fx:id="session_image1" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutX="-1.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="grade_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutX="-1.0" layoutY="6.0" onMouseClicked="#gradeClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/grade.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="session_label1" layoutX="-1.0" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="  Grades/Classes">
+                              <Label layoutX="-1.0" layoutY="170.0" prefHeight="27.0" prefWidth="201.0" text="  Grades/Classes">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="session_anchor2" prefHeight="219.0" prefWidth="291.0" GridPane.rowIndex="2">
+                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fx:id="session_image2" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="user_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#userClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/user.jpg" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="session_label2" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="         User">
+                              <Label layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="         Users">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="session_anchor21" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fx:id="session_image21" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="setting_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#settingsClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/setting.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="session_label21" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="         Settings">
+                              <Label layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="         Settings">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="chart_anchor1" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <AnchorPane GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
-                              <Label fx:id="chart_label1" layoutY="163.0" prefHeight="27.0" prefWidth="216.0" text="Exam Management">
+                              <Label layoutY="163.0" prefHeight="27.0" prefWidth="216.0" text="Exam Management">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="chart_image1" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="exam_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" layoutY="14.0" onMouseClicked="#examManagementClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/examination.png" />
                                  </image>
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="session_anchor3" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fx:id="session_image3" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="organization_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#organizationDetailsClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
                                     <Image url="@../images/organization.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="session_label3" layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Organization Details">
+                              <Label layoutY="157.0" prefHeight="27.0" prefWidth="201.0" text="Organization Details">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

@@ -8,6 +8,7 @@ package settings;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -133,6 +135,9 @@ public class SettingsController implements Initializable {
     @FXML
     private TextField grading_grade_point;
 
+    @FXML
+    public TabPane settings_tabpane;
+
     private ObservableList<ObservableList> grade_data = FXCollections.observableArrayList();
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
 
@@ -191,45 +196,47 @@ public class SettingsController implements Initializable {
         ObservableList<TableColumn> cols = session_table.getColumns();
         TableColumn col = cols.get(0);
         String id = (String) col.getCellData(session_table.getSelectionModel().getSelectedIndex());
-        String year = (String) cols.get(1).getCellData(session_table.getSelectionModel().getSelectedIndex());
-        Alert al = new Alert(Alert.AlertType.CONFIRMATION);
-        al.setHeaderText("Are you sure you want to delete session with id : " + id);
-        al.setContentText("The all the information related to this session will be permanently deleted");
-        Optional<ButtonType> res = al.showAndWait();
-        ResultSet result = null;
-        if (res.get() == ButtonType.OK) {
-            Connection conn = database.Connection.conn;
-            try {
+        if (id != null) {
+            String year = (String) cols.get(1).getCellData(session_table.getSelectionModel().getSelectedIndex());
+            Alert al = new Alert(Alert.AlertType.CONFIRMATION);
+            al.setHeaderText("Are you sure you want to delete session with id : " + id);
+            al.setContentText("The all the information related to this session will be permanently deleted");
+            Optional<ButtonType> res = al.showAndWait();
+            ResultSet result = null;
+            if (res.get() == ButtonType.OK) {
+                Connection conn = database.Connection.conn;
+                try {
 
-                Statement statement = conn.createStatement();
-                statement.addBatch("DROP TABLE `Year_" + year + "_student`;");
-                statement.addBatch("DROP TABLE `Year_" + year + "_teacher`;");
-                statement.addBatch("DROP TABLE `Year_" + year + "_subject`;");
-                statement.addBatch("DROP TABLE `Year_" + year + "_grade`;");
-                statement.addBatch("DROP TABLE `Year_" + year + "_grading`;");
-                statement.addBatch("DROP TABLE `Year_" + year + "_percentage`;");
-                statement.addBatch("DROP TABLE `Year_" + year + "_marks`;");
-                statement.addBatch("DROP TABLE `Year_" + year + "_exam`;");
-                Statement st = conn.createStatement();
-                String query = "SELECT Table_name FROM `year_" + year + "_ledger";
-                result = st.executeQuery(query);
-                while (result.next()) {
-                    String table = result.getString(1);
-                    statement.addBatch("DROP TABLE `" + table + "`;");
+                    Statement statement = conn.createStatement();
+                    statement.addBatch("DROP TABLE `Year_" + year + "_student`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_teacher`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_subject`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_grade`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_grading`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_percentage`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_marks`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_exam`;");
+                    statement.addBatch("DROP TABLE `Year_" + year + "_teacher_teaches`;");
+                    Statement st = conn.createStatement();
+                    String query = "SELECT Table_name FROM `year_" + year + "_ledger";
+                    result = st.executeQuery(query);
+                    while (result.next()) {
+                        String table = result.getString(1);
+                        statement.addBatch("DROP TABLE `" + table + "`;");
+                    }
+                    statement.addBatch("DROP TABLE `Year_" + year + "_ledger`;");
+                    statement.addBatch("DELETE FROM `session` WHERE session.Year='" + year + "';");
+                    statement.addBatch("DELETE FROM `table_details` WHERE table_details.Year='" + year + "';");
+                    statement.executeBatch();
+                    ObservableList temp = FXCollections.observableArrayList();
+                    temp = session_table.getItems();
+                    temp.removeAll(session_table.getSelectionModel().getSelectedItems());
+                    session_table.setItems(temp);
+                } catch (Exception ex) {
+                    System.out.println("Exception at onDeleteBtnClicked :" + ex.getMessage());
                 }
-                statement.addBatch("DROP TABLE `Year_" + year + "_ledger`;");
-                statement.addBatch("DELETE FROM `session` WHERE session.Year='" + year + "';");
-                statement.addBatch("DELETE FROM `table_details` WHERE table_details.Year='" + year + "';");
-                statement.executeBatch();
-                ObservableList temp = FXCollections.observableArrayList();
-                temp = session_table.getItems();
-                temp.removeAll(session_table.getSelectionModel().getSelectedItems());
-                session_table.setItems(temp);
-            } catch (Exception ex) {
-                System.out.println("Exception at onDeleteBtnClicked :" + ex.getMessage());
             }
         }
-
     }
 
     protected void makeSessionTable() {
@@ -257,8 +264,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ********************************
-             * TABLE COLUMN ADDED DYNAMICALLY *
-             *********************************
+             * TABLE COLUMN ADDED DYNAMICALLY * ********************************
              */
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
                 //We are using non property style for making dynamic table
@@ -282,8 +288,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ******************************
-             * Data added to ObservableList *
-             *******************************
+             * Data added to ObservableList * ******************************
              */
             while (rs.next()) {
                 //Iterate Row
@@ -326,21 +331,41 @@ public class SettingsController implements Initializable {
     private void addGradeBtnClicked(MouseEvent event) {
         String grade = grade_grade.getText();
         String section = grade_section.getText();
-        String query = "INSERT INTO year_" + LoginController.current_year + "_grade(Grade,Section)"
-                + " VALUES "
-                + "('" + grade + "' , '" + section + "')";
-        Connection conn = database.Connection.conn;
+        String year = LoginController.current_year;
         try {
-            conn.createStatement().execute(query);
+            //check if the grade and section is already present
+            String query = "SELECT * FROM year_" + year + "_grade WHERE Grade = ? AND Section = ?";
+            Connection conn = database.Connection.conn;
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, grade);
+            pst.setString(2, section);
+            ResultSet result = pst.executeQuery();
+            boolean already_present = false;
+            while (result.next()) {
+                already_present = true;
+            }
+            if (already_present) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setHeaderText("Grade already Present");
+                alert.setContentText("The grade and section is already present");
+                alert.show();
+            } else {
+                query = "INSERT INTO year_" + year + "_grade(Grade,Section)"
+                        + " VALUES "
+                        + "('" + grade + "' , '" + section + "')";
+                conn.createStatement().execute(query);
+                grade_grade.clear();
+                grade_section.clear();
+                grade_table.refresh();
+                grade_table.getColumns().clear();
+                grade_table.getItems().clear();
+
+            }
         } catch (Exception e) {
             System.out.println("add Grade Btn clicked in settings :" + e.getMessage());
+        } finally {
+            makeGradeTable();
         }
-        grade_grade.clear();
-        grade_section.clear();
-        grade_table.refresh();
-        grade_table.getColumns().clear();
-        grade_table.getItems().clear();
-        makeGradeTable();
     }
 
     @FXML
@@ -348,34 +373,42 @@ public class SettingsController implements Initializable {
         ObservableList<TableColumn> cols = grade_table.getColumns();
         TableColumn col = cols.get(0);
         String id = (String) col.getCellData(grade_table.getSelectionModel().getSelectedIndex());
-        Alert al = new Alert(Alert.AlertType.CONFIRMATION);
-        al.setHeaderText("Are you sure you want to delete grade with id : " + id);
-        al.setContentText("All the information related to this grade will be permanently deleted."
-                + "All students, grade,subjects will be deleted and the teachers will be unassigned to the grade."
-                + "But the marks will remain");
-        Optional<ButtonType> res = al.showAndWait();
-        if (res.get() == ButtonType.OK) {
-            Connection conn = database.Connection.conn;
-            try {
-                Statement statement = conn.createStatement();
-                statement.addBatch("DELETE FROM year_" + LoginController.current_year + "_student WHERE Grade_id = " + id + " ;");
-                statement.addBatch("DELETE FROM year_" + LoginController.current_year + "_grade WHERE Grade_id = " + id + " ;");
-                statement.addBatch("DELETE FROM year_" + LoginController.current_year + "_subject WHERE Grade_id = " + id + " ;");
-                Statement st = conn.createStatement();
-                ResultSet result;
-                String query = "SELECT Table_name FROM `year_" + LoginController.current_year + "_ledger WHERE Grade_id = " + id + ";";
-                result = st.executeQuery(query);
-                while (result.next()) {
-                    String table = result.getString(1);
-                    statement.addBatch("DROP TABLE `" + table + "`;");
+        if (id != null) {
+            Alert al = new Alert(Alert.AlertType.CONFIRMATION);
+            al.setHeaderText("Are you sure you want to delete grade with id : " + id);
+            al.setContentText("All the information related to this grade will be permanently deleted."
+                    + "All students, grade,subjects,Marks record i.e ledger"
+                    + "will be deleted and the teachers will be unassigned to the grade."
+                    + "");
+            Optional<ButtonType> res = al.showAndWait();
+            if (res.get() == ButtonType.OK) {
+                Connection conn = database.Connection.conn;
+                try {
+                    String year = LoginController.current_year;
+                    Statement statement = conn.createStatement();
+                    statement.addBatch("DELETE FROM year_" + year + "_grade WHERE "
+                            + "Grade_id = " + id + " ;");
+                    statement.addBatch("DELETE FROM year_" + year + "_grade WHERE Grade_id = " + id + " ;");
+                    String query = "DELETE FROM year_" + year + "_teacher_teaches "
+                            + "WHERE Grade_id = " + id + " ;";
+                    statement.addBatch(query);
+                    //the commented region also deletes the ledger of the class which we want to prevent
+//                String query = "SELECT Table_name FROM `year_" + year + "_ledger` WHERE Grade_id = " + id + ";";
+//                result = st.executeQuery(query);
+//                while (result.next()) {
+//                    String table = result.getString(1);
+//                    statement.addBatch("DROP TABLE `" + table + "`;");
+//                }
+                    statement.executeBatch();
+                    grade_table.refresh();
+                    grade_table.getColumns().clear();
+                    grade_table.getItems().clear();
+                    makeGradeTable();
+                } catch (Exception e) {
+                    System.out.println("Exception at delete Grade button :" + e.getMessage());
+                } finally {
+                    makeGradeTable();
                 }
-                statement.executeBatch();
-                grade_table.refresh();
-                grade_table.getColumns().clear();
-                grade_table.getItems().clear();
-                makeGradeTable();
-            } catch (Exception e) {
-                System.out.println("Exception at delete Grade button :" + e.getMessage());
             }
         }
     }
@@ -391,7 +424,8 @@ public class SettingsController implements Initializable {
         grade_table.getColumns().clear();
         grade_table.getItems().clear();
         try {
-            SQL = "SELECT * FROM year_" + LoginController.current_year + "_grade";
+            String year = LoginController.current_year;
+            SQL = "SELECT * FROM year_" + year + "_grade";
 
             rs = conn.createStatement().executeQuery(SQL);
         } catch (Exception e) {
@@ -402,8 +436,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ********************************
-             * TABLE COLUMN ADDED DYNAMICALLY *
-             *********************************
+             * TABLE COLUMN ADDED DYNAMICALLY * ********************************
              */
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
                 //We are using non property style for making dynamic table
@@ -431,8 +464,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ******************************
-             * Data added to ObservableList *
-             *******************************
+             * Data added to ObservableList * ******************************
              */
             while (rs.next()) {
                 //Iterate Row
@@ -492,8 +524,10 @@ public class SettingsController implements Initializable {
         subject_table.getColumns().clear();
         subject_table.getItems().clear();
         try {
-            SQL = "SELECT *"
-                    + " FROM year_" + LoginController.current_year + "_subject";
+            String year = LoginController.current_year;
+            SQL = "SELECT Subject_id,Subject_name,Grade "
+                    + " FROM year_" + year + "_subject "
+                    + "WHERE Active = 'yes'";
 
             rs = conn.createStatement().executeQuery(SQL);
         } catch (Exception e) {
@@ -504,8 +538,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ********************************
-             * TABLE COLUMN ADDED DYNAMICALLY *
-             *********************************
+             * TABLE COLUMN ADDED DYNAMICALLY * ********************************
              */
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
                 //We are using non property style for making dynamic table
@@ -521,7 +554,8 @@ public class SettingsController implements Initializable {
                 });
                 if ("Grade_id".equals(col.getText())
                         || "Teacher_id".equals(col.getText())
-                        || "No_of_students".equals(col.getText())) {
+                        || "No_of_students".equals(col.getText())
+                        || "Active".equalsIgnoreCase(col.getText())) {
                     col.setVisible(false);
                 }
                 subject_table.getColumns().addAll(col);
@@ -533,8 +567,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ******************************
-             * Data added to ObservableList *
-             *******************************
+             * Data added to ObservableList * ******************************
              */
             while (rs.next()) {
                 //Iterate Row
@@ -570,7 +603,8 @@ public class SettingsController implements Initializable {
         try {
             subject_grade_filter.getItems().clear();
             subject_grade_filter.getItems().add("All");
-            query = "SELECT DISTINCT Grade FROM year_" + LoginController.current_year + "_grade ;";
+            String year = LoginController.current_year;
+            query = "SELECT DISTINCT Grade FROM year_" + year + "_grade ;";
             rs = conn.createStatement().executeQuery(query);
             while (rs.next()) {
                 subject_grade_filter.getItems().add(rs.getString(1));
@@ -618,7 +652,8 @@ public class SettingsController implements Initializable {
         ResultSet rs = null;
         try {
             subject_grade.getItems().clear();
-            query = "SELECT DISTINCT Grade FROM year_" + LoginController.current_year + "_grade ;";
+            String year = LoginController.current_year;
+            query = "SELECT DISTINCT Grade FROM year_" + year + "_grade ;";
             rs = conn.createStatement().executeQuery(query);
             while (rs.next()) {
                 subject_grade.getItems().add(rs.getString(1));
@@ -635,18 +670,43 @@ public class SettingsController implements Initializable {
         Connection conn = database.Connection.conn;
         ResultSet result;
         String query;
+        String year = LoginController.current_year;
         try {
             String subject = subject_subject_name.getText();
             String grade = subject_grade.getSelectionModel().getSelectedItem().toString();
-            query = "INSERT INTO year_" + LoginController.current_year + "_subject "
-                    + "(Subject_name,Grade) VALUES ('" + subject + "','" + grade + "')";
-            conn.createStatement().executeUpdate(query);
-            makeSubjectTable();
-            subject_subject_name.clear();
-            subject_grade.getSelectionModel().selectFirst();
+            //check if the grade and section is already present
+            query = "SELECT * FROM year_" + year + "_subject WHERE Grade = ? AND Subject_name = ? ";
+            conn = database.Connection.conn;
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, grade);
+            pst.setString(2, subject);
+            result = pst.executeQuery();
+            boolean already_present = false;
+            while (result.next()) {
+                already_present = true;
+            }
+            if (already_present) {
+
+                query = "UPDATE year_" + year + "_subject SET Active = 'yes', "
+                        + "Subject_name = ?"
+                        + " WHERE Grade = ? AND Subject_name = ? ";
+                pst = conn.prepareStatement(query);
+                pst.setString(1, subject);
+                pst.setString(2, grade);
+                pst.setString(3, subject);
+                pst.execute();
+            } else {
+                query = "INSERT INTO year_" + year + "_subject "
+                        + "(Subject_name,Grade) VALUES ('" + subject + "','" + grade + "')";
+                conn.createStatement().executeUpdate(query);
+                subject_subject_name.clear();
+                subject_grade.getSelectionModel().selectFirst();
+            }
         } catch (Exception e) {
             System.out.println("Exception at addSubjectBtnClicked() "
                     + "at SettingsController : " + e.getMessage());
+        } finally {
+            makeSubjectTable();
         }
     }
 
@@ -670,8 +730,9 @@ public class SettingsController implements Initializable {
         String subject = subject_subject_name.getText();
         String grade = subject_grade.getSelectionModel().getSelectedItem().toString();
         try {
-            query = "SELECT * FROM year_" + 2074 + "_subject WHERE Grade = '" + grade + "' AND "
-                    + "Subject_name = '" + subject + "' ; ";
+            String year = LoginController.current_year;
+            query = "SELECT * FROM year_" + year + "_subject WHERE Grade = '" + grade + "' AND "
+                    + "Subject_name = '" + subject + "' AND Active = 'yes' ; ";
             result = conn.createStatement().executeQuery(query);
             if (result.next()) {
                 subject_label.setVisible(true);
@@ -692,18 +753,35 @@ public class SettingsController implements Initializable {
         ResultSet result;
         String query;
         try {
+            String year = LoginController.current_year;
             int index = subject_table.getSelectionModel().getSelectedIndex();
             TableColumn col = (TableColumn) subject_table.getColumns().get(0);
             String id = col.getCellData(index).toString();
             String grade = subject_grade.getSelectionModel().getSelectedItem().toString();
-            query = "DELETE FROM  year_" + LoginController.current_year + "_subject "
-                    + " WHERE Subject_id = " + id + " ;";
-            conn.createStatement().executeUpdate(query);
-            makeSubjectTable();
+            if (id != null) {
+                Alert al = new Alert(Alert.AlertType.CONFIRMATION);
+                al.setHeaderText("Are you sure you want to delete Subject with id : " + id);
+                al.setContentText("The subject when deleted will result in unassigning"
+                        + " teachers to the subject also");
+                Optional<ButtonType> res = al.showAndWait();
+                if (res.get() == ButtonType.OK) {
+                    query = "UPDATE  year_" + year + "_subject "
+                            + "SET Active = 'No' "
+                            + " WHERE Subject_id = " + id + " ;";
+                    Statement st = conn.createStatement();
+                    st.addBatch(query);
+                    query = "DELETE FROM year_" + year + "_teacher_teaches "
+                            + "WHERE Subject_id = " + id + " ;";
+                    st.addBatch(query);
+                    st.executeBatch();
+                    makeSubjectTable();
+                }
+            }
         } catch (Exception e) {
             System.out.println("Exception at deleteSubjectBtnClicked() "
                     + "at SettingsController : " + e.getMessage());
         }
+
     }
     ///////////////////////////////////////////////////////////////////////////////////   
 ////////////////////////////////////////////////////////////////////////////////////
@@ -728,8 +806,10 @@ public class SettingsController implements Initializable {
         division_table.getItems().clear();
         division_table.getColumns().clear();
         try {
+            String year = LoginController.current_year;
             SQL = "SELECT *"
-                    + " FROM year_" + LoginController.current_year + "_percentage";
+                    + " FROM year_" + year + "_percentage "
+                    + "ORDER BY `from`";
 
             rs = conn.createStatement().executeQuery(SQL);
         } catch (Exception e) {
@@ -740,8 +820,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ********************************
-             * TABLE COLUMN ADDED DYNAMICALLY *
-             *********************************
+             * TABLE COLUMN ADDED DYNAMICALLY * ********************************
              */
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
                 //We are using non property style for making dynamic table
@@ -765,8 +844,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ******************************
-             * Data added to ObservableList *
-             *******************************
+             * Data added to ObservableList * ******************************
              */
             while (rs.next()) {
                 //Iterate Row
@@ -800,18 +878,43 @@ public class SettingsController implements Initializable {
         String from = division_from.getText();
         String to = division_to.getText();
         String division_name = division_division_name.getText();
+        String year = LoginController.current_year;
         if (!division.isEmpty() && !from.isEmpty() && !to.isEmpty()
                 && !division_name.isEmpty()) {
             Connection conn = database.Connection.conn;
             try {
-                String year = LoginController.current_year;
-                String query = "INSERT INTO year_" + year + "_percentage VALUES "
-                        + "('" + division + "','" + from + "','" + to + "','" + division_name + "')";
-                conn.createStatement().executeUpdate(query);
-                makeDivisionTable();
+                //check if the grade and section is already present
+                String query = "SELECT * FROM year_" + year + "_percentage WHERE `from` = ? "
+                        + "OR `to` = ? OR `division` = ? OR `Division_name` = ?";
+                conn = database.Connection.conn;
+                PreparedStatement pst = conn.prepareStatement(query);
+                pst.setString(1, from);
+                pst.setString(2, to);
+                pst.setString(3, division);
+                pst.setString(4, division_name);
+                ResultSet result = pst.executeQuery();
+                boolean already_present = false;
+                while (result.next()) {
+                    already_present = true;
+                }
+                if (already_present) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Division already Present");
+                    alert.setContentText("One or many of the from,to,Division or Division_name "
+                            + " is already persent. \n All the values must be unique");
+                    alert.show();
+                } else {
+
+                    query = "INSERT INTO year_" + year + "_percentage VALUES "
+                            + "('" + division + "','" + from + "','" + to + "','" + division_name + "')";
+                    conn.createStatement().executeUpdate(query);
+
+                }
             } catch (Exception e) {
                 System.out.println("Exception at addDivisionBtnClicked() at "
                         + "SettingsController : " + e.getMessage());
+            } finally {
+                makeDivisionTable();
             }
         } else {
             Alert a = new Alert(AlertType.ERROR);
@@ -829,7 +932,8 @@ public class SettingsController implements Initializable {
             int index = division_table.getSelectionModel().getSelectedIndex();
             TableColumn col = (TableColumn) division_table.getColumns().get(0);
             String division = col.getCellData(index).toString();
-            query = "DELETE FROM  year_" + LoginController.current_year + "_percentage "
+            String year = LoginController.current_year;
+            query = "DELETE FROM  year_" + year + "_percentage "
                     + " WHERE Division = '" + division + "' ;";
             conn.createStatement().executeUpdate(query);
             makeDivisionTable();
@@ -861,8 +965,10 @@ public class SettingsController implements Initializable {
         grading_table.getColumns().clear();
         grading_table.getItems().clear();
         try {
+            String year = LoginController.current_year;
             SQL = "SELECT *"
-                    + " FROM year_" + LoginController.current_year + "_grading";
+                    + " FROM year_" + year + "_grading "
+                    + "ORDER BY per_from";
 
             rs = conn.createStatement().executeQuery(SQL);
         } catch (Exception e) {
@@ -873,8 +979,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ********************************
-             * TABLE COLUMN ADDED DYNAMICALLY *
-             *********************************
+             * TABLE COLUMN ADDED DYNAMICALLY * ********************************
              */
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
                 //We are using non property style for making dynamic table
@@ -898,8 +1003,7 @@ public class SettingsController implements Initializable {
         try {
             /**
              * ******************************
-             * Data added to ObservableList *
-             *******************************
+             * Data added to ObservableList * ******************************
              */
             while (rs.next()) {
                 //Iterate Row
@@ -938,13 +1042,41 @@ public class SettingsController implements Initializable {
             Connection conn = database.Connection.conn;
             try {
                 String year = LoginController.current_year;
-                String query = "INSERT INTO year_" + year + "_grading VALUES "
-                        + "('" + from + "','" + to + "','" + grade_letter + "','" + grade_point + "')";
-                conn.createStatement().executeUpdate(query);
-                makeGradingTable();
+                //check if the grade and section is already present
+                String query = "SELECT * FROM year_" + year + "_grading WHERE Per_from = ? OR per_to = ? "
+                        + "OR grade_letter = ? OR grade_point=?";
+                conn = database.Connection.conn;
+                PreparedStatement pst = conn.prepareStatement(query);
+                pst.setString(1, from);
+                pst.setString(2, to);
+                pst.setString(3, grade_letter);
+                pst.setString(4, grade_point);
+                ResultSet result = pst.executeQuery();
+                boolean already_present = false;
+                while (result.next()) {
+                    already_present = true;
+                }
+                if (already_present) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Grading already Present");
+                    alert.setContentText("One or many of from,to,grade_letter or grade_point "
+                            + "is repeated.\n All values must be unique");
+                    alert.show();
+                } else {
+                    query = "INSERT INTO year_" + year + "_grading VALUES "
+                            + "('" + from + "','" + to + "','" + grade_letter + "','" + grade_point + "')";
+                    conn.createStatement().executeUpdate(query);
+                    grading_grade_letter.clear();
+                    grading_from.clear();
+                    grading_to.clear();
+                    grading_grade_point.clear();
+
+                }
             } catch (Exception e) {
                 System.out.println("Exception at addGradingBtnClicked() at "
                         + "SettingsController : " + e.getMessage());
+            } finally {
+                makeGradingTable();
             }
         } else {
             Alert a = new Alert(AlertType.ERROR);
@@ -962,7 +1094,8 @@ public class SettingsController implements Initializable {
             int index = grading_table.getSelectionModel().getSelectedIndex();
             TableColumn col = (TableColumn) grading_table.getColumns().get(2);
             String grade_letter = col.getCellData(index).toString();
-            query = "DELETE FROM  year_" + LoginController.current_year + "_grading "
+            String year = LoginController.current_year;
+            query = "DELETE FROM  year_" + year + "_grading "
                     + " WHERE Grade_letter = '" + grade_letter + "' ;";
             conn.createStatement().executeUpdate(query);
             makeGradingTable();

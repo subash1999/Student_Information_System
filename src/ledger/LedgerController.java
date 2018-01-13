@@ -8,17 +8,13 @@ package ledger;
 import calculator.CalculateGrade;
 import calculator.CalculateResult;
 import com.jfoenix.controls.JFXTextField;
-import java.awt.Event;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -27,8 +23,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -46,8 +40,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -69,9 +61,7 @@ public class LedgerController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    @FXML
-    private JFXTextField search_field;
-
+   
     @FXML
     private Button add_exam;
 
@@ -172,6 +162,10 @@ public class LedgerController implements Initializable {
     private String table_name;
     ObservableList<ObservableList> data = FXCollections.observableArrayList();
 
+    private String current_grade = "";
+    private String current_section = "";
+    private String current_exam = "";
+
     //only student_id,name,roll is currently set from year_2074_students table 
     //data from the year_2074_ledger and the table is not done
     @Override
@@ -243,6 +237,9 @@ public class LedgerController implements Initializable {
         String grade = this.grade_choicebox.getSelectionModel().getSelectedItem().toString();
         String section = this.section_choicebox.getSelectionModel().getSelectedItem().toString();
         String year = LoginController.current_year;
+        current_grade = grade;
+        current_section = section;
+        current_exam = exam;
         try {
             String query = "SELECT Grade_id FROM year_" + year + "_ledger WHERE Ledger_id = "
                     + ledger_id + " ;";
@@ -261,13 +258,13 @@ public class LedgerController implements Initializable {
                 section_label.setText("Section : " + result.getString(2));
             }
             query = "SELECT COUNT(Student_id) FROM year_" + year + "_student WHERE Gender = 'Male'"
-                    + " AND Grade_id = " + grade_id;
+                    + " AND Grade_id = " + grade_id + " AND Active = 'yes ;'";
             result = conn.createStatement().executeQuery(query);
             while (result.next()) {
                 male_label.setText("Male : " + String.valueOf(result.getInt(1)));
             }
             query = "SELECT COUNT(Student_id) FROM year_" + year + "_student WHERE Gender = 'Female' "
-                    + " AND Grade_id = " + grade_id;
+                    + " AND Grade_id = " + grade_id + " AND Active = 'yes ;'";
             result = conn.createStatement().executeQuery(query);
             while (result.next()) {
                 female_label.setText("Female : " + String.valueOf(result.getInt(1)));
@@ -310,15 +307,18 @@ public class LedgerController implements Initializable {
         String year = LoginController.current_year;
         try {
             String query = null;
-            if (!grade_choicebox.getSelectionModel().getSelectedItem().toString().isEmpty()) {
-                query = "SELECT Subject_name FROM year_" + year + "_subject WHERE "
-                        + " Grade = '" + grade_choicebox.getSelectionModel().getSelectedItem().toString() + "' ;";
-            }
-            result = conn.createStatement().executeQuery(query);
-            while (result.next()) {
-                subject_choicebox.getItems().add(result.getString(1));
-            }
+            if (grade_choicebox.getSelectionModel().getSelectedItem() != null) {
+                if (!grade_choicebox.getSelectionModel().getSelectedItem().toString().isEmpty()) {
+                    query = "SELECT Subject_name FROM year_" + year + "_subject WHERE "
+                            + " Grade = '" + grade_choicebox.getSelectionModel().getSelectedItem().toString() + "' "
+                            + " AND Active='yes';";
 
+                    result = conn.createStatement().executeQuery(query);
+                    while (result.next()) {
+                        subject_choicebox.getItems().add(result.getString(1));
+                    }
+                }
+            }
             //Making FullMarks textfield only accept integer and dot
             fm_textfield.lengthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
                 if (newValue.intValue() > oldValue.intValue()) {
@@ -372,9 +372,9 @@ public class LedgerController implements Initializable {
         try {
             /*getting the already present list from the database and checking if selected list
             is already present in the database */
-            query = "SELECT Subject_name,Type FROM year_" + 2074 + "_marks INNER JOIN "
-                    + "year_" + 2074 + "_subject WHERE year_" + 2074 + "_marks.Subject_id = "
-                    + "year_" + 2074 + "_subject.Subject_id";
+            query = "SELECT Subject_name,Type FROM year_" + year + "_marks INNER JOIN "
+                    + "year_" + year + "_subject WHERE year_" + year + "_marks.Subject_id = "
+                    + "year_" + year + "_subject.Subject_id AND Ledger_id = " + ledger_id;
             result = conn.createStatement().executeQuery(query);
             ObservableList<ObservableList> already_present = FXCollections.observableArrayList();
             while (result.next()) {
@@ -384,7 +384,7 @@ public class LedgerController implements Initializable {
                 already_present.add(temp);
             }
             ObservableList selected = FXCollections.observableArrayList();
-            if (subject_choicebox.getItems().size() != 0) {
+            if (!subject_choicebox.getItems().isEmpty()) {
                 selected.add(subject_choicebox.getSelectionModel().getSelectedItem().toString());
             }
             String th_pr_type = null;
@@ -437,7 +437,8 @@ public class LedgerController implements Initializable {
                 table_spread.getColumns().clear();
                 Connection conn = database.Connection.conn;
                 ResultSet result = null;
-                String query = "SELECT Grade_id FROM `year_" + LoginController.current_year + "_grade`"
+                String year = LoginController.current_year;
+                String query = "SELECT Grade_id FROM `year_" + year + "_grade`"
                         + " WHERE Grade= '" + grade + "' AND Section = '" + section + "' ;";
                 String grade_id = null;
                 try {
@@ -447,13 +448,12 @@ public class LedgerController implements Initializable {
                     }
 
                     String exam_id = null;
-                    String year = LoginController.current_year;
                     query = "SELECT Exam_id FROM year_" + year + "_exam WHERE `Name` = '" + exam + "';";
                     result = conn.createStatement().executeQuery(query);
                     while (result.next()) {
                         exam_id = result.getString(1);
                     }
-                    query = "SELECT Table_name,Ledger_id FROM year_" + LoginController.current_year + "_ledger"
+                    query = "SELECT Table_name,Ledger_id FROM year_" + year + "_ledger"
                             + " WHERE Exam_id = " + exam_id + " AND Grade_id = " + grade_id + ";";
                     result = conn.createStatement().executeQuery(query);
                     String table_name = null;
@@ -575,7 +575,8 @@ public class LedgerController implements Initializable {
                 table_spread.getColumns().clear();
                 Connection conn = database.Connection.conn;
                 ResultSet result = null;
-                String query = "SELECT Grade_id FROM `year_" + LoginController.current_year + "_grade`"
+                String year = LoginController.current_year;
+                String query = "SELECT Grade_id FROM `year_" + year + "_grade`"
                         + " WHERE Grade= '" + grade + "' AND Section = '" + section + "' ;";
                 String grade_id = null;
                 try {
@@ -585,13 +586,12 @@ public class LedgerController implements Initializable {
                     }
 
                     String exam_id = null;
-                    String year = LoginController.current_year;
                     query = "SELECT Exam_id FROM year_" + year + "_exam WHERE `Name` = '" + exam + "';";
                     result = conn.createStatement().executeQuery(query);
                     while (result.next()) {
                         exam_id = result.getString(1);
                     }
-                    query = "SELECT Table_name,Ledger_id FROM year_" + LoginController.current_year + "_ledger"
+                    query = "SELECT Table_name,Ledger_id FROM year_" + year + "_ledger"
                             + " WHERE Exam_id = " + exam_id + " AND Grade_id = " + grade_id + ";";
                     result = conn.createStatement().executeQuery(query);
                     String table_name = null;
@@ -627,7 +627,7 @@ public class LedgerController implements Initializable {
                     query = "TRUNCATE TABLE temp";
                     st.addBatch(query);
                     //adding the student_id,roll,name
-                    query = "INSERT INTO temp(Student_id,Roll,Name) SELECT Student_id,Roll,Name FROM year_" + LoginController.current_year + "_student"
+                    query = "INSERT INTO temp(Student_id,Roll,Name) SELECT Student_id,Roll,Name FROM year_" + year + "_student"
                             + " WHERE Student_id in (SELECT Student_id FROM " + table_name + ")";
                     st.addBatch(query);
                     System.out.println(query);
@@ -658,15 +658,14 @@ public class LedgerController implements Initializable {
                         list.add(String.valueOf(result.getInt(2)));
                         list.add(String.valueOf(result.getString(3)));
                         for (int i = 4; i <= result.getMetaData().getColumnCount(); i++) {
-                            String list_items = result.getString(i) ;
-                            try{
-                                if(Double.valueOf(result.getString(i))<0)
-                                list_items = "A";                                
-                            }
-                            catch(NumberFormatException e){
+                            String list_items = result.getString(i);
+                            try {
+                                if (Double.valueOf(result.getString(i)) < 0) {
+                                    list_items = "A";
+                                }
+                            } catch (NumberFormatException e) {
                                 //nothing here
-                            }
-                            finally{
+                            } finally {
                                 list.add(list_items);
                             }
                         }
@@ -694,7 +693,7 @@ public class LedgerController implements Initializable {
                             SpreadsheetCell s;
                             String cell_data = values.get(column).toString();
                             s = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, cell_data);
-                            
+
                             //making spreadsheet colorful as the value is entered
                             Task<Void> task;
                             task = assignColor(grid, s);
@@ -709,15 +708,15 @@ public class LedgerController implements Initializable {
                             s.itemProperty().addListener(e -> {
                                 /*checking if the entered value is greater than 
                                 fm or less than 0
-                                 */                                    
+                                 */
                                 try {
                                     double value = Double.valueOf(s.getText());
                                     boolean greater_than_fm = true;
                                     String sql = "SELECT FM FROM "
-                                        + "year_" + year + "_marks WHERE "
-                                        + "Subject_title = '" + col_name + "' "
-                                        + " AND "
-                                        + " Ledger_id = " + ledger_id.getValue();
+                                            + "year_" + year + "_marks WHERE "
+                                            + "Subject_title = '" + col_name + "' "
+                                            + " AND "
+                                            + " Ledger_id = " + ledger_id.getValue();
                                     ResultSet res = conn.createStatement().executeQuery(sql);
                                     while (res.next()) {
                                         //allowing the fm + 10% of fm be the 
@@ -726,26 +725,23 @@ public class LedgerController implements Initializable {
                                         // given this is done for those situation
                                         // but only 10% more than fm can be given 
                                         // for this ledger
-                                        greater_than_fm =
-                                            Float.valueOf(s.getText()) > 
-                                                (1.1*res.getFloat(1));
+                                        greater_than_fm
+                                                = Float.valueOf(s.getText())
+                                                > (1.1 * res.getFloat(1));
                                         if (s.getText().isEmpty()
-                                        || Double.valueOf(s.getText()) < 0
-                                        || greater_than_fm) {
-                                        s.setItem("0");
-                                }
+                                                || Double.valueOf(s.getText()) < 0
+                                                || greater_than_fm) {
+                                            s.setItem("0");
+                                        }
                                     }
-                                }
-                                catch(NumberFormatException ex){
-                                    if("A".equalsIgnoreCase(s.getText())){
+                                } catch (NumberFormatException ex) {
+                                    if ("A".equalsIgnoreCase(s.getText())) {
                                         //setting the negative number value for
                                         //the absent                                        
-                                    }
-                                    else{
+                                    } else {
                                         s.setItem("0");
                                     }
-                                }
-                                catch (Exception ex) {
+                                } catch (Exception ex) {
                                     System.out.println("Exception while checking"
                                             + "if number is greater than "
                                             + "1.1 times of the full marks "
@@ -755,9 +751,9 @@ public class LedgerController implements Initializable {
                                             + "at LedgerController :  "
                                             + ex.getMessage());
                                 }
-                                
+
                                 try {
-                                    
+
                                     Task<Void> job;
                                     final GridBase g = grid;
                                     final SpreadsheetCell sc = s;
@@ -774,7 +770,7 @@ public class LedgerController implements Initializable {
                                             + "at getMarksInputLedger() "
                                             + "at LedgerController :  "
                                             + ex.getMessage());
-                                   
+
                                 }
                             });
                             if (not_editable_column_list.contains(column_header)) {
@@ -865,7 +861,7 @@ public class LedgerController implements Initializable {
                     table_name = result.getString(1);
                 }
                 String new_value = s.getText();
-                if("A".equalsIgnoreCase(s.getText())){
+                if ("A".equalsIgnoreCase(s.getText())) {
                     new_value = "-0.00000000000000000000000000000000000001";
                 }
                 query = "UPDATE " + table_name + " SET `" + column_name
@@ -914,9 +910,9 @@ public class LedgerController implements Initializable {
                         public void run() {
                             s.setStyle("-fx-background-color: white");
                         }
-                    });                    
+                    });
 
-                }                
+                }
                 return null;
             }
         };
@@ -934,8 +930,8 @@ public class LedgerController implements Initializable {
                 ResultSet result;
                 Connection conn = database.Connection.conn;
                 String value = s.getText();
-                if("A".equalsIgnoreCase(value)){
-                    value="-0.00000000000000000000000000000000000001";
+                if ("A".equalsIgnoreCase(value)) {
+                    value = "-0.00000000000000000000000000000000000001";
                 }
                 //Checking if the value is more than the full marks
                 query = "SELECT * FROM year_" + year + "_marks "
@@ -982,7 +978,6 @@ public class LedgerController implements Initializable {
                     });
 
                 }
-                
 
                 return null;
 
@@ -1000,7 +995,8 @@ public class LedgerController implements Initializable {
         try {
             //getting the respective data for ChoiceBoxes for user to select
             Connection conn = database.Connection.conn;
-            String query = "SELECT DISTINCT Name FROM year_" + LoginController.current_year
+            String year = LoginController.current_year;
+            String query = "SELECT DISTINCT Name FROM year_" + year
                     + "_exam ;";
             ResultSet result = null;
             try {
@@ -1008,20 +1004,7 @@ public class LedgerController implements Initializable {
                 while (result.next()) {
                     exam_choicebox.getItems().add(result.getString(1));
                 }
-                query = "SELECT DISTINCT `Grade` FROM year_" + LoginController.current_year
-                        + "_grade WHERE Grade_id in (SELECT DISTINCT Grade_id FROM year_" + LoginController.current_year
-                        + "_ledger) ;";
-                result = conn.createStatement().executeQuery(query);
-                while (result.next()) {
-                    grade_choicebox.getItems().add(result.getString(1));
-                }
-                query = "SELECT DISTINCT `Section` FROM year_" + LoginController.current_year
-                        + "_grade WHERE Grade_id in (SELECT DISTINCT Grade_id FROM year_" + LoginController.current_year
-                        + "_ledger) ;";
-                result = conn.createStatement().executeQuery(query);
-                while (result.next()) {
-                    section_choicebox.getItems().add(result.getString(1));
-                }
+
             } catch (Exception e) {
                 System.out.println("Exception at setting the choiceBox items in LegderController :" + e.getMessage());
             }
@@ -1029,7 +1012,24 @@ public class LedgerController implements Initializable {
             //assigning listner so that they will notify user if there is no sheet available
             exam_choicebox.getSelectionModel().selectedItemProperty().addListener(e -> {
                 try {
-                    listnerForChoiceBox();
+                    if (exam_choicebox.getSelectionModel().getSelectedItem() != null) {
+                        grade_choicebox.setDisable(true);
+                        section_choicebox.setDisable(true);
+                        if (grade_choicebox.getItems().size() != 0) {
+                            grade_choicebox.getItems().clear();
+                        }
+                        final String sql = "SELECT DISTINCT Grade FROM year_" + year + "_grade "
+                                + "WHERE  Grade_id IN (SELECT Grade_id FROM "
+                                + "year_" + year + "_ledger WHERE Exam_id IN ("
+                                + "SELECT Exam_id FROM year_" + year + "_exam "
+                                + "WHERE Name = '" + exam_choicebox.getSelectionModel().getSelectedItem().toString() + "' "
+                                + ") );";
+                        ResultSet res = conn.createStatement().executeQuery(sql);
+                        while (res.next()) {
+                            grade_choicebox.getItems().add(res.getString(1));
+                        }
+                        grade_choicebox.setDisable(false);
+                    }
                 } catch (Exception f) {
                     System.out.println("Exception at adding listner of choiceBox() at LedgerController : " + f.getMessage());
                 }
@@ -1037,7 +1037,23 @@ public class LedgerController implements Initializable {
             });
             grade_choicebox.getSelectionModel().selectedItemProperty().addListener(e -> {
                 try {
-                    listnerForChoiceBox();
+                    if (grade_choicebox.getSelectionModel().getSelectedItem() != null) {
+                        section_choicebox.setDisable(true);
+                        if (section_choicebox.getItems().size() != 0) {
+                            section_choicebox.getItems().clear();
+                        }
+                        final String sql = "SELECT DISTINCT Section FROM year_" + year + "_grade "
+                                + "WHERE  Grade_id IN (SELECT Grade_id FROM "
+                                + "year_" + year + "_ledger WHERE Exam_id IN ("
+                                + "SELECT Exam_id FROM year_" + year + "_exam "
+                                + "WHERE Name = '" + exam_choicebox.getSelectionModel().getSelectedItem().toString() + "' "
+                                + ") ) AND Grade = '" + grade_choicebox.getSelectionModel().getSelectedItem().toString() + "' ;";
+                        ResultSet res = conn.createStatement().executeQuery(sql);
+                        while (res.next()) {
+                            section_choicebox.getItems().add(res.getString(1));
+                        }
+                        section_choicebox.setDisable(false);
+                    }
                 } catch (Exception f) {
                     System.out.println("Exception at adding listner of choiceBox() at LedgerController : " + f.getMessage());
                 }
@@ -1047,7 +1063,6 @@ public class LedgerController implements Initializable {
                     listnerForChoiceBox();
                 } catch (Exception f) {
                     System.out.println("Exception at adding listner of choiceBox() at LedgerController : " + f.getMessage());
-
                 }
             });
         } catch (Exception e) {
@@ -1061,7 +1076,8 @@ public class LedgerController implements Initializable {
         String exam = exam_choicebox.getSelectionModel().getSelectedItem().toString();
         String grade = grade_choicebox.getSelectionModel().getSelectedItem().toString();
         String section = section_choicebox.getSelectionModel().getSelectedItem().toString();
-        String query = "SELECT Grade_id FROM year_" + LoginController.current_year + "_grade WHERE"
+        String year = LoginController.current_year;
+        String query = "SELECT Grade_id FROM year_" + year + "_grade WHERE"
                 + " Grade = '" + grade + "' AND Section = '" + section + "';";
         String grade_id = null;
         ResultSet result = null;
@@ -1071,7 +1087,7 @@ public class LedgerController implements Initializable {
             while (result.next()) {
                 grade_id = String.valueOf(result.getInt(1));
             }
-            String year = LoginController.current_year;
+
             query = "SELECT Name,Grade_id FROM year_" + year + "_ledger INNER JOIN year_" + year
                     + "_exam WHERE \n"
                     + "year_" + year + "_ledger.Exam_id=year_" + year + "_exam.Exam_id ;";
@@ -1103,6 +1119,7 @@ public class LedgerController implements Initializable {
             }
         } catch (Exception e) {
             System.out.println("Listner for choiceBox Exception : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -1167,8 +1184,9 @@ public class LedgerController implements Initializable {
                     }
                     //getting the subject_id
                     query = "SELECT Subject_id FROM year_" + year + "_subject WHERE Subject_name = '"
-                            + subject + "' AND Grade_id in (SELECT Grade_id FROM year_" + year + "_ledger "
-                            + "WHERE Ledger_id = " + ledger_id.get() + ")";
+                            + subject + "' AND Grade IN(SELECT DISTINCT Grade FROM year_" + year + "_grade "
+                            + "WHERE Grade_id IN (SELECT Grade_id FROM year_" + year + "_ledger "
+                            + "WHERE Ledger_id = " + ledger_id.get() + "))";
                     result = conn.createStatement().executeQuery(query);
                     String subject_id = null;
                     while (result.next()) {
@@ -1219,7 +1237,7 @@ public class LedgerController implements Initializable {
             String query;
             try {
                 Statement st = conn.createStatement();
-                query = "SELECT Table_name FROM year_" + 2074 + "_ledger WHERE Ledger_id = " + ledger_id.get() + " ;";
+                query = "SELECT Table_name FROM year_" + year + "_ledger WHERE Ledger_id = " + ledger_id.get() + " ;";
                 result = conn.createStatement().executeQuery(query);
                 String table_name = null;
                 while (result.next()) {
@@ -1330,9 +1348,9 @@ public class LedgerController implements Initializable {
         if (!"".equals(table_name) || !"".equals(ledger_id.get())) {
             String ledger_id = this.ledger_id.get();
             Alert al = new Alert(AlertType.CONFIRMATION);
-            al.setHeaderText("Do you want to confirm the deletion of the ledger \n of exam : " + exam_choicebox.getSelectionModel().getSelectedItem().toString()
-                    + "\n of grade : " + grade_choicebox.getSelectionModel().getSelectedItem().toString()
-                    + "\n of section : " + section_choicebox.getSelectionModel().getSelectedItem().toString());
+            al.setHeaderText("Do you want to confirm the deletion of the ledger \n of exam : " + current_exam
+                    + "\n of grade : " + current_grade
+                    + "\n of section : " + current_section);
             al.setContentText("Deleting a ledger will only affect the single ledger and none other factors are "
                     + "effected.!!!!IMPORTANT But Remember you have to recalculate the marks "
                     + "to get the correct ranking of the another section of same class"

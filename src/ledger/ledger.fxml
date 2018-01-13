@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -42,24 +41,6 @@
                         <Separator layoutY="130.0" prefHeight="13.0" prefWidth="261.0" />
                      </children>
                   </AnchorPane>
-                  <HBox>
-                     <children>
-                        <Label style="-fx-text-fill: blue;" text="Search Table  :">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <JFXTextField fx:id="search_field" prefHeight="18.0" prefWidth="119.0" />
-                        <ImageView fitHeight="26.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/search.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <VBox.margin>
-                        <Insets left="10.0" />
-                     </VBox.margin>
-                  </HBox>
                   <AnchorPane>
                      <VBox.margin>
                         <Insets left="20.0" />
@@ -277,6 +258,7 @@
                      </image>
                   </ImageView>
                   <Label layoutX="155.0" layoutY="45.0" prefHeight="17.0" prefWidth="119.0" text="Delete Current Sheet" />
+                  <Label layoutX="333.0" layoutY="17.0" style="-fx-text-fill: orange;" text="Note : Please use letter 'A'  or 'a' for absent students" />
                </children>
             </AnchorPane>
          </bottom>

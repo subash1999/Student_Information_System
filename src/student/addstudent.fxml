@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="599.0" prefWidth="413.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="student.AddstudentController">
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="157.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="10.0" prefWidth="181.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Name : ">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label text="Gender" GridPane.rowIndex="1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label text="Date Of Birth (DOB) :" GridPane.rowIndex="2">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label text="Address :" GridPane.rowIndex="3">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label text="Contact numbers :" GridPane.rowIndex="4">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label text="Father's Name :" GridPane.rowIndex="5">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label prefHeight="25.0" text="Mothers Name :" GridPane.rowIndex="6">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label prefHeight="25.0" text="Guardian Name :" GridPane.rowIndex="7">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label prefHeight="25.0" text="Previous School :" GridPane.rowIndex="8">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label prefHeight="25.0" text="Grade (Applied for) :" GridPane.rowIndex="9">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label prefHeight="25.0" text="Roll No :" GridPane.rowIndex="11">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <HBox GridPane.columnIndex="1">
+               <children>
+                  <JFXTextField fx:id="name_textfield" prefHeight="25.0" prefWidth="194.0" />
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" stylesheets="@../stylesheet/bootstrap2.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <RadioButton fx:id="male_radio_btn" mnemonicParsing="false" text="Male">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="gender_group" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="female_radio_btn" mnemonicParsing="false" text="Female" toggleGroup="$gender_group">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+               <GridPane.margin>
+                  <Insets top="10.0" />
+               </GridPane.margin>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <JFXDatePicker fx:id="dob_datepicker" prefHeight="25.0" prefWidth="195.0" promptText="yyyy/MM/dd" />
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <JFXTextField fx:id="address_textfield" prefHeight="25.0" prefWidth="193.0" />
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <JFXTextField fx:id="contact_textfield" prefHeight="25.0" prefWidth="197.0" promptText="9876543210,0123456789" />
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                  <JFXTextField fx:id="father_textfield" prefHeight="25.0" prefWidth="194.0" />
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <children>
+                  <JFXTextField fx:id="mother_textfield" prefHeight="25.0" prefWidth="189.0" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <children>
+                  <JFXTextField fx:id="guardian_textfield" prefHeight="25.0" prefWidth="195.0" />
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <children>
+                  <JFXTextField fx:id="previous_school_textfield" prefHeight="25.0" prefWidth="190.0" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="9">
+               <children>
+                  <ComboBox fx:id="grade_combobox" prefWidth="203.0" stylesheets="@../stylesheet/bootstrap2.css" visibleRowCount="5">
+                     <HBox.margin>
+                        <Insets top="7.0" />
+                     </HBox.margin>
+                  </ComboBox>
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="11">
+               <children>
+                  <JFXTextField fx:id="roll_textfield" editable="false" prefHeight="25.0" prefWidth="136.0" />
+                  <Label style="-fx-text-fill: red;" text="*" />
+                  <Label fx:id="roll_no_label" prefHeight="29.0" prefWidth="29.0" style="-fx-text-fill: red;" text="X">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="25.0" />
+                     </font></Label>
+               </children>
+            </HBox>
+            <HBox GridPane.columnSpan="2" GridPane.rowIndex="12">
+               <children>
+                  <VBox prefHeight="38.0" prefWidth="171.0">
+                     <children>
+                        <Label style="-fx-text-fill: orange;" text="Note :- 'X' is for not available" />
+                        <Label style="-fx-text-fill: orange;" text="            '√' is for available" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="clear_all_btn" mnemonicParsing="false" onMouseClicked="#clickClearAllBtn" stylesheets="@../stylesheet/bootstrap2.css" text="Clear All">
+                     <styleClass>
+                        <String fx:value="action-btn" />
+                        <String fx:value="primary" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="register_btn" mnemonicParsing="false" onMouseClicked="#clickRegisterBtn" stylesheets="@../stylesheet/bootstrap2.css" text="Register">
+                     <styleClass>
+                        <String fx:value="action-btn" />
+                        <String fx:value="success" />
+                     </styleClass>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <Label prefHeight="25.0" text="Section (Applied for) :" GridPane.rowIndex="10">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="10">
+               <children>
+                  <ComboBox fx:id="section_combobox" prefWidth="203.0" stylesheets="@../stylesheet/bootstrap2.css" visibleRowCount="5">
+                     <HBox.margin>
+                        <Insets top="7.0" />
+                     </HBox.margin>
+                  </ComboBox>
+                  <Label style="-fx-text-fill: red;" text="*" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets right="20.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </center>
+   <top>
+      <StackPane prefHeight="65.0" prefWidth="413.0" style="-fx-background-color: #67c8ff;">
+         <children>
+            <Label style="-fx-text-fill: white;" text="REGISTER STUDENT" textFill="#49a4a3">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+   </top>
+</BorderPane>
