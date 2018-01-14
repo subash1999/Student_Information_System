@@ -280,6 +280,7 @@ public class TeacherdetailController implements Initializable {
     public void display_subject_table() {
         subject_table.getItems().clear();
         subject_table.getColumns().clear();
+        subject_data.clear();
         Connection conn = database.Connection.conn;
         String query = "SET @a=0 ; ";
         ResultSet rs = null;

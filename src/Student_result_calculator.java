@@ -31,9 +31,11 @@ public class Student_result_calculator extends Application {
 //            }
 //        };
 //        new Thread(r).start();
-        Server server = new Server();
-        server.startServer();
+        
         try {
+            Thread.sleep(2000);
+            Server server = new Server();
+        server.startServer();
             FXMLLoader fxml = new FXMLLoader(getClass().getResource("/login/login.fxml"));
 //            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/student/student.fxml"));
 //            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/teacher/addteacher.fxml"));

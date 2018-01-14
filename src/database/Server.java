@@ -41,7 +41,7 @@ public class Server {
             runApache();
             runMySql();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Alert error = new Alert(Alert.AlertType.ERROR);
                 error.setContentText(ex.getMessage());
@@ -51,7 +51,7 @@ public class Server {
                 error.showAndWait();
                 ex.printStackTrace();
             }
-        }        
+        }               
         database.Connection.connect();
         a.getDialogPane().getScene().setCursor(Cursor.DEFAULT);
         a.close();

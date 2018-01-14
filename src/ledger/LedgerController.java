@@ -1265,7 +1265,7 @@ public class LedgerController implements Initializable {
     @FXML
     private void clickAddExam(MouseEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/ledger/newexam.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/examManagement/newexam.fxml"));
             Scene scene = new Scene(root);
             Stage window = new Stage();
             window.setScene(scene);
@@ -1373,9 +1373,9 @@ public class LedgerController implements Initializable {
                     GridBase grid = new GridBase(0, 0);
                     table_spread.setGrid(grid);
                     al = new Alert(AlertType.INFORMATION);
-                    al.setHeaderText("Deletion of the ledger of exam : " + exam_choicebox.getSelectionModel().getSelectedItem().toString()
-                            + ", of grade : " + grade_choicebox.getSelectionModel().getSelectedItem().toString()
-                            + " of section : " + section_choicebox.getSelectionModel().getSelectedItem().toString()
+                    al.setHeaderText("Deletion of the ledger of exam : " + current_exam
+                            + ", of grade : " +current_grade
+                            + " of section : " + current_section
                             + " was successful");
                     al.setContentText("Operation was successful ");
                     al.show();

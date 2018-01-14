@@ -5,6 +5,7 @@
  */
 package Main;
 
+import java.io.IOException;
 import student.StudentController;
 import teacher.TeacherController;
 import java.math.BigDecimal;
@@ -38,7 +39,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -284,7 +284,18 @@ public class MainwindowController implements Initializable {
 
     @FXML
     void examManagementClicked(MouseEvent event) {
-
+            try {
+            Parent root = FXMLLoader.load(getClass().getResource("/examManagement/ExamManagement.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Exam Management");
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Exception at examManagementClicked(MouseEvent event) "
+                    + "at MainwindowController : " + e.getMessage());
+            e.printStackTrace();
+        }    
     }
 
     @FXML
@@ -453,7 +464,7 @@ public class MainwindowController implements Initializable {
             Parent root1 = null;
             root1 = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Users");            
+            stage.setTitle("Users");
             stage.setScene(new Scene(root1));
             stage.show();
         } catch (Exception ex) {
@@ -462,10 +473,11 @@ public class MainwindowController implements Initializable {
             ex.printStackTrace();
         }
     }
+    
 
     @FXML
     void changePasswordClicked(MouseEvent event) {
-        int user_id = 0; 
+        int user_id = 0;
         PasswordDialog pwd_dialog = new PasswordDialog();
         String user = LoginController.current_user;
         pwd_dialog.setTitle("Verify User");

@@ -92,7 +92,7 @@ public class EditteacherController implements Initializable {
             String year = LoginController.current_year;
             int id = teacher_id;
             String query = "SELECT * FROM year_"+year+"_teacher "
-                    + "WHERE Teacher_id = "+id+" WHERE Active = 'yes' ;";
+                    + "WHERE Teacher_id = "+id+" AND Active = 'yes' ;";
             Connection conn =database.Connection.conn;
             ResultSet result = conn.createStatement().executeQuery(query);
             while(result.next()){
