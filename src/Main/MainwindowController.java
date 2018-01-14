@@ -5,7 +5,6 @@
  */
 package Main;
 
-import java.io.IOException;
 import student.StudentController;
 import teacher.TeacherController;
 import java.math.BigDecimal;
@@ -42,6 +41,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -62,6 +62,7 @@ public class MainwindowController implements Initializable {
     /**
      * Initializes the controller class.
      */
+
     @FXML
     private MenuBar menubar;
 
@@ -72,7 +73,7 @@ public class MainwindowController implements Initializable {
     private MenuItem view_session_menu_item;
 
     @FXML
-    private MenuItem change_session_menu_item;
+    private MenuItem change_session_menuu_item;
 
     @FXML
     private MenuItem close_menu_item;
@@ -117,6 +118,9 @@ public class MainwindowController implements Initializable {
     private Label current_year;
 
     @FXML
+    private Label current_user1;
+
+    @FXML
     private ImageView student_image;
 
     @FXML
@@ -132,6 +136,9 @@ public class MainwindowController implements Initializable {
     private ImageView chart_image;
 
     @FXML
+    private AnchorPane backup_restore_anchorpane;
+
+    @FXML
     private ImageView backup_image;
 
     @FXML
@@ -141,22 +148,41 @@ public class MainwindowController implements Initializable {
     private ImageView grade_image;
 
     @FXML
+    private AnchorPane user_anchorpane;
+
+    @FXML
     private ImageView user_image;
+
+    @FXML
+    private AnchorPane settings_anchorpane;
 
     @FXML
     private ImageView setting_image;
 
     @FXML
+    private AnchorPane exam_management_anchorpane;
+
+    @FXML
     private ImageView exam_image;
+
+    @FXML
+    private AnchorPane organization_details_anchorpane;
 
     @FXML
     private ImageView organization_image;
 
     @FXML
     private TextField display;
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if(!LoginController.user_type.equalsIgnoreCase("Admin")){
+            exam_management_anchorpane.setVisible(false);
+            user_anchorpane.setVisible(false);
+            settings_anchorpane.setVisible(false);
+            organization_details_anchorpane.setVisible(false);
+            backup_restore_anchorpane.setVisible(false);
+        }
         dateAndTime();
         current_user.setText("User : " + LoginController.current_user);
         current_year.setText("Session : " + LoginController.current_year);

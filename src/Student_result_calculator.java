@@ -49,6 +49,7 @@ public class Student_result_calculator extends Application {
             // controller.setValues("25","34");
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
+            primaryStage.setTitle("Login");
             primaryStage.toFront();
             //primaryStage.setResizable(false);
             primaryStage.toFront();

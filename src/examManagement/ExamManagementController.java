@@ -364,37 +364,39 @@ public class ExamManagementController implements Initializable {
 
     @FXML
     private void clickDeleteBtn(MouseEvent event) {
-        Connection conn = database.Connection.conn;
-        try {
-            Alert a = new Alert(AlertType.CONFIRMATION);
-            a.setHeaderText("Please read below before confirming !!!");
-            a.setContentText("Deleteting a exam will result in deleting all the"
-                    + " ledger associated with that exam, so be carefull");
-            Optional<ButtonType> btn = a.showAndWait();
-            if (btn.get() == ButtonType.OK) {
-                String year = LoginController.current_year;
-                String query = "SELECT Table_name FROM year_" + year + "_ledger WHERE "
-                        + "Exam_id = " + exam_id.get() + " ;";
-                ResultSet result = conn.createStatement().executeQuery(query);
-                Statement st = conn.createStatement();
-                while (result.next()) {
-                    query = "DROP TABLE " + result.getString(1) + " ;";
+        if (exam_id.get() != 0) {
+            Connection conn = database.Connection.conn;
+            try {
+                Alert a = new Alert(AlertType.CONFIRMATION);
+                a.setHeaderText("Please read below before confirming !!!");
+                a.setContentText("Deleteting a exam will result in deleting all the"
+                        + " ledger associated with that exam, so be carefull");
+                Optional<ButtonType> btn = a.showAndWait();
+                if (btn.get() == ButtonType.OK) {
+                    String year = LoginController.current_year;
+                    String query = "SELECT Table_name FROM year_" + year + "_ledger WHERE "
+                            + "Exam_id = " + exam_id.get() + " ;";
+                    ResultSet result = conn.createStatement().executeQuery(query);
+                    Statement st = conn.createStatement();
+                    while (result.next()) {
+                        query = "DROP TABLE " + result.getString(1) + " ;";
+                        st.addBatch(query);
+                    }
+                    query = "DELETE FROM year_" + year + "_ledger WHERE "
+                            + "Exam_id = " + exam_id.get() + " ;";
                     st.addBatch(query);
+                    query = "DELETE FROM year_" + year + "_exam WHERE "
+                            + "Exam_id = " + exam_id.get() + " ;";
+                    st.addBatch(query);
+                    st.executeBatch();
                 }
-                query = "DELETE FROM year_" + year + "_ledger WHERE "
-                        + "Exam_id = " + exam_id.get() + " ;";
-                st.addBatch(query);
-                query = "DELETE FROM year_" + year + "_exam WHERE "
-                        + "Exam_id = " + exam_id.get() + " ;";
-                st.addBatch(query);
-                st.executeBatch();
+            } catch (Exception e) {
+                System.out.println("Exception at clickDeleteBtn "
+                        + "at ExamManagementController : " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                refresh();
             }
-        } catch (Exception e) {
-            System.out.println("Exception at clickDeleteBtn "
-                    + "at ExamManagementController : " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            refresh();
         }
     }
 
@@ -403,58 +405,60 @@ public class ExamManagementController implements Initializable {
         int index = ledger_table.getSelectionModel().getSelectedIndex();
         TableColumn col = (TableColumn) ledger_table.getColumns().get(1);
         int ledger_id = Integer.valueOf(String.valueOf(col.getCellData(index)));
-        col = (TableColumn) ledger_table.getColumns().get(2);
-        String current_grade = String.valueOf(col.getCellData(index));
-        col = (TableColumn) ledger_table.getColumns().get(3);
-        String current_section = String.valueOf(col.getCellData(index));
-        String table_name = null;
-        String current_exam = exam_name_label.getText();
-        Connection conn = database.Connection.conn;
-        ResultSet result = null;
-        String sql = null;
-        String year = LoginController.current_year;
-        try {
-            sql = "SELECT Table_name FROM year_" + year + "_ledger "
-                    + " WHERE Ledger_id = " + ledger_id + " ;";
-            result = conn.createStatement().executeQuery(sql);
-            while (result.next()) {
-                table_name = result.getString(1);
-            }
-        } catch (Exception e) {
-            System.out.println("Exception at clickDeleteLedgerBtn() "
-                    + "at ExamManagementController : " + e.getMessage());
-            e.printStackTrace();
-        }
-        Alert al = new Alert(AlertType.CONFIRMATION);
-        al.setHeaderText("Do you want to confirm the deletion of the ledger \n of exam : " + current_exam
-                + "\n of grade : " + current_grade
-                + "\n of section : " + current_section);
-        al.setContentText("Deleting a ledger will only affect the single ledger and none other factors are "
-                + "effected.!!!!IMPORTANT But Remember you have to recalculate the marks "
-                + "to get the correct ranking of the another section of same class"
-                + " if it have any other section......");
-        Optional<ButtonType> button = al.showAndWait();
-        if (button.get() == ButtonType.OK) {
+        if (ledger_id != 0) {
+            col = (TableColumn) ledger_table.getColumns().get(2);
+            String current_grade = String.valueOf(col.getCellData(index));
+            col = (TableColumn) ledger_table.getColumns().get(3);
+            String current_section = String.valueOf(col.getCellData(index));
+            String table_name = null;
+            String current_exam = exam_name_label.getText();
+            Connection conn = database.Connection.conn;
+            ResultSet result = null;
+            String sql = null;
+            String year = LoginController.current_year;
             try {
-                Statement st = conn.createStatement();
-                sql = "DROP TABLE " + table_name + " ;";
-                st.addBatch(sql);
-                sql = "DELETE FROM year_" + year + "_ledger WHERE Ledger_id =  " + ledger_id + " ;";
-                st.addBatch(sql);
-                sql = "DELETE FROM year_" + year + "_marks WHERE Ledger_id =  " + ledger_id + " ;";
-                st.addBatch(sql);
-                st.executeBatch();
-                al = new Alert(AlertType.INFORMATION);
-                al.setContentText("Deletion of the ledger of exam : " + current_exam
-                        + ", of grade : " + current_grade
-                        + " of section : " + current_section
-                        + " was successful");
-                al.setHeaderText("Deletion Operation was successful ");
-                al.show();
-                makeLedgerTable();
+                sql = "SELECT Table_name FROM year_" + year + "_ledger "
+                        + " WHERE Ledger_id = " + ledger_id + " ;";
+                result = conn.createStatement().executeQuery(sql);
+                while (result.next()) {
+                    table_name = result.getString(1);
+                }
             } catch (Exception e) {
-                System.out.println("Exception at clickDeleteLedgerBtn() at ExamManagementController : " + e.getMessage());
+                System.out.println("Exception at clickDeleteLedgerBtn() "
+                        + "at ExamManagementController : " + e.getMessage());
                 e.printStackTrace();
+            }
+            Alert al = new Alert(AlertType.CONFIRMATION);
+            al.setHeaderText("Do you want to confirm the deletion of the ledger \n of exam : " + current_exam
+                    + "\n of grade : " + current_grade
+                    + "\n of section : " + current_section);
+            al.setContentText("Deleting a ledger will only affect the single ledger and none other factors are "
+                    + "effected.!!!!IMPORTANT But Remember you have to recalculate the marks "
+                    + "to get the correct ranking of the another section of same class"
+                    + " if it have any other section......");
+            Optional<ButtonType> button = al.showAndWait();
+            if (button.get() == ButtonType.OK) {
+                try {
+                    Statement st = conn.createStatement();
+                    sql = "DROP TABLE " + table_name + " ;";
+                    st.addBatch(sql);
+                    sql = "DELETE FROM year_" + year + "_ledger WHERE Ledger_id =  " + ledger_id + " ;";
+                    st.addBatch(sql);
+                    sql = "DELETE FROM year_" + year + "_marks WHERE Ledger_id =  " + ledger_id + " ;";
+                    st.addBatch(sql);
+                    st.executeBatch();
+                    al = new Alert(AlertType.INFORMATION);
+                    al.setContentText("Deletion of the ledger of exam : " + current_exam
+                            + ", of grade : " + current_grade
+                            + " of section : " + current_section
+                            + " was successful");
+                    al.setHeaderText("Deletion Operation was successful ");
+                    al.show();
+                    makeLedgerTable();
+                } catch (Exception e) {
+                    System.out.println("Exception at clickDeleteLedgerBtn() at ExamManagementController : " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
         }
     }

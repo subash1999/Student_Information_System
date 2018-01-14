@@ -225,7 +225,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                        <AnchorPane fx:id="backup_restore_anchorpane" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                            <children>
                               <ImageView fx:id="backup_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#backupRestoreClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
@@ -267,7 +267,7 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.rowIndex="2">
+                        <AnchorPane fx:id="user_anchorpane" prefHeight="219.0" prefWidth="291.0" GridPane.rowIndex="2">
                            <children>
                               <ImageView fx:id="user_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#userClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
@@ -281,7 +281,7 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <AnchorPane fx:id="settings_anchorpane" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <ImageView fx:id="setting_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#settingsClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>
@@ -295,7 +295,7 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <AnchorPane fx:id="exam_management_anchorpane" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
                               <Label layoutY="163.0" prefHeight="27.0" prefWidth="216.0" text="Exam Management">
                                  <font>
@@ -309,7 +309,7 @@
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <AnchorPane fx:id="organization_details_anchorpane" prefHeight="219.0" prefWidth="291.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <children>
                               <ImageView fx:id="organization_image" accessibleRole="BUTTON" fitHeight="138.0" fitWidth="147.0" onMouseClicked="#organizationDetailsClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                  <image>

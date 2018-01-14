@@ -58,6 +58,7 @@ public class LoginController implements Initializable {
 
     public static String current_year;
     public static String current_user;
+    public static String user_type = new String();
     Scene scene;
 
     @FXML
@@ -69,18 +70,22 @@ public class LoginController implements Initializable {
             try {
                 result = conn.createStatement().executeQuery("select * from `user` where Username= BINARY '"
                         + username.getText() + "' and Password= BINARY '" + password.getText() + "'");
-                if (choice_box.getItems().size() == 1
-                        && choice_box.getItems().get(0).equals("First Use")) {
-                    Stage window = new Stage();
-                    window = (Stage) login.getScene().getWindow();
-                    window.close();
-                    Alert a = new Alert(AlertType.INFORMATION);
-                    a.setHeaderText("Seems It's Your First Time !!");
-                    a.setContentText("Firstly add a session to continue to the software");
-                    a.show();
-                    Parent root = null;
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/settings/newSession/addsession1.fxml"));
-                    root = loader.load();
+
+                if (result.next()) {
+                    user_type = result.getString("Type");
+                    if (choice_box.getItems().size() == 1
+                            && choice_box.getItems().get(0).equals("First Use")
+                            && user_type.equalsIgnoreCase("admin")) {
+                        Stage window = new Stage();
+                        window = (Stage) login.getScene().getWindow();
+                        window.close();
+                        Alert a = new Alert(AlertType.INFORMATION);
+                        a.setHeaderText("Seems It's Your First Time !!");
+                        a.setContentText("Firstly add a session to continue to the software");
+                        a.show();
+                        Parent root = null;
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/settings/newSession/addsession1.fxml"));
+                        root = loader.load();
 //                    SettingsController controller = loader.<SettingsController>getController();
 //                    ObservableList<Tab> tab  = controller.settings_tabpane.getTabs();
 //                    for(int i = 0 ; i<tab.size();i++){
@@ -89,30 +94,27 @@ public class LoginController implements Initializable {
 //                            t.setDisable(true);
 //                        }
 //                    }
-                    //again assing a new stage to remove all the properties of the login box window
-                    window = new Stage();
-                    scene = new Scene(root);
-                    window.setMaximized(true);
-                    window.setScene(scene);
-                    window.setTitle("Student Result Calculator /   USER :  " + current_user + "   /   SESSION : " + current_year);
-                    window.setOnCloseRequest(e -> {
-                        try {
-                            Parent roo= FXMLLoader.load(getClass().getResource("/login/login.fxml"));
-                            Scene s = new Scene(roo);
-                            Stage stage = new Stage();
-                            stage.setScene(s);
-                            stage.setTitle("Login");
-                            stage.show();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                        
-                    
-                    });
-                    window.show();
+                        //again assing a new stage to remove all the properties of the login box window
+                        window = new Stage();
+                        scene = new Scene(root);
+                        window.setScene(scene);
+                        window.setTitle("New Session");
+                        window.setOnCloseRequest(e -> {
+                            try {
+                                Parent roo = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
+                                Scene s = new Scene(roo);
+                                Stage stage = new Stage();
+                                stage.setScene(s);
+                                stage.setTitle("Login");
+                                stage.show();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
 
-                } else {
-                    if (result.next()) {
+                        });
+                        window.show();
+
+                    } else if (!choice_box.getItems().get(0).equalsIgnoreCase("First Use")) {
                         Parent root = null;
                         //setting the value of current year before the fxml file is called
                         //if fxml file is called first then before value is set, then main window will 
@@ -151,13 +153,21 @@ public class LoginController implements Initializable {
                             }
                         });
                         window.show();
-
-                    } else {
-                        Alert alert = new Alert(AlertType.ERROR);
-                        alert.setHeaderText("Wrong Username or Password");
-
-                        alert.show();
+                    } else if(choice_box.getItems().size() == 1
+                            && choice_box.getItems().get(0).equalsIgnoreCase("First Use")
+                            && !user_type.equalsIgnoreCase("admin")) {
+                        Alert a = new Alert(AlertType.INFORMATION);
+                        a.setHeaderText("Admin can create new Session");
+                        a.setContentText("Only admin can create new session "
+                                + "if there is no session only then then user "
+                                + "can access the software");
+                        a.show();
                     }
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Wrong Username or Password");
+
+                    alert.show();
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -208,6 +218,7 @@ public class LoginController implements Initializable {
             });
             if (choice_box.getItems().isEmpty()) {
                 choice_box.getItems().add("First Use");
+                choice_box.getSelectionModel().selectFirst();
             }
         } catch (Exception e) {
             System.out.println("Exception at login : while adding items to"
