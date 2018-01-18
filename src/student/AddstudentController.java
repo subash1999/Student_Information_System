@@ -109,7 +109,7 @@ public class AddstudentController implements Initializable {
         database.Connection.connect();
         formatDatePicker();
         refresh();
-
+         contact_textfield.setStyle("-fx-prompt-text-fill:gray");
     }
 
     private void refresh() {

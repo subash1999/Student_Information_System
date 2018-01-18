@@ -32,6 +32,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -44,7 +45,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import login.LoginController;
-import student.EditstudentController;
 
 /**
  * FXML Controller class
@@ -80,6 +80,18 @@ public class TeacherController implements Initializable {
     @FXML
     private ImageView delete_teacher_image;
 
+    @FXML
+    private Label add_teacher_label;
+
+    @FXML
+    private Label edit_teacher_label;
+
+    @FXML
+    private Label delete_teacher_label;
+    
+    @FXML
+    private Label total_label;
+
     public static String teacher_id = "0";
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
     private String[] column_name;
@@ -93,6 +105,14 @@ public class TeacherController implements Initializable {
         choiceBox();
         onRowClick();
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            add_teacher_image.setVisible(false);
+            edit_teacher_image.setVisible(false);
+            delete_teacher_image.setVisible(false);
+            add_teacher_label.setVisible(false);
+            edit_teacher_label.setVisible(false);
+            delete_teacher_label.setVisible(false);
+        }
     }
 
     private void onRowClick() {
@@ -119,7 +139,7 @@ public class TeacherController implements Initializable {
                         Stage stage = new Stage();
                         stage.setTitle("Teacher Detail");
                         stage.setScene(new Scene(root1));
-                        stage.setOnCloseRequest(e->{
+                        stage.setOnCloseRequest(e -> {
                             refresh();
                         });
                         stage.show();
@@ -215,6 +235,7 @@ public class TeacherController implements Initializable {
                     }
 
                     break;
+
                 case "phone":
                     for (TableColumn c : cols) {
                         if ("phone".equals(c.getText().toLowerCase())) {
@@ -233,6 +254,25 @@ public class TeacherController implements Initializable {
                     }
 
                     break;
+                case "teacher_id":
+                    for (TableColumn c : cols) {
+                        if ("teacher_id".equalsIgnoreCase(c.getText().toLowerCase())) {
+                            col = c;
+                        }
+                    }
+
+                    cellValue = col.getCellData(data.get(i)).toString();
+
+                    cellValue = cellValue.toLowerCase();
+
+                    if (cellValue.contains(search_field.textProperty().get().toLowerCase())) {
+
+                        tableItems.add(data.get(i));
+
+                    }
+
+                    break;
+
                 case "address":
                     for (TableColumn c : cols) {
                         if ("address".equals(c.getText().toLowerCase())) {
@@ -277,6 +317,7 @@ public class TeacherController implements Initializable {
         }
 
         table.setItems(tableItems);
+        
     }
 
     private void makeTable() {
@@ -357,6 +398,7 @@ public class TeacherController implements Initializable {
         table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         //setting the table menu button visible which lets user to select the column to view or hide
         table.setTableMenuButtonVisible(true);
+        total_label.setText("Total : "+table.getItems().size());                     
 
     }
 
@@ -422,14 +464,19 @@ public class TeacherController implements Initializable {
                         pst.setInt(1, id);
                         pst.execute();
                     }
+                    for (int id : teacher_id) {
+                        query = "DELETE FROM year_" + year + "_teacher_teaches "
+                                + " WHERE Teacher_id = ?";
+                        pst = conn.prepareStatement(query);
+                        pst.setInt(1, id);
+                        pst.execute();
+                    }
                     refresh();
-
                 } catch (Exception e) {
                     System.out.println("Exception at clickDeleteStudent() "
                             + "at StudentController : " + e.getMessage());
                     e.printStackTrace();
                 }
-
             }
         }
     }

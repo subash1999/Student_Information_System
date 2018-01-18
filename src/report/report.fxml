@@ -205,7 +205,7 @@
                      </children>
                   </VBox>
                   <AnchorPane layoutX="282.0" layoutY="18.0" />
-                  <Label layoutX="254.0" layoutY="10.0" prefHeight="33.0" prefWidth="152.0" text="Organization Details :">
+                  <Label fx:id="organization_label" layoutX="254.0" layoutY="10.0" prefHeight="33.0" prefWidth="152.0" text="Organization Details :">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -255,125 +255,110 @@
                         <Label fx:id="next_label" accessibleRole="BUTTON" onMouseClicked="#clickNextLabel" prefHeight="22.0" prefWidth="44.0" style="-fx-cursor: hand; -fx-text-fill: blue;" text="Next&gt;&gt;" underline="true" />
                      </children>
                   </HBox>
-                  <Label text="Result/Issue Date">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="date_textfield" editable="false" prefHeight="25.0" prefWidth="148.0" stylesheets="@../stylesheet/bootstrap3.css">
-                     <VBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <HBox spacing="3.0">
-                     <VBox.margin>
-                        <Insets left="5.0" top="10.0" />
-                     </VBox.margin>
+                  <AnchorPane fx:id="report_modify_anchorpane">
                      <children>
-                        <VBox>
+                        <Label layoutX="5.0" text="Result/Issue Date">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="date_textfield" editable="false" layoutX="5.0" layoutY="20.0" prefHeight="25.0" prefWidth="148.0" stylesheets="@../stylesheet/bootstrap3.css" />
+                        <HBox layoutX="5.0" layoutY="60.0" spacing="3.0">
                            <children>
-                              <Label prefHeight="15.0" text="Change here is temporary i.e for ">
+                              <VBox>
+                                 <children>
+                                    <Label prefHeight="15.0" text="Change here is temporary i.e for ">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="15.0" text="saving marksheet with another date for">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="15.0" text="permanent, change it from ledger view">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
+                              <Button fx:id="edit_date_btn" minWidth="62.0" mnemonicParsing="false" onMouseClicked="#clickEditDateBtn" prefHeight="32.0" prefWidth="62.0" stylesheets="@../stylesheet/bootstrap2.css" text="Edit">
+                                 <styleClass>
+                                    <String fx:value="action-btn" />
+                                    <String fx:value="arrow-button" />
+                                    <String fx:value="primary" />
+                                 </styleClass>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="5.0" layoutY="125.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="32.0" prefWidth="86.0" text="Save Current :">
                                  <font>
-                                    <Font size="10.0" />
+                                    <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="15.0" text="saving marksheet with another date for">
+                              <Button fx:id="save_current_btn" mnemonicParsing="false" onMouseClicked="#clickSaveCurrentBtn" stylesheets="@../stylesheet/bootstrap3.css" text="Save Current">
+                                 <styleClass>
+                                    <String fx:value="middle" />
+                                    <String fx:value="info" />
+                                 </styleClass>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="5.0" layoutY="167.0" prefHeight="25.0" prefWidth="257.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="32.0" prefWidth="125.0" text="Save selected class:">
                                  <font>
-                                    <Font size="10.0" />
-                                 </font>
-                              </Label>
-                              <Label prefHeight="15.0" text="permanent, change it from ledger view">
-                                 <font>
-                                    <Font size="10.0" />
+                                    <Font size="14.0" />
                                  </font>
                               </Label>
                            </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </VBox>
-                        <Button fx:id="edit_date_btn" minWidth="62.0" mnemonicParsing="false" onMouseClicked="#clickEditDateBtn" prefHeight="32.0" prefWidth="62.0" stylesheets="@../stylesheet/bootstrap2.css" text="Edit">
-                           <styleClass>
-                              <String fx:value="action-btn" />
-                              <String fx:value="arrow-button" />
-                              <String fx:value="primary" />
-                           </styleClass>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox spacing="10.0">
-                     <VBox.margin>
-                        <Insets left="5.0" top="20.0" />
-                     </VBox.margin>
-                     <children>
-                        <Label prefHeight="32.0" prefWidth="86.0" text="Save Current :">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="save_current_btn" mnemonicParsing="false" onMouseClicked="#clickSaveCurrentBtn" stylesheets="@../stylesheet/bootstrap3.css" text="Save Current">
-                           <styleClass>
-                              <String fx:value="middle" />
-                              <String fx:value="info" />
-                           </styleClass>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="25.0" prefWidth="257.0" spacing="10.0">
-                     <VBox.margin>
-                        <Insets left="5.0" top="10.0" />
-                     </VBox.margin>
-                     <children>
-                        <Label prefHeight="32.0" prefWidth="125.0" text="Save selected class:">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="25.0" prefWidth="257.0" spacing="8.0">
-                     <children>
-                        <Label prefHeight="25.0" prefWidth="46.0" text="From : ">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ComboBox fx:id="save_from_combobox" prefHeight="25.0" prefWidth="73.0" />
-                        <Label prefHeight="25.0" prefWidth="29.0" text="To : ">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ComboBox fx:id="save_to_combobox" prefHeight="25.0" prefWidth="73.0" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="80.0">
-                     <VBox.margin>
-                        <Insets left="5.0" top="8.0" />
-                     </VBox.margin>
-                     <children>
-                        <AnchorPane>
+                        </HBox>
+                        <HBox layoutY="192.0" prefHeight="25.0" prefWidth="257.0" spacing="8.0">
                            <children>
-                              <ProgressIndicator fx:id="progress_indicator" prefHeight="64.0" prefWidth="83.0" progress="0.0" />
+                              <Label prefHeight="25.0" prefWidth="46.0" text="From : ">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox fx:id="save_from_combobox" prefHeight="25.0" prefWidth="73.0" />
+                              <Label prefHeight="25.0" prefWidth="29.0" text="To : ">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox fx:id="save_to_combobox" prefHeight="25.0" prefWidth="73.0" />
                            </children>
-                        </AnchorPane>
-                        <Button fx:id="save_all_btn" mnemonicParsing="false" onMouseClicked="#clickSaveAllBtn" stylesheets="@../stylesheet/bootstrap3.css" text="Save All">
-                           <styleClass>
-                              <String fx:value="middle" />
-                              <String fx:value="primary" />
-                           </styleClass>
-                        </Button>
+                        </HBox>
+                        <HBox layoutX="5.0" layoutY="225.0" spacing="80.0">
+                           <children>
+                              <AnchorPane>
+                                 <children>
+                                    <ProgressIndicator fx:id="progress_indicator" prefHeight="64.0" prefWidth="83.0" progress="0.0" />
+                                 </children>
+                              </AnchorPane>
+                              <Button fx:id="save_all_btn" mnemonicParsing="false" onMouseClicked="#clickSaveAllBtn" stylesheets="@../stylesheet/bootstrap3.css" text="Save All">
+                                 <styleClass>
+                                    <String fx:value="middle" />
+                                    <String fx:value="primary" />
+                                 </styleClass>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </AnchorPane>
                </children>
             </VBox>
          </right>

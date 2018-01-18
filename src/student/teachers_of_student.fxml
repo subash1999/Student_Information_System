@@ -5,9 +5,6 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -22,25 +19,6 @@
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <MenuBar fx:id="menubar" stylesheets="@../../stylesheet/bootstrap2.css">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
             <DecorationPane prefHeight="71.0" prefWidth="600.0" style="-fx-background-color: #67c8ff;">
                <children>
                   <Label prefHeight="48.0" style="-fx-text-fill: white;" stylesheets="@../../stylesheet/bootstrap3.css" text="TEACHERS AND SUBJECTS OF A STUDENT">

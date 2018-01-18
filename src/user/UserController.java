@@ -139,7 +139,7 @@ public class UserController implements Initializable {
             SQL = "SET @a=0";
             conn.createStatement().executeQuery(SQL);
             SQL = "SELECT @a:=@a+1 AS 'S.N',User_id,Type,Username,Name,Phone FROM  User "
-                    + " WHERE Active = 'yes' ORDER BY Type,User_id";
+                    + " ORDER BY Type,User_id";
             rs = conn.createStatement().executeQuery(SQL);
         } catch (Exception e) {
             e.printStackTrace();

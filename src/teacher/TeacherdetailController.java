@@ -95,6 +95,17 @@ public class TeacherdetailController implements Initializable {
 
     @FXML
     private Button edit_btn;
+    
+    @FXML
+    private Label section_label;
+    
+    
+    @FXML
+    private Label grade_label;
+    
+    
+    @FXML
+    private Label subject_label;
 
     TeacherIdStore store_teacher_id = new TeacherIdStore();
     ObservableList<ObservableList> subject_data = FXCollections.observableArrayList();
@@ -107,6 +118,17 @@ public class TeacherdetailController implements Initializable {
         display_teacher_table();
         searchTable();
         onTeacherTableRowClick();
+         if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+             section_label.setVisible(false);
+             grade_label.setVisible(false);
+             subject_label.setVisible(false);
+             subject.setVisible(false);
+             grade.setVisible(false);
+             section.setVisible(false);
+             add_btn.setVisible(false);
+             delete_selected_btn.setVisible(false);
+             edit_btn.setVisible(false);             
+         }
     }
 
     public void setTeacherId(String s) {

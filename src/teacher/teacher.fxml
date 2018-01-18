@@ -3,9 +3,6 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,42 +12,28 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="465.0" prefWidth="824.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teacher.TeacherController">
+<BorderPane prefHeight="478.0" prefWidth="835.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="teacher.TeacherController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <MenuBar prefHeight="33.0" prefWidth="800.0" stylesheets="@../../stylesheet/bootstrap2.css">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem fx:id="menuitem_close" mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem fx:id="menuitem_about" mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
             <AnchorPane prefHeight="59.0" prefWidth="800.0">
                <children>
-                  <JFXTextField fx:id="search_field" focusColor="#40a9db" layoutX="600.0" layoutY="24.0" promptText="Search" unFocusColor="#1c2221f7">
+                  <JFXTextField fx:id="search_field" focusColor="#40a9db" layoutX="617.0" layoutY="20.0" promptText="Search" unFocusColor="#1c2221f7">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXTextField>
-                  <Label layoutX="355.0" layoutY="28.0" prefHeight="27.0" prefWidth="103.0" stylesheets="@../../stylesheet/bootstrap2.css" text="Search by : ">
+                  <Label layoutX="372.0" layoutY="24.0" prefHeight="27.0" prefWidth="103.0" stylesheets="@../../stylesheet/bootstrap2.css" text="Search by : ">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="search_icon" accessibleRole="BUTTON" fitHeight="28.0" fitWidth="39.0" layoutX="784.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="search_icon" accessibleRole="BUTTON" fitHeight="28.0" fitWidth="39.0" layoutX="801.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/search.png" />
                      </image>
                   </ImageView>
-                  <ChoiceBox fx:id="search_choice" layoutX="460.0" layoutY="29.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@../../stylesheet/bootstrap2.css" />
+                  <ChoiceBox fx:id="search_choice" layoutX="477.0" layoutY="25.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@../../stylesheet/bootstrap2.css" />
                   <VBox layoutX="23.0" layoutY="-4.0">
                      <children>
                         <StackPane prefHeight="56.0" prefWidth="89.0">
@@ -62,7 +45,7 @@
                               </ImageView>
                            </children>
                         </StackPane>
-                        <Label text="    Add Teacher" />
+                        <Label fx:id="add_teacher_label" text="    Add Teacher" />
                      </children>
                   </VBox>
                   <VBox layoutX="122.0" layoutY="5.0">
@@ -76,7 +59,7 @@
                               </ImageView>
                            </children>
                         </StackPane>
-                        <Label text="Edit Teacher" />
+                        <Label fx:id="edit_teacher_label" text="Edit Teacher" />
                      </children>
                   </VBox>
                   <VBox layoutX="204.0" layoutY="2.0" prefHeight="71.0" prefWidth="79.0">
@@ -90,10 +73,11 @@
                               </ImageView>
                            </children>
                         </StackPane>
-                        <Label prefHeight="17.0" prefWidth="81.0" text="Delete Teacher" />
+                        <Label fx:id="delete_teacher_label" prefHeight="17.0" prefWidth="81.0" text="Delete Teacher" />
                      </children>
                   </VBox>
-                  <Label layoutX="295.0" layoutY="33.0" text="Total :" />
+                  <Label fx:id="total_label" layoutX="297.0" layoutY="33.0" text="Total :" />
+                  <Label layoutX="540.0" layoutY="61.0" style="-fx-text-fill: orange;" text="Double Click table row to get the details of teacher" />
                </children>
             </AnchorPane>
          </children>

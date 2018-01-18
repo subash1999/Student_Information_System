@@ -149,6 +149,12 @@ public class ReportController implements Initializable {
     @FXML
     private StackPane stackpane;
 
+    @FXML
+    private AnchorPane report_modify_anchorpane;
+
+    @FXML
+    private Label organization_label;
+
     private String year = LoginController.current_year;
     /*
     This is used to display the marksheet in the stackpane which is a children
@@ -188,6 +194,12 @@ public class ReportController implements Initializable {
         save_all_btn.setDisable(true);
         //hiding the progress indicator
         progress_indicator.setVisible(false);
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            report_modify_anchorpane.setVisible(false);
+            organization_label.setVisible(false);
+            view_org_btn.setVisible(false);
+            edit_exam_name_btn.setVisible(false);
+        }
     }
 
     private void listenerForLedgerId() {
@@ -645,6 +657,10 @@ public class ReportController implements Initializable {
                 System.out.println("Exception at clickEditDateBtn() "
                         + "at ReportController : " + ex.getMessage());
             }
+            if (!(roll_no.get() == null || ledger_id.get() == null)) {
+                marksReport();
+            }
+
         }
     }
 
@@ -670,6 +686,10 @@ public class ReportController implements Initializable {
             }
             exam_name_textfield.setEditable(false);
             edit_exam_name_btn.setText("Edit");
+            if (!(roll_no.get() == null || ledger_id.get() == null)) {
+                marksReport();
+            }
+
         }
     }
 
@@ -795,9 +815,9 @@ public class ReportController implements Initializable {
                                 saving.setHeaderText("Saving Done");
                                 saving.setContentText("All the files are saved in "
                                         + "the location : " + path_file.getAbsolutePath());
-                                
+
                             });
-                            
+
                             return null;
                         }
                     };
@@ -871,7 +891,6 @@ public class ReportController implements Initializable {
             window.setOnCloseRequest(e -> {
                 if (!(roll_no.get() == null || ledger_id.get() == null)) {
                     marksReport();
-
                 }
 
             });

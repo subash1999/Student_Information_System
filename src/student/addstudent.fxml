@@ -140,7 +140,7 @@
             </HBox>
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
-                  <JFXTextField fx:id="contact_textfield" prefHeight="25.0" prefWidth="197.0" promptText="9876543210,0123456789" />
+                  <JFXTextField fx:id="contact_textfield" prefHeight="25.0" prefWidth="197.0" />
                   <Label style="-fx-text-fill: red;" text="*" />
                </children>
             </HBox>
@@ -153,6 +153,7 @@
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="6">
                <children>
                   <JFXTextField fx:id="mother_textfield" prefHeight="25.0" prefWidth="189.0" />
+                  <Label style="-fx-text-fill: red;" text="*" />
                </children>
             </HBox>
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="7">

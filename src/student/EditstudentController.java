@@ -405,13 +405,11 @@ public class EditstudentController implements Initializable {
                 while (result.next()) {
                     student_id = result.getInt(1);
                 }
-                Stage stage = (Stage) save_btn.getScene().getWindow();
-                stage.close();
                 Alert a = new Alert(Alert.AlertType.INFORMATION);
                 a.setHeaderText("Student Data Updated Successfully");
-                a.setContentText("The Student : " + name + " data is  for"
+                a.setContentText("The Student : " + name + " data is updated for"
                         + "\n Grade : " + grade + "\nSection : " + section
-                        + "\nRoll NO : " + roll + "\nwas given Student_id : "
+                        + "\nRoll NO : " + roll + "\n Student_id : "
                         + student_id);
                 a.show();
                 //clearing all the fiels now
@@ -429,6 +427,8 @@ public class EditstudentController implements Initializable {
                 section_combobox.getItems().clear();
                 grade_combobox.getItems().clear();
                 refresh();
+                //Stage stage = (Stage) save_btn.getScene().getWindow();
+                //stage.close();               
             } catch (Exception e) {
                 System.out.println("Exception at updateValues() "
                         + "at EditstudentController : " + e.getMessage());

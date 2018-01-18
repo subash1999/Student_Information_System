@@ -154,9 +154,16 @@ public class LedgerController implements Initializable {
 
     @FXML
     private Button recalculate_btn;
+    
     @FXML
     private ProgressIndicator progress_indicator;
-
+    
+    @FXML
+    private AnchorPane ledger_modify_anchorpane;
+    
+    @FXML
+    private AnchorPane bottom_anchorpane;
+    
     private StringProperty ledger_id = new SimpleStringProperty();
 
     private String table_name;
@@ -183,6 +190,13 @@ public class LedgerController implements Initializable {
         addSubject();
         deleteSubject();
         listnerForOptionsToggleGroup();
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            ledger_modify_anchorpane.setVisible(false);
+            add_exam.setVisible(false);
+            edit_result_date.setVisible(false);
+            bottom_anchorpane.setVisible(false);
+        }
+        
     }
 
     private void listnerForOptionsToggleGroup() {
@@ -773,10 +787,15 @@ public class LedgerController implements Initializable {
 
                                 }
                             });
+                            if(LoginController.user_type.equalsIgnoreCase("Admin")){
                             if (not_editable_column_list.contains(column_header)) {
                                 s.setEditable(false);
                             } else {
                                 s.setEditable(true);
+                            }
+                            }
+                            else{
+                                s.setEditable(false);
                             }
                             list.add(s);
                         }
@@ -1365,9 +1384,9 @@ public class LedgerController implements Initializable {
                     Statement st = conn.createStatement();
                     sql = "DROP TABLE " + table_name + " ;";
                     st.addBatch(sql);
-                    sql = "DELETE FROM year_" + year + "_ledger WHERE Ledger_id =  " + ledger_id + " ;";
-                    st.addBatch(sql);
                     sql = "DELETE FROM year_" + year + "_marks WHERE Ledger_id =  " + ledger_id + " ;";
+                    st.addBatch(sql);
+                    sql = "DELETE FROM year_" + year + "_ledger WHERE Ledger_id =  " + ledger_id + " ;";
                     st.addBatch(sql);
                     st.executeBatch();
                     GridBase grid = new GridBase(0, 0);

@@ -30,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -138,6 +139,12 @@ public class SettingsController implements Initializable {
     @FXML
     public TabPane settings_tabpane;
 
+    @FXML
+    public AnchorPane subject_modify_anchorpane;
+
+    @FXML
+    public AnchorPane grade_modify_anchorpane;
+
     private ObservableList<ObservableList> grade_data = FXCollections.observableArrayList();
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
 
@@ -149,6 +156,19 @@ public class SettingsController implements Initializable {
         subject();
         division();
         grading();
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            session_anchorpane.setVisible(false);
+            grade_add.setVisible(false);
+            grade_section.setVisible(false);
+            grade_grade.setVisible(false);
+            grade_delete.setVisible(false);
+            subject_delete.setVisible(false);
+            subject_subject_name.setVisible(false);
+            subject_add.setVisible(false);
+            subject_grade.setVisible(false);
+            subject_modify_anchorpane.setVisible(false);
+            grade_modify_anchorpane.setVisible(false);
+        }
     }
 
 //Session Management
@@ -208,23 +228,24 @@ public class SettingsController implements Initializable {
                 try {
 
                     Statement statement = conn.createStatement();
-                    statement.addBatch("DROP TABLE `Year_" + year + "_student`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_teacher`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_subject`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_grade`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_grading`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_percentage`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_marks`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_exam`;");
-                    statement.addBatch("DROP TABLE `Year_" + year + "_teacher_teaches`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_student`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_grading`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_percentage`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_marks`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_teacher_teaches`;");
+                    statement.executeBatch();
                     Statement st = conn.createStatement();
                     String query = "SELECT Table_name FROM `year_" + year + "_ledger";
                     result = st.executeQuery(query);
                     while (result.next()) {
                         String table = result.getString(1);
-                        statement.addBatch("DROP TABLE `" + table + "`;");
+                        statement.addBatch("DROP TABLE IF EXISTS `" + table + "`;");
                     }
-                    statement.addBatch("DROP TABLE `Year_" + year + "_ledger`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_ledger`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_exam`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_grade`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_subject`;");
+                    statement.addBatch("DROP TABLE IF EXISTS `Year_" + year + "_teacher`;");
                     statement.addBatch("DELETE FROM `session` WHERE session.Year='" + year + "';");
                     statement.addBatch("DELETE FROM `table_details` WHERE table_details.Year='" + year + "';");
                     statement.executeBatch();
@@ -251,7 +272,7 @@ public class SettingsController implements Initializable {
             session_table.getColumns().clear();
             session_table.getItems().clear();
         }
-
+        data.clear();
         try {
             SQL = "SELECT * FROM `session`";
 
@@ -332,39 +353,54 @@ public class SettingsController implements Initializable {
         String grade = grade_grade.getText();
         String section = grade_section.getText();
         String year = LoginController.current_year;
-        try {
-            //check if the grade and section is already present
-            String query = "SELECT * FROM year_" + year + "_grade WHERE Grade = ? AND Section = ?";
-            Connection conn = database.Connection.conn;
-            PreparedStatement pst = conn.prepareStatement(query);
-            pst.setString(1, grade);
-            pst.setString(2, section);
-            ResultSet result = pst.executeQuery();
-            boolean already_present = false;
-            while (result.next()) {
-                already_present = true;
+        if (!grade.isEmpty()) {
+            try {
+                //check if the grade and section is already present
+                String query = "SELECT * FROM year_" + year + "_grade WHERE Grade = ? AND Section = ?";
+                Connection conn = database.Connection.conn;
+                PreparedStatement pst = conn.prepareStatement(query);
+                pst.setString(1, grade);
+                if (section.isEmpty()) {
+                    section = "null";
+                }
+                pst.setString(2, section);
+                ResultSet result = pst.executeQuery();
+                boolean already_present = false;
+                while (result.next()) {
+                    already_present = true;
+                }
+                if (already_present) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText("Grade already Present");
+                    alert.setContentText("The grade and section is already present");
+                    alert.show();
+                } else {
+                    if (section.isEmpty()) {
+                        section = "null";
+                    }
+                    query = "INSERT INTO year_" + year + "_grade(Grade,Section)"
+                            + " VALUES "
+                            + "('" + grade + "' , '" + section + "')";
+                    conn.createStatement().execute(query);
+                    grade_grade.clear();
+                    grade_section.clear();
+                    grade_table.refresh();
+                    grade_table.getColumns().clear();
+                    grade_table.getItems().clear();
+                }
+            } catch (Exception e) {
+                System.out.println("add Grade Btn clicked in settings :" + e.getMessage());
+            } finally {
+                makeGradeTable();
+                subject();
             }
-            if (already_present) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setHeaderText("Grade already Present");
-                alert.setContentText("The grade and section is already present");
-                alert.show();
-            } else {
-                query = "INSERT INTO year_" + year + "_grade(Grade,Section)"
-                        + " VALUES "
-                        + "('" + grade + "' , '" + section + "')";
-                conn.createStatement().execute(query);
-                grade_grade.clear();
-                grade_section.clear();
-                grade_table.refresh();
-                grade_table.getColumns().clear();
-                grade_table.getItems().clear();
-
-            }
-        } catch (Exception e) {
-            System.out.println("add Grade Btn clicked in settings :" + e.getMessage());
-        } finally {
-            makeGradeTable();
+        } else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Please Enter Grade");
+            alert.setContentText("Enter Grade and section. If there is no "
+                    + "section leave it empty, "
+                    + "the system will assign 'null' value to the section ");
+            alert.show();
         }
     }
 
@@ -386,12 +422,6 @@ public class SettingsController implements Initializable {
                 try {
                     String year = LoginController.current_year;
                     Statement statement = conn.createStatement();
-                    statement.addBatch("DELETE FROM year_" + year + "_grade WHERE "
-                            + "Grade_id = " + id + " ;");
-                    statement.addBatch("DELETE FROM year_" + year + "_grade WHERE Grade_id = " + id + " ;");
-                    String query = "DELETE FROM year_" + year + "_teacher_teaches "
-                            + "WHERE Grade_id = " + id + " ;";
-                    statement.addBatch(query);
                     //the commented region also deletes the ledger of the class which we want to prevent
 //                String query = "SELECT Table_name FROM `year_" + year + "_ledger` WHERE Grade_id = " + id + ";";
 //                result = st.executeQuery(query);
@@ -399,6 +429,28 @@ public class SettingsController implements Initializable {
 //                    String table = result.getString(1);
 //                    statement.addBatch("DROP TABLE `" + table + "`;");
 //                }
+
+                    String query = "SELECT Grade FROM year_" + year + "_grade  "
+                            + "WHERE Grade IN (SELECT Grade FROM "
+                            + "year_" + year + "_grade WHERE Grade_id = " + id + ") "
+                            + "AND Grade_id != " + id + " ;";
+                    ResultSet result = conn.createStatement().executeQuery(query);
+                    if (!result.next()) {
+                        query = "UPDATE  year_" + year + "_subject "
+                                + "SET Active = 'No' "
+                                + " WHERE Grade IN (SELECT  Grade "
+                                + "FROM year_" + year + "_grade "
+                                + "WHERE Grade_id = " + id + ") ;";
+                        statement.addBatch(query);
+                    }
+                    query = "DELETE FROM year_" + year + "_teacher_teaches "
+                            + "WHERE Grade_id = " + id + " ;";
+                    statement.addBatch(query);
+                    statement.addBatch("UPDATE year_" + year + "_student SET "
+                            + "Active='No' WHERE Grade_id = " + id + " "
+                            + " ;");
+                    statement.addBatch("DELETE FROM year_" + year + "_grade WHERE "
+                            + "Grade_id = " + id + " ;");
                     statement.executeBatch();
                     grade_table.refresh();
                     grade_table.getColumns().clear();
@@ -408,6 +460,7 @@ public class SettingsController implements Initializable {
                     System.out.println("Exception at delete Grade button :" + e.getMessage());
                 } finally {
                     makeGradeTable();
+                    subject();
                 }
             }
         }
@@ -423,6 +476,7 @@ public class SettingsController implements Initializable {
         ResultSet rs = null;
         grade_table.getColumns().clear();
         grade_table.getItems().clear();
+        grade_data.clear();
         try {
             String year = LoginController.current_year;
             SQL = "SELECT * FROM year_" + year + "_grade";
@@ -523,6 +577,7 @@ public class SettingsController implements Initializable {
         ResultSet rs = null;
         subject_table.getColumns().clear();
         subject_table.getItems().clear();
+        subject_data.clear();
         try {
             String year = LoginController.current_year;
             SQL = "SELECT Subject_id,Subject_name,Grade "
@@ -592,7 +647,7 @@ public class SettingsController implements Initializable {
         subject_table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         //setting the table menu button visible which lets user to select the column to view or hide
         subject_table.setTableMenuButtonVisible(true);
-
+        subject_table.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
     private void gradeFilterChoiceBox() {
@@ -667,46 +722,52 @@ public class SettingsController implements Initializable {
 
     @FXML
     private void addSubjectBtnClicked(MouseEvent event) {
-        Connection conn = database.Connection.conn;
-        ResultSet result;
-        String query;
-        String year = LoginController.current_year;
-        try {
-            String subject = subject_subject_name.getText();
-            String grade = subject_grade.getSelectionModel().getSelectedItem().toString();
-            //check if the grade and section is already present
-            query = "SELECT * FROM year_" + year + "_subject WHERE Grade = ? AND Subject_name = ? ";
-            conn = database.Connection.conn;
-            PreparedStatement pst = conn.prepareStatement(query);
-            pst.setString(1, grade);
-            pst.setString(2, subject);
-            result = pst.executeQuery();
-            boolean already_present = false;
-            while (result.next()) {
-                already_present = true;
-            }
-            if (already_present) {
+        String subject = subject_subject_name.getText();
+        if (!subject.isEmpty()) {
+            Connection conn = database.Connection.conn;
+            ResultSet result;
+            String query;
+            String year = LoginController.current_year;
+            try {
+                String grade = subject_grade.getSelectionModel().getSelectedItem().toString();
+                //check if the grade and section is already present
+                query = "SELECT * FROM year_" + year + "_subject WHERE Grade = ? AND Subject_name = ? ";
+                conn = database.Connection.conn;
+                PreparedStatement pst = conn.prepareStatement(query);
+                pst.setString(1, grade);
+                pst.setString(2, subject);
+                result = pst.executeQuery();
+                boolean already_present = false;
+                while (result.next()) {
+                    already_present = true;
+                }
+                if (already_present) {
 
-                query = "UPDATE year_" + year + "_subject SET Active = 'yes', "
-                        + "Subject_name = ?"
-                        + " WHERE Grade = ? AND Subject_name = ? ";
-                pst = conn.prepareStatement(query);
-                pst.setString(1, subject);
-                pst.setString(2, grade);
-                pst.setString(3, subject);
-                pst.execute();
-            } else {
-                query = "INSERT INTO year_" + year + "_subject "
-                        + "(Subject_name,Grade) VALUES ('" + subject + "','" + grade + "')";
-                conn.createStatement().executeUpdate(query);
-                subject_subject_name.clear();
-                subject_grade.getSelectionModel().selectFirst();
+                    query = "UPDATE year_" + year + "_subject SET Active = 'yes', "
+                            + "Subject_name = ?"
+                            + " WHERE Grade = ? AND Subject_name = ? ";
+                    pst = conn.prepareStatement(query);
+                    pst.setString(1, subject);
+                    pst.setString(2, grade);
+                    pst.setString(3, subject);
+                    pst.execute();
+                } else {
+                    query = "INSERT INTO year_" + year + "_subject "
+                            + "(Subject_name,Grade) VALUES ('" + subject + "','" + grade + "')";
+                    conn.createStatement().executeUpdate(query);
+                    subject_subject_name.clear();
+                    subject_grade.getSelectionModel().selectFirst();
+                }
+            } catch (Exception e) {
+                System.out.println("Exception at addSubjectBtnClicked() "
+                        + "at SettingsController : " + e.getMessage());
+            } finally {
+                makeSubjectTable();
             }
-        } catch (Exception e) {
-            System.out.println("Exception at addSubjectBtnClicked() "
-                    + "at SettingsController : " + e.getMessage());
-        } finally {
-            makeSubjectTable();
+        } else {
+            Alert a = new Alert(AlertType.ERROR);
+            a.setHeaderText("Fill all the fields");
+            a.show();
         }
     }
 
@@ -728,8 +789,8 @@ public class SettingsController implements Initializable {
         ResultSet result;
         String query;
         String subject = subject_subject_name.getText();
-        String grade = subject_grade.getSelectionModel().getSelectedItem().toString();
         try {
+            String grade = subject_grade.getSelectionModel().getSelectedItem().toString();
             String year = LoginController.current_year;
             query = "SELECT * FROM year_" + year + "_subject WHERE Grade = '" + grade + "' AND "
                     + "Subject_name = '" + subject + "' AND Active = 'yes' ; ";
@@ -805,6 +866,7 @@ public class SettingsController implements Initializable {
         ResultSet rs = null;
         division_table.getItems().clear();
         division_table.getColumns().clear();
+        division_data.clear();
         try {
             String year = LoginController.current_year;
             SQL = "SELECT *"

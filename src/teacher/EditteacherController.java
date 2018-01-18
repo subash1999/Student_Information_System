@@ -13,6 +13,8 @@ import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -61,7 +63,7 @@ public class EditteacherController implements Initializable {
 
     @FXML
     private Button save_btn;
-    
+
     public IntegerProperty id = new SimpleIntegerProperty();
 
     /**
@@ -69,16 +71,20 @@ public class EditteacherController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       id.set(0);
-       listenerForId();
+        id.set(0);
+        listenerForId();
+        phone.setStyle("-fx-prompt-text-fill:gray");
+        makePhoneTextFieldNumeric();
     }
-    private void listenerForId(){
-        id.addListener(e->{
-            if(id.get()!=0){
+
+    private void listenerForId() {
+        id.addListener(e -> {
+            if (id.get() != 0) {
                 setValues(id.get());
             }
         });
     }
+
     private boolean areRequiredFieldsFilled() {
         boolean filled = !name.getText().isEmpty()
                 && !(!male.isSelected() && !female.isSelected())
@@ -88,33 +94,31 @@ public class EditteacherController implements Initializable {
     }
 
     private void setValues(int teacher_id) {
-        try{
+        try {
             String year = LoginController.current_year;
             int id = teacher_id;
-            String query = "SELECT * FROM year_"+year+"_teacher "
-                    + "WHERE Teacher_id = "+id+" AND Active = 'yes' ;";
-            Connection conn =database.Connection.conn;
+            String query = "SELECT * FROM year_" + year + "_teacher "
+                    + "WHERE Teacher_id = " + id + " AND Active = 'yes' ;";
+            Connection conn = database.Connection.conn;
             ResultSet result = conn.createStatement().executeQuery(query);
-            while(result.next()){
+            while (result.next()) {
                 this.teacher_id.setText(String.valueOf(result.getInt("Teacher_id")));
                 this.name.setText(result.getString("Name"));
                 this.phone.setText(result.getString("Phone"));
                 this.address.setText("Address");
                 String qualification = result.getString("Qualification");
-                if(result.wasNull()){
+                if (result.wasNull()) {
                     qualification = "";
                 }
                 this.qualification.setText(qualification);
                 String gender = result.getString("Gender");
-                if("Male".equalsIgnoreCase(gender)||"M".equalsIgnoreCase(gender)){
+                if ("Male".equalsIgnoreCase(gender) || "M".equalsIgnoreCase(gender)) {
                     male.setSelected(true);
-                }
-                else if ("Female".equalsIgnoreCase(gender)||"F".equalsIgnoreCase(gender)){
+                } else if ("Female".equalsIgnoreCase(gender) || "F".equalsIgnoreCase(gender)) {
                     female.setSelected(true);
                 }
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Exception at setValues() at EditteacherController "
                     + e.getMessage());
             e.printStackTrace();
@@ -157,13 +161,13 @@ public class EditteacherController implements Initializable {
                 pst.setString(5, qualification);
                 pst.setInt(6, id);
                 pst.execute();
-                Stage stage = (Stage) save_btn.getScene().getWindow();
-                stage.close();
                 Alert a = new Alert(AlertType.INFORMATION);
                 a.setHeaderText("Updation Successful !!!");
                 a.setContentText("The teacher with id : " + id
                         + "\n was updated successfuly ");
                 a.show();
+                // Stage stage = (Stage) save_btn.getScene().getWindow();
+                // stage.close();
             } catch (Exception e) {
                 System.out.println("Exception at clickSaveBtn() at "
                         + "EditteacherController : " + e.getMessage());
@@ -179,8 +183,26 @@ public class EditteacherController implements Initializable {
 
     @FXML
     private void clickUndoAllBtn(MouseEvent event) {
-        if(id.get()!=0){
+        if (id.get() != 0) {
             setValues(id.get());
         }
     }
+
+    private void makePhoneTextFieldNumeric() {
+        phone.lengthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    char ch = phone.getText().charAt(oldValue.intValue());
+                    // Check if the new character is the number or other's
+                    if (!(ch >= '0' && ch <= '9' || ch == '+' || ch == '-' || ch == ',')) {
+                        // if it's not number then just setText to previous one
+                        phone.setText(phone.getText().substring(0, phone.getText().length() - 1));
+                    }
+                }
+            }
+        });
+
+    }
+
 }

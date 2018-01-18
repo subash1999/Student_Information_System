@@ -105,6 +105,9 @@ public class ChartController implements Initializable {
     @FXML
     private VBox exam_chart_vbox;
 
+    @FXML
+    private VBox save_chart_vbox;
+
     private List<String> grade_id = new ArrayList<String>();
     private String year = LoginController.current_year;
     private StringProperty exam_id = new SimpleStringProperty();
@@ -123,6 +126,9 @@ public class ChartController implements Initializable {
         view_chart_btn.setDisable(true);
         listenerForChartAboutComboBox();
         listenerForChartGroup();
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            save_chart_vbox.setVisible(false);
+        }
     }
 
     public void selectionComboBox() {
@@ -587,7 +593,10 @@ public class ChartController implements Initializable {
         Image img = new Image("/images/download.jpg");
         image_view.setImage(img);
         image_view.setStyle("-fx-cursor: hand;");
-                inner_vbox.getChildren().addAll(save_label, image_view);
+        inner_vbox.getChildren().addAll(save_label, image_view);
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            image_view.setVisible(false);
+        }
         VBox vbox = new VBox();
         vbox.getChildren().add(inner_vbox);
         //setting up the pie chart
@@ -619,8 +628,8 @@ public class ChartController implements Initializable {
         }
         vbox.getChildren().add(pie_chart_vbox);
         //saving the chart when image_view is clicked
-        image_view.setOnMouseClicked(event->{
-            try {            
+        image_view.setOnMouseClicked(event -> {
+            try {
                 FileChooser file_chooser = new FileChooser();
                 file_chooser.setInitialFileName("Filename.png");
                 file_chooser.getExtensionFilters().addAll(
@@ -638,12 +647,12 @@ public class ChartController implements Initializable {
                     WritableImage chart_image = pie_chart_vbox.snapshot(new SnapshotParameters(), null);
                     ImageIO.write(SwingFXUtils.fromFXImage(chart_image, null), "png", chart);
                 }
-            
-        } catch (Exception e) {
-            System.out.println("Exception at clickSaveChartImage() "
-                    + "at ChartController : " + e.getMessage());
-            e.printStackTrace();
-        }
+
+            } catch (Exception e) {
+                System.out.println("Exception at clickSaveChartImage() "
+                        + "at ChartController : " + e.getMessage());
+                e.printStackTrace();
+            }
         });
         pie_chart_vbox.prefWidthProperty().bind(vbox.widthProperty().multiply(0.7));
         vbox.setPadding(new Insets(10, 10, 10, 10));

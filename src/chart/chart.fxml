@@ -118,7 +118,7 @@
          <center>
             <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <right>
-                  <VBox prefHeight="546.0" prefWidth="190.0" BorderPane.alignment="CENTER">
+                  <VBox fx:id="save_chart_vbox" prefHeight="546.0" prefWidth="190.0" BorderPane.alignment="CENTER">
                      <children>
                         <Label text="Save Current Chart">
                            <font>

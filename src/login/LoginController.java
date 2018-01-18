@@ -82,7 +82,7 @@ public class LoginController implements Initializable {
                         Alert a = new Alert(AlertType.INFORMATION);
                         a.setHeaderText("Seems It's Your First Time !!");
                         a.setContentText("Firstly add a session to continue to the software");
-                        a.show();
+                        a.showAndWait();
                         Parent root = null;
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/settings/newSession/addsession1.fxml"));
                         root = loader.load();

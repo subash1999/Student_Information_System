@@ -54,35 +54,39 @@
                         <Font name="Times New Roman Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label layoutX="10.0" layoutY="38.0" text="Grade :">
-                     <font>
-                        <Font name="Arial" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="10.0" layoutY="75.0" text="Section :">
-                     <font>
-                        <Font name="Arial" size="15.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="grade_add" layoutX="126.0" layoutY="109.0" mnemonicParsing="false" onMouseClicked="#addGradeBtnClicked" text="Add Grade">
-                     <styleClass>
-                        <String fx:value="info" />
-                        <String fx:value="action-btn" />
-                     </styleClass>
-                  </Button>
-                  <TextField fx:id="grade_section" layoutX="69.0" layoutY="71.0" prefWidth="147.0" />
-                  <TextField fx:id="grade_grade" layoutX="64.0" layoutY="33.0" />
-                  <Label layoutX="12.0" layoutY="150.0" text="To delete :Select the grade to delete and press delete button" textFill="#0941e5">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="grade_delete" layoutX="252.0" layoutY="171.0" mnemonicParsing="false" onMouseClicked="#deleteGradeBtnClicked" text="Delete Grade">
-                     <styleClass>
-                        <String fx:value="danger" />
-                        <String fx:value="action-btn" />
-                     </styleClass>
-                  </Button>
+                  <AnchorPane fx:id="grade_modify_anchorpane" layoutX="10.0" layoutY="33.0">
+                     <children>
+                        <Label layoutY="5.0" text="Grade :">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label layoutY="42.0" text="Section :">
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="grade_add" layoutX="116.0" layoutY="76.0" mnemonicParsing="false" onMouseClicked="#addGradeBtnClicked" text="Add Grade">
+                           <styleClass>
+                              <String fx:value="info" />
+                              <String fx:value="action-btn" />
+                           </styleClass>
+                        </Button>
+                        <TextField fx:id="grade_section" layoutX="59.0" layoutY="38.0" prefWidth="147.0" />
+                        <TextField fx:id="grade_grade" layoutX="54.0" />
+                        <Button fx:id="grade_delete" layoutX="242.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#deleteGradeBtnClicked" text="Delete Grade">
+                           <styleClass>
+                              <String fx:value="danger" />
+                              <String fx:value="action-btn" />
+                           </styleClass>
+                        </Button>
+                        <Label layoutX="7.0" layoutY="116.0" text="To delete :Select the grade to delete and press delete button" textFill="#0941e5">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
                </children></AnchorPane>
       </content>
     </Tab>
@@ -91,46 +95,50 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TableView fx:id="subject_table" layoutX="15.0" layoutY="41.0" prefHeight="179.0" prefWidth="366.0" />
-                  <Button fx:id="subject_delete" layoutX="293.0" layoutY="4.0" mnemonicParsing="false" onMouseClicked="#deleteSubjectBtnClicked" text="Delete">
-                     <styleClass>
-                        <String fx:value="action-btn" />
-                        <String fx:value="danger" />
-                     </styleClass>
-                  </Button>
-                  <VBox layoutX="12.0" layoutY="222.0" spacing="20.0">
+                  <AnchorPane fx:id="subject_modify_anchorpane" layoutX="12.0" layoutY="243.0">
                      <children>
-                        <Label text="Add Subject">
-                           <font>
-                              <Font name="Times New Roman" size="22.0" />
-                           </font>
-                        </Label>
-                        <Label text="Subejct Name :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Grade :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
+                        <VBox spacing="20.0">
+                           <children>
+                              <Label text="Add Subject">
+                                 <font>
+                                    <Font name="Times New Roman" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Subejct Name :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Grade :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <TextField fx:id="subject_subject_name" layoutX="110.0" layoutY="41.0" />
+                        <Button fx:id="subject_add" layoutX="185.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#addSubjectBtnClicked" text="Add">
+                           <styleClass>
+                              <String fx:value="action-btn" />
+                              <String fx:value="info" />
+                           </styleClass>
+                        </Button>
+                        <ChoiceBox fx:id="subject_grade" layoutX="110.0" layoutY="81.0" prefWidth="150.0" />
+                        <Label fx:id="subject_label" layoutX="3.0" layoutY="118.0" style="-fx-text-fill: red;" text="Subject with similar name already exists in selected grade" />
                      </children>
-                  </VBox>
-                  <TextField fx:id="subject_subject_name" layoutX="122.0" layoutY="263.0" />
-                  <Button fx:id="subject_add" layoutX="197.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#addSubjectBtnClicked" text="Add">
-                     <styleClass>
-                        <String fx:value="action-btn" />
-                        <String fx:value="info" />
-                     </styleClass>
-                  </Button>
-                  <ChoiceBox fx:id="subject_grade" layoutX="122.0" layoutY="303.0" prefWidth="150.0" />
+                  </AnchorPane>
                   <Label layoutX="15.0" layoutY="10.0" text="Grade Filter:">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
                   <ChoiceBox fx:id="subject_grade_filter" layoutX="103.0" layoutY="6.0" prefWidth="150.0" />
-                  <Label fx:id="subject_label" layoutX="15.0" layoutY="340.0" style="-fx-text-fill: red;" text="Subject with similar name already exists in selected grade" />
+                  <Button fx:id="subject_delete" layoutX="299.0" layoutY="5.0" mnemonicParsing="false" onMouseClicked="#deleteSubjectBtnClicked" text="Delete">
+                     <styleClass>
+                        <String fx:value="action-btn" />
+                        <String fx:value="danger" />
+                     </styleClass>
+                  </Button>
                </children>
             </AnchorPane>
          </content>

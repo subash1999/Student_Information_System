@@ -62,7 +62,6 @@ public class MainwindowController implements Initializable {
     /**
      * Initializes the controller class.
      */
-
     @FXML
     private MenuBar menubar;
 
@@ -70,40 +69,16 @@ public class MainwindowController implements Initializable {
     private Menu file;
 
     @FXML
-    private MenuItem view_session_menu_item;
+    private Menu settings_menu;
 
     @FXML
-    private MenuItem change_session_menuu_item;
+    private MenuItem view_session_menu_item;
 
     @FXML
     private MenuItem close_menu_item;
 
     @FXML
-    private Menu edit;
-
-    @FXML
-    private MenuItem delete_menu_item;
-
-    @FXML
-    private Menu help;
-
-    @FXML
-    private MenuItem about_menu_item;
-
-    @FXML
-    private Menu teacher;
-
-    @FXML
     private MenuItem settings_menu_item;
-
-    @FXML
-    private MenuItem add;
-
-    @FXML
-    private Menu chat;
-
-    @FXML
-    private MenuItem open_chat_menu_item;
 
     @FXML
     private Label current_time;
@@ -173,15 +148,19 @@ public class MainwindowController implements Initializable {
 
     @FXML
     private TextField display;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if(!LoginController.user_type.equalsIgnoreCase("Admin")){
+        backup_restore_anchorpane.setVisible(false);
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
             exam_management_anchorpane.setVisible(false);
             user_anchorpane.setVisible(false);
             settings_anchorpane.setVisible(false);
             organization_details_anchorpane.setVisible(false);
             backup_restore_anchorpane.setVisible(false);
+            settings_menu_item.setVisible(false);
+            view_session_menu_item.setVisible(false);
+            settings_menu.setVisible(false);
         }
         dateAndTime();
         current_user.setText("User : " + LoginController.current_user);
@@ -310,7 +289,7 @@ public class MainwindowController implements Initializable {
 
     @FXML
     void examManagementClicked(MouseEvent event) {
-            try {
+        try {
             Parent root = FXMLLoader.load(getClass().getResource("/examManagement/ExamManagement.fxml"));
             Scene scene = new Scene(root);
             Stage stage = new Stage();
@@ -321,7 +300,7 @@ public class MainwindowController implements Initializable {
             System.out.println("Exception at examManagementClicked(MouseEvent event) "
                     + "at MainwindowController : " + e.getMessage());
             e.printStackTrace();
-        }    
+        }
     }
 
     @FXML
@@ -499,7 +478,6 @@ public class MainwindowController implements Initializable {
             ex.printStackTrace();
         }
     }
-    
 
     @FXML
     void changePasswordClicked(MouseEvent event) {
@@ -597,24 +575,6 @@ public class MainwindowController implements Initializable {
             // ... user chose OK
         } else {
             close.close();
-        }
-
-    }
-
-    @FXML
-    void addTeacherMenuItemOnAction(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/teacher/addteacher.fxml"));
-            Parent root1;
-            root1 = fxmlLoader.load();
-            //passing the id of the selected student to the studentdetail.fxml file
-            Stage stage = new Stage();
-            stage.setTitle("Add Teacher");
-            stage.setScene(new Scene(root1));
-            stage.show();
-        } catch (Exception ex) {
-            System.out.println("Error while loading the file addteacher.fxml at MainWindow : " + ex.getMessage());
-            ex.printStackTrace();
         }
 
     }

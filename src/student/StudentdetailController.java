@@ -43,73 +43,81 @@ public class StudentdetailController implements Initializable {
      */
     @FXML
     private MenuBar menubar;
-
+    
     @FXML
     private JFXTextField search_field;
-
+    
     @FXML
     private TableView table;
-
+    
     @FXML
     private Label student_id;
-
+    
     @FXML
     private Label name;
-
+    
     @FXML
     private Label grade;
-
+    
     @FXML
     private Label section;
-
+    
     @FXML
     private Label gender;
-
+    
     @FXML
     private Label roll;
-
+    
     @FXML
     private Label dob;
-
+    
     @FXML
     private Label father;
-
+    
     @FXML
     private Label mother;
-
+    
     @FXML
     private Label guardian;
-
+    
     @FXML
     private Label address;
-
+    
     @FXML
     private Label phone;
-
+    
     @FXML
     private Label previous_school;
-
+    
     @FXML
     private Button edit_btn;
-
+    
     @FXML
     private Button teachers_btn;
-
+    
     @FXML
     private Button subjects_btn;
+    
+    @FXML
+    private Label edit_label;
+    
     private String[] column_name;
     private int column_count;
     private StudentIdStore store_student_id = new StudentIdStore();
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeTable();
         displayDetails();
         onRowClick();
         searchTable();
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            edit_btn.setVisible(false);
+            edit_label.setVisible(false);
+        }
     }
-
+    
     public void refresh() {
         makeTable();
         String search = search_field.getText();
@@ -118,7 +126,7 @@ public class StudentdetailController implements Initializable {
         String student_id = store_student_id.get();
         store_student_id.set(student_id);
     }
-
+    
     @FXML
     private void clickEditBtn(MouseEvent event) {
         if (!store_student_id.get().equals("0")) {
@@ -145,7 +153,7 @@ public class StudentdetailController implements Initializable {
             }
         }
     }
-
+    
     @FXML
     private void teacher_btn_clicked(MouseEvent event) {
         try {
@@ -163,10 +171,10 @@ public class StudentdetailController implements Initializable {
             System.out.println("Error in loading fxml file :" + e.getMessage());
         }
     }
-
+    
     public void searchTable() {
         search_field.textProperty().addListener(new InvalidationListener() {
-
+            
             @Override
             public void invalidated(javafx.beans.Observable observable) {
                 if (search_field.getText() == null) {
@@ -178,35 +186,35 @@ public class StudentdetailController implements Initializable {
                     return;
                 }
                 ObservableList filteredItems = FXCollections.observableArrayList();
-
+                
                 ObservableList<TableColumn> cols = table.getColumns();
-
+                
                 for (int i = 0; i < data.size(); i++) {
-
+                    
                     TableColumn col = new TableColumn();
                     for (int j = 0; j < cols.size(); j++) {
                         col = cols.get(j);
-
+                        
                         String cellValue = col.getCellData(data.get(i)).toString();
-
+                        
                         cellValue = cellValue.toLowerCase();
-
+                        
                         if (cellValue.contains(search_field.textProperty().get().toLowerCase())) {
-
+                            
                             filteredItems.add(data.get(i));
-
+                            
                             break;
-
+                            
                         }
-
+                        
                     }
                 }
                 table.setItems(filteredItems);
             }
-
+            
         });
     }
-
+    
     private void onRowClick() {
         table.setRowFactory(tv -> {
             TableRow row = new TableRow<>();
@@ -225,7 +233,7 @@ public class StudentdetailController implements Initializable {
             return row;
         });
     }
-
+    
     public void makeTable() {
         database.Connection.connect();
         Connection conn = database.Connection.conn;
@@ -255,25 +263,25 @@ public class StudentdetailController implements Initializable {
                 final int j = i;
                 TableColumn col = new TableColumn(result.getMetaData().getColumnName(i + 1));
                 col.setStyle("-fx-alignment : center;");
-
+                
                 col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                     @Override
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
                         return new SimpleStringProperty(param.getValue().get(j).toString());
-
+                        
                     }
                 });
                 column_name[i] = col.getText();
                 if ("previous_school".equalsIgnoreCase(col.getText()) || "mother_name".equalsIgnoreCase(col.getText())) {
                     col.setVisible(false);
                 }
-
+                
                 table.getColumns().addAll(col);
             }
         } catch (Exception ex) {
             System.out.println("Getting metadata error");
         }
-
+        
         try {
             /**
              * ******************************
@@ -287,7 +295,7 @@ public class StudentdetailController implements Initializable {
                     row.add(result.getString(i));
                 }
                 data.add(row);
-
+                
             }
         } catch (Exception ex) {
             System.out.println("No next data error");
@@ -302,11 +310,11 @@ public class StudentdetailController implements Initializable {
         //setting the table menu button visible which lets user to select the column to view or hide
         table.setTableMenuButtonVisible(true);
     }
-
+    
     public void setStudentId(String s) {
         store_student_id.set(s);
     }
-
+    
     public void displayDetails() {
         Connection conn = database.Connection.conn;
         String year = LoginController.current_year;
@@ -329,24 +337,24 @@ public class StudentdetailController implements Initializable {
                 phone.setText("Phone : " + result.getString("Phone"));
                 previous_school.setText("Previous School : " + result.getString("Previous_school"));
             }
-
+            
         } catch (Exception ex) {
             System.out.println("Exception occured during displaying details");
         }
-
+        
     }
-
+    
     private class StudentIdStore {
-
+        
         private String s = "0";
-
+        
         public void set(String s) {
             if (!s.equalsIgnoreCase("0")) {
                 this.s = s;
                 displayDetails();
             }
         }
-
+        
         public String get() {
             return s;
         }

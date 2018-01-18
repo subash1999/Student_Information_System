@@ -137,7 +137,8 @@ public class Teachers_of_studentController implements Initializable {
                     + "INNER JOIN year_" + year + "_student ON year_" + year + "_subject.Grade"
                     + "=year_" + year + "_student.Grade AND "
                     + "year_" + year + "_student.Student_id=" + 
-                    store_student_id.get()+ " ;";
+                    store_student_id.get()+ " WHERE "
+                    + "year_" + year + "_subject.Active='yes';";
             result = st.executeQuery(query);
             try {
                 teacher_table.getColumns().clear();

@@ -189,50 +189,53 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <AnchorPane layoutX="282.0" layoutY="18.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="150.0" layoutX="220.0" layoutY="2.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="305.0" />
-                  <Label layoutX="227.0" layoutY="4.0" text="Add Subject to Current Ledger : ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="fm_textfield" layoutX="265.0" layoutY="86.0" prefHeight="27.0" prefWidth="41.0" />
-                  <Label layoutX="227.0" layoutY="33.0" style="-fx-text-fill: blue;" text="Subejct :" />
-                  <ChoiceBox fx:id="subject_choicebox" layoutX="295.0" layoutY="29.0" prefHeight="17.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
-                  <Label layoutX="228.0" layoutY="92.0" style="-fx-text-fill: blue;" text="FM :" />
-                  <TextField fx:id="pm_textfield" layoutX="357.0" layoutY="87.0" prefHeight="27.0" prefWidth="41.0" />
-                  <Label layoutX="320.0" layoutY="91.0" style="-fx-text-fill: blue;" text="PM :" />
-                  <RadioButton fx:id="theory_radiobtn" layoutX="316.0" layoutY="64.0" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Theory">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="subject_type" />
-                     </toggleGroup>
-                  </RadioButton>
-                  <Label layoutX="227.0" layoutY="65.0" style="-fx-text-fill: blue;" text="Subejct Type :" />
-                  <RadioButton fx:id="practical_radiobtn" layoutX="385.0" layoutY="64.0" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Practical" toggleGroup="$subject_type" />
-                  <Button fx:id="add_subject_btn" layoutX="370.0" layoutY="116.0" mnemonicParsing="false" onMouseClicked="#clickAddSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Add Subject">
-                     <styleClass>
-                        <String fx:value="action-btn" />
-                        <String fx:value="primary" />
-                     </styleClass>
-                  </Button>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="135.0" layoutX="529.0" layoutY="2.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="201.0" />
-                  <Label layoutX="532.0" layoutY="5.0" text="Delete Subject from Current Ledger : " />
-                  <Label layoutX="534.0" layoutY="36.0" style="-fx-text-fill: blue;" text="Subejct Column :" />
-                  <ChoiceBox fx:id="subject_column_choicebox" layoutX="534.0" layoutY="59.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
-                  <Button fx:id="delete_subject_btn" layoutX="534.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#clickDeleteSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Delete Subject">
-                     <styleClass>
-                        <String fx:value="action-btn" />
-                        <String fx:value="danger" />
-                     </styleClass>
-                  </Button>
-                  <Label fx:id="add_subject_label" layoutX="230.0" layoutY="114.0" style="-fx-text-fill: red;" text="Selection already present" />
-                  <Button fx:id="recalculate_btn" layoutX="870.0" layoutY="117.0" mnemonicParsing="false" onMouseClicked="#clickReCalculateBtn" stylesheets="@../stylesheet/bootstrap2.css" text="Re Calculate Marks">
-                     <styleClass>
-                        <String fx:value="action-btn" />
-                        <String fx:value="success" />
-                     </styleClass>
-                  </Button>
-                  <ProgressIndicator fx:id="progress_indicator" layoutX="803.0" layoutY="103.0" prefHeight="53.0" prefWidth="44.0" progress="0.0" />
+                  <AnchorPane fx:id="ledger_modify_anchorpane" layoutX="220.0" layoutY="2.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="150.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="305.0" />
+                        <Label layoutX="7.0" layoutY="2.0" text="Add Subject to Current Ledger : ">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="fm_textfield" layoutX="45.0" layoutY="84.0" prefHeight="27.0" prefWidth="41.0" />
+                        <Label layoutX="7.0" layoutY="31.0" style="-fx-text-fill: blue;" text="Subejct :" />
+                        <ChoiceBox fx:id="subject_choicebox" layoutX="75.0" layoutY="27.0" prefHeight="17.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
+                        <Label layoutX="8.0" layoutY="90.0" style="-fx-text-fill: blue;" text="FM :" />
+                        <TextField fx:id="pm_textfield" layoutX="137.0" layoutY="85.0" prefHeight="27.0" prefWidth="41.0" />
+                        <Label layoutX="100.0" layoutY="89.0" style="-fx-text-fill: blue;" text="PM :" />
+                        <RadioButton fx:id="theory_radiobtn" layoutX="96.0" layoutY="62.0" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Theory">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="subject_type" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <Label layoutX="7.0" layoutY="63.0" style="-fx-text-fill: blue;" text="Subejct Type :" />
+                        <RadioButton fx:id="practical_radiobtn" layoutX="165.0" layoutY="62.0" mnemonicParsing="false" stylesheets="@../stylesheet/bootstrap2.css" text="Practical" toggleGroup="$subject_type" />
+                        <Button fx:id="add_subject_btn" layoutX="150.0" layoutY="114.0" mnemonicParsing="false" onMouseClicked="#clickAddSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Add Subject">
+                           <styleClass>
+                              <String fx:value="action-btn" />
+                              <String fx:value="primary" />
+                           </styleClass>
+                        </Button>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="135.0" layoutX="309.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="201.0" />
+                        <Label layoutX="312.0" layoutY="3.0" text="Delete Subject from Current Ledger : " />
+                        <Label layoutX="314.0" layoutY="34.0" style="-fx-text-fill: blue;" text="Subejct Column :" />
+                        <ChoiceBox fx:id="subject_column_choicebox" layoutX="314.0" layoutY="57.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
+                        <Button fx:id="delete_subject_btn" layoutX="314.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#clickDeleteSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Delete Subject">
+                           <styleClass>
+                              <String fx:value="action-btn" />
+                              <String fx:value="danger" />
+                           </styleClass>
+                        </Button>
+                        <Label fx:id="add_subject_label" layoutX="10.0" layoutY="112.0" style="-fx-text-fill: red;" text="Selection already present" />
+                        <Button fx:id="recalculate_btn" layoutX="650.0" layoutY="115.0" mnemonicParsing="false" onMouseClicked="#clickReCalculateBtn" stylesheets="@../stylesheet/bootstrap2.css" text="Re Calculate Marks">
+                           <styleClass>
+                              <String fx:value="action-btn" />
+                              <String fx:value="success" />
+                           </styleClass>
+                        </Button>
+                        <ProgressIndicator fx:id="progress_indicator" layoutX="583.0" layoutY="101.0" prefHeight="53.0" prefWidth="44.0" progress="0.0" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </top>
@@ -244,7 +247,7 @@
             </SpreadsheetView>
          </center>
          <bottom>
-            <AnchorPane prefHeight="72.0" prefWidth="933.0" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="bottom_anchorpane" prefHeight="72.0" prefWidth="933.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="new_sheet" accessibleRole="BUTTON" fitHeight="44.0" fitWidth="106.0" layoutX="11.0" layoutY="3.0" onMouseClicked="#clickCreateNewSheet" pickOnBounds="true" style="-fx-cursor: hand;">
                      <image>

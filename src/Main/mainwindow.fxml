@@ -27,33 +27,12 @@
           <Menu id="file" fx:id="file" mnemonicParsing="false" text="File">
             <items>
                   <MenuItem fx:id="view_session_menu_item" mnemonicParsing="false" onAction="#viewSettingsMenuItemClicked" text="View Session..." />
-                  <MenuItem fx:id="change_session_menuu_item" mnemonicParsing="false" text="Change Session..." />
               <MenuItem fx:id="close_menu_item" mnemonicParsing="false" onAction="#closeMenuItemClicked" text="Close" />
             </items>
           </Menu>
-          <Menu id="edit" fx:id="edit" mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem fx:id="delete_menu_item" mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu id="help" fx:id="help" mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem fx:id="about_menu_item" mnemonicParsing="false" text="About..." />
-            </items>
-          </Menu>
-            <Menu id="teacher" fx:id="teacher" mnemonicParsing="false" text="Settings">
+            <Menu id="teacher" fx:id="settings_menu" mnemonicParsing="false" text="Settings">
               <items>
                   <MenuItem fx:id="settings_menu_item" mnemonicParsing="false" onAction="#viewSettingsMenuItemClicked" text="View Settings" />
-              </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Teacher">
-              <items>
-                <MenuItem fx:id="add" mnemonicParsing="false" onAction="#addTeacherMenuItemOnAction" text="Add Teacher" />
-              </items>
-            </Menu>
-            <Menu id="chat" fx:id="chat" mnemonicParsing="false" text="Chat">
-              <items>
-                <MenuItem fx:id="open_chat_menu_item" mnemonicParsing="false" text="Open Chat..." />
               </items>
             </Menu>
         </menus>

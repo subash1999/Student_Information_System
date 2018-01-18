@@ -389,6 +389,10 @@ public class ExamManagementController implements Initializable {
                             + "Exam_id = " + exam_id.get() + " ;";
                     st.addBatch(query);
                     st.executeBatch();
+                    exam_id_label.setText("");
+                    exam_name_label.setText("");
+                    full_name_label.setText("");
+                    result_date_label.setText("");
                 }
             } catch (Exception e) {
                 System.out.println("Exception at clickDeleteBtn "

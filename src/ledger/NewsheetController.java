@@ -215,7 +215,11 @@ public class NewsheetController implements Initializable {
                      + " , \n `Division` VARCHAR(30) DEFAULT 'Failed'"
                      + " , \n `ClassRank` VARCHAR(30) DEFAULT '0'"
                      + " , \n `Rank` VARCHAR(30) DEFAULT '0'"
-                     + " , \n `Remarks` VARCHAR(255) DEFAULT 'None' );";     
+                     + " , \n `Remarks` VARCHAR(255) DEFAULT 'None'"
+                     + " , \n FOREIGN KEY (Student_id) REFERENCES "
+                     + "year_"+year+"_student(Student_id) "
+                     + "ON DELETE RESTRICT"
+                     + " );";     
              System.out.println(query);
              st.addBatch(query);
              st.executeBatch();

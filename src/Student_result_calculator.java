@@ -31,13 +31,14 @@ public class Student_result_calculator extends Application {
 //            }
 //        };
 //        new Thread(r).start();
-        
+
         try {
-            Thread.sleep(2000);
             Server server = new Server();
-        server.startServer();
+            server.startServer();
+            LoginController.current_year="2074";
+            LoginController.user_type="admi";
             FXMLLoader fxml = new FXMLLoader(getClass().getResource("/login/login.fxml"));
-//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/student/student.fxml"));
+//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/chart/chart.fxml"));
 //            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/teacher/addteacher.fxml"));
 //            Parent root = FXMLLoader.load(getClass().getResource("/report/reportcard.fxml"));
 //          Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));    
@@ -67,7 +68,13 @@ public class Student_result_calculator extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.out.println("Meg used 0=" + (Runtime.getRuntime().totalMemory()
+                - Runtime.getRuntime().freeMemory()) / (1000 * 1000) + "M");
+
         launch(args);
+        System.out.println("Meg used last=" + (Runtime.getRuntime().totalMemory()
+                - Runtime.getRuntime().freeMemory()) / (1000 * 1000) + "M");
+
     }
 
 }

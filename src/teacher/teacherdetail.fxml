@@ -8,9 +8,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -26,25 +23,6 @@
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <MenuBar fx:id="menubar" stylesheets="@../../stylesheet/bootstrap2.css">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
             <DecorationPane prefHeight="43.0" prefWidth="1112.0" style="-fx-background-color: #67c8ff;">
                <children>
                   <Label prefHeight="48.0" prefWidth="260.0" style="-fx-text-fill: white;" stylesheets="@../../stylesheet/bootstrap3.css" text="TEACHER DETAILS">
@@ -152,7 +130,7 @@
                         </Label>
                         <HBox spacing="5.0" stylesheets="@../stylesheet/bootstrap2.css">
                            <children>
-                              <Label prefHeight="31.0" text="Subject :">
+                              <Label fx:id="subject_label" prefHeight="31.0" text="Subject :">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -162,7 +140,7 @@
                         </HBox>
                         <HBox spacing="5.0" stylesheets="@../stylesheet/bootstrap2.css">
                            <children>
-                              <Label prefHeight="31.0" text="Grade  : ">
+                              <Label fx:id="grade_label" prefHeight="31.0" text="Grade  : ">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -172,7 +150,7 @@
                         </HBox>
                         <HBox stylesheets="@../stylesheet/bootstrap2.css">
                            <children>
-                              <Label prefHeight="31.0" text="Section : ">
+                              <Label fx:id="section_label" prefHeight="31.0" text="Section : ">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

@@ -94,6 +94,15 @@ public class StudentController implements Initializable {
     @FXML
     private Label search_count_label;
 
+    @FXML
+    private Label add_student_label;
+
+    @FXML
+    private Label delete_selected_students_label;
+
+    @FXML
+    private Label edit_selected_label;
+
     public static String student_id = "0";
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
     private String[] column_name;
@@ -108,17 +117,26 @@ public class StudentController implements Initializable {
         onRowClick();
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countLabels();
+        if (!LoginController.user_type.equalsIgnoreCase("Admin")) {
+            add_student_image.setVisible(false);
+            edit_student_image.setVisible(false);
+            delete_student_image.setVisible(false);
+            add_student_label.setVisible(false);
+            delete_selected_students_label.setVisible(false);
+            edit_selected_label.setVisible(false);
+        }
 
     }
 
     public void refresh() {
-        countLabels();
         makeTable();
-        searchTable();
+        countLabels();
         search_count_label.setText("");
         String search = search_field.getText();
         search_field.setText("");
         search_field.setText(search);
+        searchTable();
+
     }
 
     private void countLabels() {
@@ -176,7 +194,7 @@ public class StudentController implements Initializable {
                         Stage stage = new Stage();
                         stage.setTitle("Student Detail");
                         stage.setScene(new Scene(root1));
-                        stage.setOnCloseRequest(e->{
+                        stage.setOnCloseRequest(e -> {
                             refresh();
                         });
                         stage.show();
@@ -498,7 +516,6 @@ public class StudentController implements Initializable {
 
     private void makeTable() {
         database.Connection.connect();
-
         Connection conn = database.Connection.conn;
         table.getItems().clear();
         table.getColumns().clear();
@@ -682,7 +699,7 @@ public class StudentController implements Initializable {
                     controller.student_id.set(student_id);
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.setResizable(false);
-                    stage.setOnCloseRequest(e->{
+                    stage.setOnCloseRequest(e -> {
                         refresh();
                     });
                     stage.show();
