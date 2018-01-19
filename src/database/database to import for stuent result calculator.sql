@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2018 at 04:24 AM
+-- Generation Time: Jan 18, 2018 at 05:51 AM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -21,6 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `school`
 --
+DROP DATABASE IF EXISTS `school`;
+CREATE DATABASE IF NOT EXISTS `school` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `school`;
 
 -- --------------------------------------------------------
 
@@ -28,6 +31,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `organization`
 --
 
+DROP TABLE IF EXISTS `organization`;
 CREATE TABLE `organization` (
   `Name` text NOT NULL,
   `Established` varchar(255) DEFAULT 'null',
@@ -37,6 +41,11 @@ CREATE TABLE `organization` (
   `Contact` varchar(255) DEFAULT 'null'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `organization`
+--
+
+TRUNCATE TABLE `organization`;
 --
 -- Dumping data for table `organization`
 --
@@ -50,6 +59,7 @@ INSERT INTO `organization` (`Name`, `Established`, `Year_format`, `Logo`, `Addre
 -- Table structure for table `session`
 --
 
+DROP TABLE IF EXISTS `session`;
 CREATE TABLE `session` (
   `Session_id` int(11) NOT NULL,
   `Year` varchar(20) NOT NULL,
@@ -57,6 +67,11 @@ CREATE TABLE `session` (
   `To` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `session`
+--
+
+TRUNCATE TABLE `session`;
 --
 -- Dumping data for table `session`
 --
@@ -71,6 +86,7 @@ INSERT INTO `session` (`Session_id`, `Year`, `From`, `To`) VALUES
 -- Table structure for table `table_details`
 --
 
+DROP TABLE IF EXISTS `table_details`;
 CREATE TABLE `table_details` (
   `Table_id` int(11) NOT NULL,
   `Table_name` varchar(50) NOT NULL,
@@ -78,6 +94,11 @@ CREATE TABLE `table_details` (
   `Type` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `table_details`
+--
+
+TRUNCATE TABLE `table_details`;
 --
 -- Dumping data for table `table_details`
 --
@@ -100,6 +121,7 @@ INSERT INTO `table_details` (`Table_id`, `Table_name`, `Year`, `Type`) VALUES
 -- Table structure for table `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `User_id` int(11) NOT NULL,
   `Name` varchar(255) NOT NULL,
@@ -110,11 +132,16 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Truncate table before insert `user`
+--
+
+TRUNCATE TABLE `user`;
+--
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`User_id`, `Name`, `Username`, `Password`, `Type`, `Phone`) VALUES
-(3, 'Sunam', 'su', 's', 'Regular', '9846010790'),
+(3, 'Sunam', 'su', 'su', 'Regular', '9846010790'),
 (6, 'Subash Niroula', 's', 's', 'Admin', '9846055581');
 
 -- --------------------------------------------------------
@@ -123,6 +150,7 @@ INSERT INTO `user` (`User_id`, `Name`, `Username`, `Password`, `Type`, `Phone`) 
 -- Table structure for table `year_2074_exam`
 --
 
+DROP TABLE IF EXISTS `year_2074_exam`;
 CREATE TABLE `year_2074_exam` (
   `Exam_id` int(11) NOT NULL,
   `Name` varchar(255) NOT NULL,
@@ -131,12 +159,74 @@ CREATE TABLE `year_2074_exam` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Truncate table before insert `year_2074_exam`
+--
+
+TRUNCATE TABLE `year_2074_exam`;
+--
 -- Dumping data for table `year_2074_exam`
 --
 
 INSERT INTO `year_2074_exam` (`Exam_id`, `Name`, `Result_date`, `Full_name`) VALUES
-(1, 'first_term', '2017/02/02', 'First Terminal Examination'),
-(2, 'second_term', '0000/00/00', 'Second');
+(1, 'first_term', '2017/02/02', 'First Terminal Examination');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `year_2074_first_term_1`
+--
+
+DROP TABLE IF EXISTS `year_2074_first_term_1`;
+CREATE TABLE `year_2074_first_term_1` (
+  `Student_id` int(11) NOT NULL,
+  `Roll` int(11) NOT NULL,
+  `English_th 40/100` float DEFAULT '0',
+  `Total` varchar(30) DEFAULT '0',
+  `Percentage` varchar(30) DEFAULT '0',
+  `Result` varchar(30) DEFAULT 'Fail',
+  `Division` varchar(30) DEFAULT 'Failed',
+  `ClassRank` varchar(30) DEFAULT '0',
+  `Rank` varchar(30) DEFAULT '0',
+  `Remarks` varchar(255) DEFAULT 'None'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Truncate table before insert `year_2074_first_term_1`
+--
+
+TRUNCATE TABLE `year_2074_first_term_1`;
+--
+-- Dumping data for table `year_2074_first_term_1`
+--
+
+INSERT INTO `year_2074_first_term_1` (`Student_id`, `Roll`, `English_th 40/100`, `Total`, `Percentage`, `Result`, `Division`, `ClassRank`, `Rank`, `Remarks`) VALUES
+(1, 1, 100, '100.0', '100.0', 'Pass', 'Dist.', '1', '1', 'Excellent Keep it Up'),
+(2, 2, 50, '50.0', '50.0', 'Pass', 'Second', '12', '12', 'Poor performance. Work harder'),
+(3, 3, 25, '25.0', '25.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(4, 4, 45, '45.0', '45.0', 'Pass', 'No division found', '13', '13', 'Poor performance. Work harder'),
+(5, 5, 67, '67.0', '67.0', 'Pass', 'First', '8', '8', 'Average. Aim higher to score more '),
+(6, 6, 89, '89.0', '89.0', 'Pass', 'Dist.', '3', '3', 'Very Good. You can do more than this'),
+(7, 7, 76, '76.0', '76.0', 'Pass', 'First', '7', '7', 'Good. Focous on weak subjects to achieve distinction'),
+(8, 8, 54, '54.0', '54.0', 'Pass', 'Second', '11', '11', 'Poor performance. Work harder'),
+(9, 9, 32, '32.0', '32.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(10, 10, 56, '56.0', '56.0', 'Pass', 'Second', '10', '10', 'Poor performance. Work harder'),
+(11, 11, 77, '77.0', '77.0', 'Pass', 'First', '6', '6', 'Good. Focous on weak subjects to achieve distinction'),
+(12, 12, 88, '88.0', '88.0', 'Pass', 'Dist.', '4', '4', 'Very Good. You can do more than this'),
+(13, 13, 99, '99.0', '99.0', 'Pass', 'Dist.', '2', '2', 'Excellent Keep it Up'),
+(14, 14, 11, '11.0', '11.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(15, 15, 13, '13.0', '13.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(16, 16, 35, '35.0', '35.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(17, 17, 57, '57.0', '57.0', 'Pass', 'Second', '9', '9', 'Poor performance. Work harder'),
+(18, 18, 80, '80.0', '80.0', 'Pass', 'Dist.', '5', '5', 'Very Good. You can do more than this'),
+(19, 19, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(20, 20, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(21, 21, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(22, 22, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(23, 23, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(24, 24, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(25, 25, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(26, 26, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects'),
+(609, 27, 0, '0.0', '0.0', 'Fail', 'Failed', '0', '0', 'Failed. Work hard on failed Subjects');
 
 -- --------------------------------------------------------
 
@@ -144,12 +234,18 @@ INSERT INTO `year_2074_exam` (`Exam_id`, `Name`, `Result_date`, `Full_name`) VAL
 -- Table structure for table `year_2074_grade`
 --
 
+DROP TABLE IF EXISTS `year_2074_grade`;
 CREATE TABLE `year_2074_grade` (
   `Grade_id` int(11) NOT NULL,
   `Grade` varchar(20) DEFAULT 'null',
   `Section` varchar(20) DEFAULT 'null'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `year_2074_grade`
+--
+
+TRUNCATE TABLE `year_2074_grade`;
 --
 -- Dumping data for table `year_2074_grade`
 --
@@ -180,6 +276,7 @@ INSERT INTO `year_2074_grade` (`Grade_id`, `Grade`, `Section`) VALUES
 -- Table structure for table `year_2074_grading`
 --
 
+DROP TABLE IF EXISTS `year_2074_grading`;
 CREATE TABLE `year_2074_grading` (
   `Per_from` varchar(30) NOT NULL,
   `Per_to` varchar(30) NOT NULL,
@@ -187,6 +284,11 @@ CREATE TABLE `year_2074_grading` (
   `Grade_point` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `year_2074_grading`
+--
+
+TRUNCATE TABLE `year_2074_grading`;
 --
 -- Dumping data for table `year_2074_grading`
 --
@@ -201,6 +303,7 @@ INSERT INTO `year_2074_grading` (`Per_from`, `Per_to`, `Grade_letter`, `Grade_po
 -- Table structure for table `year_2074_ledger`
 --
 
+DROP TABLE IF EXISTS `year_2074_ledger`;
 CREATE TABLE `year_2074_ledger` (
   `Ledger_id` int(11) NOT NULL,
   `Table_name` varchar(255) NOT NULL,
@@ -208,12 +311,25 @@ CREATE TABLE `year_2074_ledger` (
   `Exam_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `year_2074_ledger`
+--
+
+TRUNCATE TABLE `year_2074_ledger`;
+--
+-- Dumping data for table `year_2074_ledger`
+--
+
+INSERT INTO `year_2074_ledger` (`Ledger_id`, `Table_name`, `Grade_id`, `Exam_id`) VALUES
+(1, 'year_2074_first_term_1', 1, 1);
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `year_2074_marks`
 --
 
+DROP TABLE IF EXISTS `year_2074_marks`;
 CREATE TABLE `year_2074_marks` (
   `Marks_id` int(11) NOT NULL,
   `Subject_id` int(11) NOT NULL,
@@ -224,12 +340,25 @@ CREATE TABLE `year_2074_marks` (
   `Type` varchar(50) NOT NULL DEFAULT 'Theory'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `year_2074_marks`
+--
+
+TRUNCATE TABLE `year_2074_marks`;
+--
+-- Dumping data for table `year_2074_marks`
+--
+
+INSERT INTO `year_2074_marks` (`Marks_id`, `Subject_id`, `Subject_title`, `Ledger_id`, `FM`, `PM`, `Type`) VALUES
+(1, 1, 'English_th 40/100', 1, 100, 40, 'Theory');
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `year_2074_percentage`
 --
 
+DROP TABLE IF EXISTS `year_2074_percentage`;
 CREATE TABLE `year_2074_percentage` (
   `Division` varchar(30) NOT NULL,
   `From` varchar(30) NOT NULL,
@@ -237,6 +366,11 @@ CREATE TABLE `year_2074_percentage` (
   `Division_name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `year_2074_percentage`
+--
+
+TRUNCATE TABLE `year_2074_percentage`;
 --
 -- Dumping data for table `year_2074_percentage`
 --
@@ -252,6 +386,7 @@ INSERT INTO `year_2074_percentage` (`Division`, `From`, `To`, `Division_name`) V
 -- Table structure for table `year_2074_student`
 --
 
+DROP TABLE IF EXISTS `year_2074_student`;
 CREATE TABLE `year_2074_student` (
   `Student_id` int(11) NOT NULL,
   `Roll` int(11) NOT NULL,
@@ -270,6 +405,11 @@ CREATE TABLE `year_2074_student` (
   `Active` varchar(20) NOT NULL DEFAULT 'Yes'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `year_2074_student`
+--
+
+TRUNCATE TABLE `year_2074_student`;
 --
 -- Dumping data for table `year_2074_student`
 --
@@ -568,20 +708,20 @@ INSERT INTO `year_2074_student` (`Student_id`, `Roll`, `Name`, `Grade_id`, `Grad
 (293, 42, 'Amir Lama', 8, 'Nursery', 'B', 'Male', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'yes'),
 (294, 43, 'Usish Diwali', 9, 'Nursery', 'B', 'Male', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'yes'),
 (295, 44, 'Aruna Subedi', 9, 'Nursery', 'B', 'Female', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'yes'),
-(296, 1, 'Nishant Tamang', 9, '1', 'Apple', 'Male', 'null', 'null', 'null', 'Gyan Tamang', 'null', 'Gyan Tamang', 'null', 'yes'),
+(296, 1, 'Nishant Tamang', 9, '1', 'Apple', 'Male', '2018-01-01', 'null', 'nul', 'Gyan Tamang', 'null', 'Gyan Tamang', 'null', 'yes'),
 (297, 2, 'Supriya Mote', 9, '1', 'Apple', 'Female', '2002-01-17', 'null', 'nul', 'Sunil Mote', 'null', 'Sunil Mote', 'null', 'yes'),
 (298, 3, 'Kaustav Karki', 9, '1', 'Apple', 'Male', '1999-02-21', 'null', 'nu', 'Dipak Karki', 'null', 'Dipak Karki', 'null', 'No'),
 (299, 4, 'Anweshan Aale', 9, '1', 'Apple', 'Male', '1999-01-13', 'null', 'nul', 'Bidur Ale', 'null', 'Bidur Ale', 'null', 'No'),
 (300, 5, 'Prasana Neupane', 9, '1', 'Apple', 'Female', 'null', 'null', 'null', 'Pravakar Neupane', 'null', 'Pravakar Neupane', 'null', 'No'),
-(301, 6, 'Bijen Subedi', 9, '1', 'Apple', 'Male', 'null', 'null', 'null', 'null', 'Sushila Subedi', 'null', 'null', 'yes'),
-(302, 7, 'Kusum Rijal', 9, '1', 'Apple', 'Female', 'null', 'null', 'null', 'Suresh Rijal', 'null', 'Suresh Rijal', 'null', 'yes'),
-(303, 8, 'Archan Lama', 9, '1', 'Apple', 'Male', 'null', 'null', 'null', 'Kaji Lama', 'null', 'Kaji Lama', 'null', 'yes'),
-(304, 9, 'Nishant Poudel', 9, '1', 'Apple', 'Male', 'null', 'null', 'null', 'Khem Poudel', 'null', 'Khem Poudel', 'null', 'yes'),
-(305, 10, 'Saphal Khatri', 9, '1', 'Apple', 'Male', 'null', 'null', 'null', 'Sankhar Khatri', 'null', 'Sankhar Khatri', 'null', 'yes'),
-(306, 11, 'Riza Tandukar', 9, '1', 'Apple', 'Female', 'null', 'null', 'null', 'Prakash Tandukar', 'null', 'Prakash Tandukar', 'null', 'yes'),
+(301, 6, 'Bijen Sub', 9, '1', 'Apple', 'Male', '2018-01-02', 'null', 'nul', 'null', 'Sushila Subedi', 'null', 'null', 'yes'),
+(302, 7, 'Kusum Rijal', 9, '1', 'Apple', 'Female', '2018-01-02', 'null', 'nul', 'Suresh Rijal', 'null', 'Suresh Rijal', 'null', 'yes'),
+(303, 8, 'Archan Lama', 9, '1', 'Apple', 'Male', '2018-01-02', 'null', 'n', 'Kaji Lama', 'null', 'Kaji Lama', 'null', 'yes'),
+(304, 9, 'Nishant Poude', 9, '1', 'Apple', 'Male', '2018-01-08', 'null', '123', 'Khem Poudel', 'null', 'Khem Poudel', 'null', 'yes'),
+(305, 10, 'Saphal Khatri', 9, '1', 'Apple', 'Male', '2018-01-08', 'null', 'nul', 'Sankhar Khatri', 'null', 'Sankhar Khatri', 'null', 'yes'),
+(306, 11, 'Riza Tandukar', 9, '1', 'Apple', 'Female', '2018-01-02', 'null', 'nu', 'Prakash Tandukar', 'null', 'Prakash Tandukar', 'null', 'yes'),
 (307, 12, 'Pratikshya Karki', 9, '1', 'Apple', 'Female', 'null', 'null', 'null', 'Ram Karki', 'null', 'Ram Karki', 'null', 'yes'),
-(308, 13, 'Aayush Shrestha', 9, '1', 'Apple', 'Male', 'null', 'null', 'null', 'Ananda Kumar Shrestha', 'null', 'Ananda Kumar Shrestha', 'null', 'yes'),
-(309, 14, 'Rasmin Thakuri', 9, '1', 'Apple', 'Female', 'null', 'null', 'null', 'Rinku Thakuri', 'null', 'Rinku Thakuri', 'null', 'yes'),
+(308, 13, 'Aayush Shrestha', 9, '1', 'Apple', 'Male', '2018-01-02', 'null', 'nul', 'Ananda Kumar Shrestha', 'null', 'Ananda Kumar Shrestha', 'null', 'yes'),
+(309, 14, 'Rasmin Thakuri', 9, '1', 'Apple', 'Female', '2018-01-01', 'null', 'nul', 'Rinku Thakuri', 'null', 'Rinku Thakuri', 'null', 'yes'),
 (310, 15, 'Sujina Shrestha', 9, '1', 'Apple', 'Female', 'null', 'null', 'null', 'Shyam Shrestha', 'null', 'Shyam Shrestha', 'null', 'yes'),
 (311, 16, 'Alisha Payakurel', 9, '1', 'Apple', 'Female', 'null', 'null', 'null', 'Bashu  Pyakurel', 'null', 'Bashu  Pyakurel', 'null', 'yes'),
 (312, 17, 'Sajan Yogi', 9, '1', 'Apple', 'Male', 'null', 'null', 'null', 'Krishna Yogi', 'null', 'Krishna Yogi', 'null', 'yes'),
@@ -889,6 +1029,7 @@ INSERT INTO `year_2074_student` (`Student_id`, `Roll`, `Name`, `Grade_id`, `Grad
 -- Table structure for table `year_2074_subject`
 --
 
+DROP TABLE IF EXISTS `year_2074_subject`;
 CREATE TABLE `year_2074_subject` (
   `Subject_id` int(11) NOT NULL,
   `Subject_name` varchar(30) NOT NULL,
@@ -897,6 +1038,11 @@ CREATE TABLE `year_2074_subject` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Truncate table before insert `year_2074_subject`
+--
+
+TRUNCATE TABLE `year_2074_subject`;
+--
 -- Dumping data for table `year_2074_subject`
 --
 
@@ -904,8 +1050,10 @@ INSERT INTO `year_2074_subject` (`Subject_id`, `Subject_name`, `Grade`, `Active`
 (1, 'English', '8', 'yes'),
 (2, 'Math', '8', 'yes'),
 (6, 'social', '8', 'yes'),
-(8, 'social', 'JKG', 'yes'),
-(9, 'Science', '8', 'No');
+(8, 'social', 'JKG', 'No'),
+(9, 'Science', '8', 'No'),
+(11, 'aaa', 'a', 'No'),
+(12, 'a', '8', 'No');
 
 -- --------------------------------------------------------
 
@@ -913,6 +1061,7 @@ INSERT INTO `year_2074_subject` (`Subject_id`, `Subject_name`, `Grade`, `Active`
 -- Table structure for table `year_2074_teacher`
 --
 
+DROP TABLE IF EXISTS `year_2074_teacher`;
 CREATE TABLE `year_2074_teacher` (
   `Teacher_id` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
@@ -924,15 +1073,21 @@ CREATE TABLE `year_2074_teacher` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Truncate table before insert `year_2074_teacher`
+--
+
+TRUNCATE TABLE `year_2074_teacher`;
+--
 -- Dumping data for table `year_2074_teacher`
 --
 
 INSERT INTO `year_2074_teacher` (`Teacher_id`, `Name`, `Gender`, `Phone`, `Address`, `Qualification`, `Active`) VALUES
-(1, 'Yagya Niraula', '9851160980', 'Itahara', 'BE', 'Male', 'yes'),
-(2, 'Goma Dahal', '9856789023', 'Address', 'BA', 'Female', 'yes'),
-(7, 'Sunam Niroula', '9846055581', 'Address', 'BE', 'Male', 'yes'),
-(8, 'Subash', '999999999', 'Address', 'BBA', 'Male', 'yes'),
-(9, 'Ashma Pandey', '987897987', 'Address', 'MBBS', 'Male', 'yes');
+(1, 'Yagya Niraula', 'Male', '888888', 'Address', 'Male', 'yes'),
+(2, 'Goma Dahal', 'Female', '99999999', 'Address', 'Female', 'yes'),
+(7, 'Sunam Niroula', 'Male', '111111', 'Address', 'Male', 'yes'),
+(8, 'Subash n', 'Male', '555555', 'Address', 'Male', 'yes'),
+(9, 'Ashma Pandey', 'Female', '56789', 'Address', 'AA', 'yes'),
+(10, 'Ram Hari Acharya', 'Male', '9876543210', 'NEC College', 'MSC', 'yes');
 
 -- --------------------------------------------------------
 
@@ -940,12 +1095,18 @@ INSERT INTO `year_2074_teacher` (`Teacher_id`, `Name`, `Gender`, `Phone`, `Addre
 -- Table structure for table `year_2074_teacher_teaches`
 --
 
+DROP TABLE IF EXISTS `year_2074_teacher_teaches`;
 CREATE TABLE `year_2074_teacher_teaches` (
   `Teacher_id` int(11) NOT NULL,
   `Subject_id` int(11) NOT NULL,
   `Grade_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Truncate table before insert `year_2074_teacher_teaches`
+--
+
+TRUNCATE TABLE `year_2074_teacher_teaches`;
 --
 -- Dumping data for table `year_2074_teacher_teaches`
 --
@@ -954,7 +1115,8 @@ INSERT INTO `year_2074_teacher_teaches` (`Teacher_id`, `Subject_id`, `Grade_id`)
 (2, 2, 1),
 (2, 6, 1),
 (7, 1, 1),
-(8, 8, 4);
+(10, 8, 4),
+(10, 8, 5);
 
 --
 -- Indexes for dumped tables
@@ -990,6 +1152,13 @@ ALTER TABLE `year_2074_exam`
   ADD PRIMARY KEY (`Exam_id`);
 
 --
+-- Indexes for table `year_2074_first_term_1`
+--
+ALTER TABLE `year_2074_first_term_1`
+  ADD PRIMARY KEY (`Roll`),
+  ADD KEY `Student_id` (`Student_id`);
+
+--
 -- Indexes for table `year_2074_grade`
 --
 ALTER TABLE `year_2074_grade`
@@ -1016,7 +1185,8 @@ ALTER TABLE `year_2074_ledger`
 --
 ALTER TABLE `year_2074_marks`
   ADD PRIMARY KEY (`Marks_id`),
-  ADD KEY `Subject_id` (`Subject_id`);
+  ADD KEY `Subject_id` (`Subject_id`),
+  ADD KEY `fk_ledger_id_marks_table` (`Ledger_id`);
 
 --
 -- Indexes for table `year_2074_percentage`
@@ -1076,7 +1246,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `year_2074_exam`
 --
 ALTER TABLE `year_2074_exam`
-  MODIFY `Exam_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Exam_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `year_2074_grade`
 --
@@ -1086,12 +1256,12 @@ ALTER TABLE `year_2074_grade`
 -- AUTO_INCREMENT for table `year_2074_ledger`
 --
 ALTER TABLE `year_2074_ledger`
-  MODIFY `Ledger_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `year_2074_marks`
 --
 ALTER TABLE `year_2074_marks`
-  MODIFY `Marks_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Marks_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `year_2074_student`
 --
@@ -1101,15 +1271,21 @@ ALTER TABLE `year_2074_student`
 -- AUTO_INCREMENT for table `year_2074_subject`
 --
 ALTER TABLE `year_2074_subject`
-  MODIFY `Subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `year_2074_teacher`
 --
 ALTER TABLE `year_2074_teacher`
-  MODIFY `Teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `year_2074_first_term_1`
+--
+ALTER TABLE `year_2074_first_term_1`
+  ADD CONSTRAINT `year_2074_first_term_1_ibfk_1` FOREIGN KEY (`Student_id`) REFERENCES `year_2074_student` (`Student_id`);
 
 --
 -- Constraints for table `year_2074_ledger`
@@ -1122,6 +1298,7 @@ ALTER TABLE `year_2074_ledger`
 -- Constraints for table `year_2074_marks`
 --
 ALTER TABLE `year_2074_marks`
+  ADD CONSTRAINT `fk_ledger_id_marks_table` FOREIGN KEY (`Ledger_id`) REFERENCES `year_2074_ledger` (`Ledger_id`),
   ADD CONSTRAINT `year_2074_marks_ibfk_1` FOREIGN KEY (`Subject_id`) REFERENCES `year_2074_subject` (`Subject_id`);
 
 --
