@@ -1,4 +1,4 @@
-# student_result_calculator/simple student information system. 
+# student_result_calculator/simple student information system.(Pics below) 
 # java fx project, uses fxml,mysql database
 It is an application for finding the result and getting the output of the result in the marksheet, generating charts of the result. 
 It can also store student ,teacher, subject, grade information here.
@@ -15,5 +15,5 @@ Two Types of users i.e admin and regular user.
 ![alt tag](27479691_1572836816128772_1600974077_o.png)
 ![alt tag](27480152_1572835642795556_393322949_o.png)
 ![alt tag](27534873_1572836806128773_2084044094_o.png)
-![alt tag](27535289_1572836776128776_2126156934_o (1).png)
+![alt tag](27535289_1572836776128776_2126156934_o.png)
 
