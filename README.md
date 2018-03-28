@@ -9,3 +9,4 @@ Two Types of users i.e admin and regular user.
 # install jdk 1.8 or higher, run the program
 # user and password for admin,............ Username : s and Password : s, create a regular user yourself and try it. 
 # NO logout system to logout one has to close the system, and again open it to re login
+![alt tag](27479691_1572836816128772_1600974077_o.png)
