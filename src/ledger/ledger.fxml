@@ -3,7 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.RadioButton?>
@@ -59,14 +59,14 @@
                         </Button>
                      </children>
                   </AnchorPane>
-                  <AnchorPane>
+                  <ComboBox fx:id="exam_choicebox" prefHeight="31.0" prefWidth="185.0" stylesheets="@../stylesheet/bootstrap2.css">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
                      <VBox.margin>
                         <Insets left="20.0" />
                      </VBox.margin>
-                     <children>
-                        <ChoiceBox fx:id="exam_choicebox" prefWidth="177.0" stylesheets="@../stylesheet/bootstrap2.css" />
-                     </children>
-                  </AnchorPane>
+                  </ComboBox>
                   <Label style="-fx-text-fill: blue;" text="Grade ">
                      <font>
                         <Font size="14.0" />
@@ -75,11 +75,14 @@
                         <Insets left="20.0" />
                      </VBox.margin>
                   </Label>
-                  <ChoiceBox fx:id="grade_choicebox" prefWidth="165.0" stylesheets="@../stylesheet/bootstrap2.css">
+                  <AnchorPane>
                      <VBox.margin>
                         <Insets left="20.0" />
                      </VBox.margin>
-                  </ChoiceBox>
+                     <children>
+                        <ComboBox fx:id="grade_choicebox" prefWidth="165.0" stylesheets="@../stylesheet/bootstrap2.css" />
+                     </children>
+                  </AnchorPane>
                   <Label style="-fx-text-fill: blue;" text="Section">
                      <font>
                         <Font size="14.0" />
@@ -88,11 +91,11 @@
                         <Insets left="20.0" />
                      </VBox.margin>
                   </Label>
-                  <ChoiceBox fx:id="section_choicebox" prefWidth="153.0" stylesheets="@../stylesheet/bootstrap2.css">
+                  <ComboBox fx:id="section_choicebox" prefWidth="150.0" stylesheets="@../stylesheet/bootstrap2.css">
                      <VBox.margin>
                         <Insets left="20.0" />
                      </VBox.margin>
-                  </ChoiceBox>
+                  </ComboBox>
                   <AnchorPane />
                   <AnchorPane fx:id="anchorpane_label">
                      <children>
@@ -199,7 +202,6 @@
                         </Label>
                         <TextField fx:id="fm_textfield" layoutX="45.0" layoutY="84.0" prefHeight="27.0" prefWidth="41.0" />
                         <Label layoutX="7.0" layoutY="31.0" style="-fx-text-fill: blue;" text="Subejct :" />
-                        <ChoiceBox fx:id="subject_choicebox" layoutX="75.0" layoutY="27.0" prefHeight="17.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
                         <Label layoutX="8.0" layoutY="90.0" style="-fx-text-fill: blue;" text="FM :" />
                         <TextField fx:id="pm_textfield" layoutX="137.0" layoutY="85.0" prefHeight="27.0" prefWidth="41.0" />
                         <Label layoutX="100.0" layoutY="89.0" style="-fx-text-fill: blue;" text="PM :" />
@@ -219,7 +221,6 @@
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="135.0" layoutX="309.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: white;" width="201.0" />
                         <Label layoutX="312.0" layoutY="3.0" text="Delete Subject from Current Ledger : " />
                         <Label layoutX="314.0" layoutY="34.0" style="-fx-text-fill: blue;" text="Subejct Column :" />
-                        <ChoiceBox fx:id="subject_column_choicebox" layoutX="314.0" layoutY="57.0" prefWidth="136.0" stylesheets="@../stylesheet/bootstrap2.css" />
                         <Button fx:id="delete_subject_btn" layoutX="314.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#clickDeleteSubject" stylesheets="@../stylesheet/bootstrap2.css" text="Delete Subject">
                            <styleClass>
                               <String fx:value="action-btn" />
@@ -234,6 +235,19 @@
                            </styleClass>
                         </Button>
                         <ProgressIndicator fx:id="progress_indicator" layoutX="583.0" layoutY="101.0" prefHeight="53.0" prefWidth="44.0" progress="0.0" />
+                        <Button fx:id="save_ledger_btn" layoutX="671.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#clickSaveLedgerBtn" style="-fx-background-color: #18b2a0;" stylesheets="@../stylesheet/bootstrap2.css" text="SAVE LEDGER">
+                           <styleClass>
+                              <String fx:value="action-btn" />
+                              <String fx:value="primary" />
+                           </styleClass>
+                        </Button>
+                        <ImageView fx:id="save_image" accessibleRole="BUTTON" fitHeight="53.0" fitWidth="56.0" layoutX="605.0" layoutY="25.0" onMouseClicked="#clickSaveLedgerBtn" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@../images/Save-icon.png" />
+                           </image>
+                        </ImageView>
+                        <ComboBox fx:id="subject_choicebox" layoutX="62.0" layoutY="27.0" prefWidth="135.0" stylesheets="@../stylesheet/bootstrap2.css" />
+                        <ComboBox fx:id="subject_column_choicebox" layoutX="314.0" layoutY="57.0" prefWidth="150.0" stylesheets="@../stylesheet/bootstrap2.css" />
                      </children>
                   </AnchorPane>
                </children>

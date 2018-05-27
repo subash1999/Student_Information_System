@@ -24,7 +24,7 @@ public class Connection {
     public static void connect(){                 
         try{ 
         Class.forName("com.mysql.jdbc.Driver");    
-        servername = "jdbc:mysql://localhost:3308/school?zeroDateTimeBehavior=convertToNull";
+        servername = "jdbc:mysql://localhost:3306/school?zeroDateTimeBehavior=convertToNull";
         username = "root";
         password = "";
         conn = DriverManager.getConnection(servername , username, password);
@@ -50,6 +50,12 @@ public class Connection {
     
    
     }
+    protected void finalize () throws Throwable {
+    if (conn != null) {
+        conn.close();
+        conn = null;
+    }
+}
     
    
 }

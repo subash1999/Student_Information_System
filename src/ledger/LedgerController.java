@@ -7,7 +7,6 @@ package ledger;
 
 import calculator.CalculateGrade;
 import calculator.CalculateResult;
-import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -33,7 +32,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
@@ -66,13 +65,13 @@ public class LedgerController implements Initializable {
     private Button add_exam;
 
     @FXML
-    private ChoiceBox exam_choicebox;
+    private ComboBox exam_choicebox;
 
     @FXML
-    private ChoiceBox grade_choicebox;
+    private ComboBox grade_choicebox;
 
     @FXML
-    private ChoiceBox section_choicebox;
+    private ComboBox section_choicebox;
 
     @FXML
     private AnchorPane anchorpane_label;
@@ -117,7 +116,7 @@ public class LedgerController implements Initializable {
     private TextField fm_textfield;
 
     @FXML
-    private ChoiceBox subject_choicebox;
+    private ComboBox subject_choicebox;
 
     @FXML
     private TextField pm_textfield;
@@ -135,7 +134,7 @@ public class LedgerController implements Initializable {
     private Button add_subject_btn;
 
     @FXML
-    private ChoiceBox subject_column_choicebox;
+    private ComboBox subject_column_choicebox;
 
     @FXML
     private Button delete_subject_btn;
@@ -163,6 +162,12 @@ public class LedgerController implements Initializable {
     
     @FXML
     private AnchorPane bottom_anchorpane;
+    
+    @FXML
+    private ImageView save_image;
+    
+    @FXML
+    private Button save_ledger_btn;
     
     private StringProperty ledger_id = new SimpleStringProperty();
 
@@ -195,7 +200,9 @@ public class LedgerController implements Initializable {
             add_exam.setVisible(false);
             edit_result_date.setVisible(false);
             bottom_anchorpane.setVisible(false);
-        }
+        }        
+        save_ledger_btn.setDisable(true);
+        save_image.setDisable(true);
         
     }
 
@@ -207,12 +214,13 @@ public class LedgerController implements Initializable {
             String section = section_choicebox.getSelectionModel().getSelectedItem().toString();
             if (marks_to_grading_radio_btn.isSelected()) {
                 getMarksToGradingLedger(exam, grade, section);
-                System.out.println("Marks to grading radio btn");
+                save_ledger_btn.setDisable(false);
+                save_image.setDisable(false);
             } else if (marks_input_radio_btn.isSelected()) {
                 getMarksInputLedger(exam, grade, section);
-                System.out.println("Marks input radio btn");
-            }
-            System.out.println("Listner Over");
+                save_ledger_btn.setDisable(false);    
+                save_image.setDisable(false);
+            }            
         });
     }
 
@@ -570,6 +578,7 @@ public class LedgerController implements Initializable {
                 }
                 //returning the cursor back to normal after the task is completed
                 exam_choicebox.getScene().setCursor(Cursor.DEFAULT);
+                System.gc();
                 return null;
             }
         };
@@ -624,10 +633,12 @@ public class LedgerController implements Initializable {
                     //Inserting values into the result date textfield
                     query = "SELECT Result_date FROM year_" + year + "_exam WHERE Exam_id = " + exam_id;
                     result = conn.createStatement().executeQuery(query);
+                    String date = "";
                     while (result.next()) {
-                        result_date_textfield.clear();
-                        result_date_textfield.setText(result.getString(1));
+                        date = result.getString(1);                        
                     }
+                    result_date_textfield.clear();
+                    result_date_textfield.setText(date);
                     Statement st = conn.createStatement();
                     query = "CREATE TEMPORARY TABLE IF NOT EXISTS temp ("
                             + "Student_id INT ,"
@@ -678,7 +689,7 @@ public class LedgerController implements Initializable {
                                     list_items = "A";
                                 }
                             } catch (NumberFormatException e) {
-                                //nothing here
+                                
                             } finally {
                                 list.add(list_items);
                             }
@@ -842,6 +853,7 @@ public class LedgerController implements Initializable {
                 }
                 //changing cursor back to normal after job done and scene is changed
                 exam_choicebox.getScene().setCursor(Cursor.DEFAULT);
+                System.gc();
                 return null;
             }
         };
@@ -1124,6 +1136,8 @@ public class LedgerController implements Initializable {
                 anchorpane_label.setVisible(false);
                 if (marks_input_radio_btn.isSelected()) {
                     getMarksInputLedger(exam, grade, section);
+                    save_ledger_btn.setDisable(false);
+                    save_image.setDisable(false);
                 } else if (marks_to_grading_radio_btn.isSelected()) {
                     //only selecting this will change the data in the spreadsheet
                     //because this has a listner inside the listner the
@@ -1410,6 +1424,8 @@ public class LedgerController implements Initializable {
 
     @FXML
     private void clickReCalculateBtn(MouseEvent event) {
+        save_ledger_btn.setDisable(true);
+        save_image.setDisable(true);
         progress_indicator.setVisible(true);
         String led_id = ledger_id.get();
         final Task<Void> task = new Task<Void>() {
@@ -1441,7 +1457,8 @@ public class LedgerController implements Initializable {
                 } else {
                     updateProgress(1, 1);
                 }
-
+                save_ledger_btn.setDisable(false);
+                save_image.setDisable(false);
                 return null;
             }
         };
@@ -1475,6 +1492,17 @@ public class LedgerController implements Initializable {
         listnerForChoiceBox();
         addSubject();
         deleteSubject();
+    }
+    
+    @FXML
+    private void clickSaveLedgerBtn(MouseEvent event) {
+        SaveLedger save_ledger = new SaveLedger();
+        String year = LoginController.current_year;
+        String grade = grade_choicebox.getSelectionModel().getSelectedItem().toString();
+        String section = section_choicebox.getSelectionModel().getSelectedItem().toString();
+        String exam = exam_choicebox.getSelectionModel().getSelectedItem().toString();
+        String initial_file_name = year+"_"+exam+"_"+grade+"_"+section;
+        save_ledger.saveLedgerInExcel(table_spread,initial_file_name,save_ledger_btn.getScene().getWindow());
     }
 
 }

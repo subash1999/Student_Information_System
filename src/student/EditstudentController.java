@@ -105,12 +105,13 @@ public class EditstudentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        makeRollAndSectionCombobox();
         listenerForStudentId();
+        makeRollAndSectionCombobox();
         makeRollTextFieldNumeric();
         makeContactTextFieldNumeric();
-        listenerForRoll();
         formatDatePicker();
+        listenerForRoll();
+
     }
 
     private void listenerForStudentId() {
@@ -126,10 +127,6 @@ public class EditstudentController implements Initializable {
         if (student_id.get() != 0) {
             setValues(student_id.get());
         }
-        makeRollAndSectionCombobox();
-        makeRollTextFieldNumeric();
-        makeContactTextFieldNumeric();
-        listenerForRoll();
     }
 
     private void setRoll() {
@@ -182,8 +179,6 @@ public class EditstudentController implements Initializable {
             //combobox
             grade_combobox.getSelectionModel().selectedItemProperty().addListener(e -> {
                 if (!(grade_combobox.getSelectionModel().getSelectedItem() == null)) {
-                    roll_textfield.setText(null);
-                    roll_textfield.setEditable(false);
                     String grade = grade_combobox.getSelectionModel().getSelectedItem().toString();
                     String sql = "SELECT DISTINCT Section FROM year_" + year + "_grade "
                             + "WHERE Grade = ?";
@@ -214,7 +209,6 @@ public class EditstudentController implements Initializable {
             //listener for section_combobox
             section_combobox.getSelectionModel().selectedItemProperty().addListener(e -> {
                 if (!(section_combobox.getSelectionModel().getSelectedItem() == null)) {
-                    roll_textfield.setText(null);
                     setRoll();
                 }
             });
@@ -235,7 +229,8 @@ public class EditstudentController implements Initializable {
             if (section_combobox.getSelectionModel().getSelectedItem() != null) {
                 section = section_combobox.getSelectionModel().getSelectedItem().toString();
             }
-            if (roll_textfield.getText() != null) {
+            String roll_no = roll_textfield.getText();
+            if (!roll_no.isEmpty()) {
                 try {
                     int roll = Integer.valueOf(roll_textfield.getText());
                     if (roll != current_roll) {
@@ -340,6 +335,11 @@ public class EditstudentController implements Initializable {
         if (areRequiredFieldFilled()) {
             String year = LoginController.current_year;
             String name = name_textfield.getText();
+            if (male_radio_btn.isSelected()) {
+                this.gender = "Male";
+            } else if (female_radio_btn.isSelected()) {
+                this.gender = "Female";
+            }
             String gender = this.gender;
             String dob = dob_datepicker.getValue().toString();
             String address = address_textfield.getText();

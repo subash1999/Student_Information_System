@@ -473,26 +473,46 @@ public class UserController implements Initializable {
     @FXML
     private void clickDeleteUser(MouseEvent event) {
         if (!table.getSelectionModel().getSelectedItems().isEmpty()) {
-            int index = table.getSelectionModel().getSelectedIndex();
-            TableColumn col = (TableColumn) table.getColumns().get(1);
-            int user_id = Integer.valueOf(String.valueOf(col.getCellData(index)));
-            Alert a = new Alert(AlertType.CONFIRMATION);
-            a.setHeaderText("Confirm User Deletion ");
-            a.setContentText("Are you sure to delete the user with id : " + user_id);
-            Optional<ButtonType> btn = a.showAndWait();
-            if (btn.get() == ButtonType.OK) {
-                String query = "DELETE FROM User WHERE User_id = " + user_id;
+            if (LoginController.current_user != null) {
+                int index = table.getSelectionModel().getSelectedIndex();
+                TableColumn col = (TableColumn) table.getColumns().get(1);
+                int user_id = Integer.valueOf(String.valueOf(col.getCellData(index)));
+                String query = "SELECT `Username` FROM User WHERE User_id = " + user_id;
+                String username = new String();
                 Connection conn = database.Connection.conn;
                 try {
-                    conn.createStatement().execute(query);
-                    a = new Alert(AlertType.INFORMATION);
-                    a.setHeaderText("Deletion Successful");
-                    a.setContentText("Deletion of user with id : " + user_id);
-                    a.show();
+                    ResultSet result = conn.createStatement().executeQuery(query);
+                    result.next();
+                    username = result.getString(1);
                     refresh();
                 } catch (Exception e) {
-                    System.out.println("Exception at clickDeleteUser() at "
+                    System.out.println("Exception at clickDeleteUser() upper at "
                             + "UserController : " + e.getMessage());
+                }
+                if (LoginController.current_user.equals(username)) {
+                    Alert a = new Alert(AlertType.ERROR);
+                    a.setHeaderText("Interrupted !!!  Cannot delete yourself !!");
+                    a.setContentText("You cannot delete yourself from the system");
+                    a.show();
+                } else {
+                    Alert a = new Alert(AlertType.CONFIRMATION);
+                    a.setHeaderText("Confirm User Deletion ");
+                    a.setContentText("Are you sure to delete the user with id : " + user_id);
+                    Optional<ButtonType> btn = a.showAndWait();
+                    if (btn.get() == ButtonType.OK) {
+                        query = "DELETE FROM User WHERE User_id = " + user_id;
+                        try {
+                            conn.createStatement().execute(query);
+                            a = new Alert(AlertType.INFORMATION);
+                            a.setHeaderText("Deletion Successful");
+                            a.setContentText("Deletion of user with id : " + user_id);
+                            a.show();
+                            refresh();
+                        } catch (Exception e) {
+                            System.out.println("Exception at clickDeleteUser() at "
+                                    + "UserController : " + e.getMessage());
+                        }
+                    }
                 }
             }
         }
@@ -540,7 +560,7 @@ public class UserController implements Initializable {
                             Stage stage = new Stage();
                             stage.setTitle("Edit User");
                             stage.initModality(Modality.APPLICATION_MODAL);
-                            stage.setOnCloseRequest(e->{
+                            stage.setOnCloseRequest(e -> {
                                 refresh();
                             });
                             stage.setScene(scene);
@@ -551,11 +571,10 @@ public class UserController implements Initializable {
                                     + " : " + e.getMessage());
                             e.printStackTrace();
                         }
-                    }
-                    else{
+                    } else {
                         Alert a = new Alert(AlertType.ERROR);
                         a.setHeaderText("Wrong password");
-                        a.setContentText("Wrong Password For \n Username : "+user);
+                        a.setContentText("Wrong Password For \n Username : " + user);
                         a.show();
                     }
                 }
