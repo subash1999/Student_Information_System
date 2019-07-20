@@ -39,8 +39,8 @@ public class Student_result_calculator extends Application {
             LoginController.current_year="2074";
             LoginController.user_type="admin";
             LoginController.current_user="s";
-//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/login/login.fxml"));
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/ledger/ledger.fxml"));
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/login/login.fxml"));
+//            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/ledger/ledger.fxml"));
 //            FXMLLoader fxml = new FXMLLoader(getClass().getResource("/teacher/addteacher.fxml"));
 //            Parent root = FXMLLoader.load(getClass().getResource("/report/reportcard.fxml"));
 //          Parent root = FXMLLoader.load(getClass().getResource("/ledger/ledger.fxml"));    
